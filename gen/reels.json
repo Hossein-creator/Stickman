@@ -1,0 +1,6 @@
+[
+ {"n":"11","id":"11-the-wall","label":"UNSAID","grow":[3.9,6.5,9.0],"seed":11},
+ {"n":"12","id":"12-the-thread","label":"DAY","grow":[3.0,6.0,9.2],"seed":12},
+ {"n":"13","id":"13-the-seed","label":"DAY","grow":[3.5,6.5,8.6],"seed":13},
+ {"n":"14","id":"14-the-path","label":"DAY","grow":[3.5,6.0,8.5],"seed":14}
+]

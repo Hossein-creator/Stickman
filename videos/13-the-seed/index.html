@@ -1,0 +1,412 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+    <style>
+      @font-face {
+        font-family: "HFMono";
+        src: url("assets/fonts/consolab.ttf") format("truetype");
+        font-weight: 700;
+      }
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      html,
+      body {
+        width: 1080px;
+        height: 1920px;
+        overflow: hidden;
+        background: #000;
+      }
+      #root {
+        position: relative;
+        width: 1080px;
+        height: 1920px;
+        overflow: hidden;
+        background: #000;
+      }
+      #stage {
+        position: absolute;
+        inset: 0;
+        width: 1080px;
+        height: 1920px;
+      }
+      #stage svg {
+        position: absolute;
+        inset: 0;
+      }
+      .mono {
+        position: absolute;
+        font-family: "HFMono", monospace;
+        font-weight: 700;
+        white-space: nowrap;
+      }
+      /* everything readable stays inside the Instagram safe area: x 120-960, y 220-1500 */
+      #head {
+        position: absolute;
+        left: 0;
+        right: 0;
+        top: 222px;
+        text-align: center;
+        font-family: "HFMono", monospace;
+        font-weight: 700;
+        font-size: 38px;
+        letter-spacing: 0.12em;
+        line-height: 1.45;
+        color: #fff;
+        text-shadow: 0 0 16px rgba(255, 255, 255, 0.3);
+      }
+      #head .ghost {
+        visibility: hidden;
+      }
+      #ctr {
+        position: absolute;
+        left: 0;
+        right: 0;
+        top: 430px;
+        text-align: center;
+        font-family: "HFMono", monospace;
+        font-weight: 700;
+        white-space: nowrap;
+      }
+      #ctr .lbl {
+        font-size: 26px;
+        letter-spacing: 0.24em;
+        color: #9a9a9a;
+        vertical-align: middle;
+      }
+      #num {
+        display: inline-block;
+        min-width: 2.4ch;
+        font-size: 58px;
+        letter-spacing: 0.08em;
+        color: #fff;
+        vertical-align: middle;
+        text-shadow: 0 0 14px rgba(255, 255, 255, 0.35);
+      }
+      #tag {
+        display: inline-block;
+        min-width: 5.2ch;
+        padding: 6px 12px 4px;
+        font-size: 26px;
+        letter-spacing: 0.18em;
+        vertical-align: middle;
+        visibility: hidden;
+      }
+      #tag.fail {
+        visibility: visible;
+        background: #d62a2a;
+        color: #fff;
+      }
+      #tag.pass {
+        visibility: visible;
+        background: #fff;
+        color: #000;
+        box-shadow: 0 0 22px rgba(255, 255, 255, 0.6);
+      }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="14" data-width="1080" data-height="1920">
+      <div id="stage" class="clip" data-start="0" data-duration="14" data-track-index="0">
+        <svg id="svg" width="1080" height="1920" viewBox="0 0 1080 1920" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <linearGradient id="beam" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0" stop-color="#ffffff" stop-opacity="0.55" />
+              <stop offset="0.7" stop-color="#ffffff" stop-opacity="0.12" />
+              <stop offset="1" stop-color="#ffffff" stop-opacity="0.04" />
+            </linearGradient>
+            <radialGradient id="pool" cx="0.5" cy="0.5" r="0.5">
+              <stop offset="0" stop-color="#ffffff" stop-opacity="0.32" />
+              <stop offset="1" stop-color="#ffffff" stop-opacity="0" />
+            </radialGradient>
+            <radialGradient id="dustG" cx="0.5" cy="0.5" r="0.5">
+              <stop offset="0" stop-color="#b5b5b5" stop-opacity="0.8" />
+              <stop offset="1" stop-color="#b5b5b5" stop-opacity="0" />
+            </radialGradient>
+            <linearGradient id="ply" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0" stop-color="#d9c29b" />
+              <stop offset="1" stop-color="#8f7858" />
+            </linearGradient>
+            <linearGradient id="floorFade" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0" stop-color="#000" stop-opacity="0.45" />
+              <stop offset="1" stop-color="#000" stop-opacity="1" />
+            </linearGradient>
+            <filter id="blur" x="-50%" y="-50%" width="200%" height="200%">
+              <feGaussianBlur stdDeviation="12" />
+            </filter>
+            <filter id="soft" x="-50%" y="-50%" width="200%" height="200%">
+              <feGaussianBlur stdDeviation="16" />
+            </filter>
+          </defs>
+          <!-- world: floor at world y 600 -> screen y 1400, world x 400 -> screen x 540 -->
+          <g transform="translate(540 1400) scale(1.45) translate(-400 -600)">
+            <g id="beams"></g>
+            
+            <use href="#world" transform="translate(0 1200) scale(1 -1)" opacity="0.16" />
+            <rect x="-200" y="600" width="1200" height="260" fill="url(#floorFade)" />
+            <rect x="-200" y="599" width="1200" height="2" fill="#2a2a2a" />
+            <g id="world"></g>
+          </g>
+        </svg>
+        <div id="ctr"><span class="lbl">DAY</span> <span id="num">00</span></div>
+        <div id="head">
+          <div id="h1"></div>
+          <div id="h2"></div>
+        </div>
+      </div>
+      <audio id="mix" src="assets/audio/mix.wav" data-start="0" data-duration="14" data-track-index="1"></audio>
+    </div>
+
+    <script>
+      (function () {
+        const DUR = 14;
+        const FL = 600, BX0 = 380, BX1 = 520, BTOP = 410, TOPF = 404, SX = 250;
+        const THIGH = 80, SHIN = 78, LEG = 154;
+        const UARM = 64, FARM = 60, TORSO = 116, NECK = 12, HEADR = 31;
+        const NS = "http://www.w3.org/2000/svg";
+        const svgEl = (tag, attrs, parent) => {
+          const e = document.createElementNS(NS, tag);
+          for (const k in attrs || {}) e.setAttribute(k, attrs[k]);
+          if (parent) parent.appendChild(e);
+          return e;
+        };
+        const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
+        const lerp = (a, b, p) => a + (b - a) * p;
+        const ease = (p) => 0.5 - 0.5 * Math.cos(Math.PI * clamp(p, 0, 1));
+        const backOut = (p) => { p = clamp(p, 0, 1); const s = 2.2; return 1 + (s + 1) * Math.pow(p - 1, 3) + s * Math.pow(p - 1, 2); };
+        const win = (t, a, b) => ease((t - a) / (b - a));
+        const rad = (x) => (x * Math.PI) / 180;
+        const down = (a, f) => [Math.sin(rad(a)) * f, Math.cos(rad(a))];
+        const up = (a, f) => [Math.sin(rad(a)) * f, -Math.cos(rad(a))];
+        const r1 = (v) => Math.round(v * 10) / 10;
+        const E = (id) => document.getElementById(id);
+        let seed = 31;
+        const rnd = () => ((seed = (seed * 16807) % 2147483647) / 2147483647);
+
+        // ---------- rig v2 (from reel 05): blended poses, head/arm follow-through, breathing ----------
+        function makeFig(parent, front, back, glow, id) {
+          const g = svgEl("g", { id }, parent);
+          if (glow) parent.insertBefore(svgEl("use", { href: "#" + id, filter: "url(#blur)", opacity: 0.45 }), g);
+          const parts = { g };
+          for (const [n, col] of [["armB", back], ["legB", back], ["torso", front], ["legF", front], ["armF", front]]) {
+            const o = svgEl("path", { fill: "none", stroke: "#000", "stroke-width": 34, "stroke-linecap": "round", "stroke-linejoin": "round" }, g);
+            const w = svgEl("path", { fill: "none", stroke: col, "stroke-width": 22, "stroke-linecap": "round", "stroke-linejoin": "round" }, g);
+            parts[n] = [o, w];
+          }
+          parts.head = svgEl("circle", { r: HEADR, fill: front, stroke: "#000", "stroke-width": 6 }, g);
+          return parts;
+        }
+        function ik(a, b, l1, l2, pick) {
+          let dx = b[0] - a[0], dy = b[1] - a[1];
+          let d = Math.hypot(dx, dy);
+          const maxd = l1 + l2 - 0.5;
+          if (d > maxd) {
+            b = [a[0] + (dx / d) * maxd, a[1] + (dy / d) * maxd];
+            dx = b[0] - a[0];
+            dy = b[1] - a[1];
+            d = maxd;
+          }
+          d = Math.max(d, Math.abs(l1 - l2) + 1);
+          const al = Math.acos(clamp((l1 * l1 + d * d - l2 * l2) / (2 * l1 * d), -1, 1));
+          const base = Math.atan2(dy, dx);
+          const c1 = [a[0] + Math.cos(base + al) * l1, a[1] + Math.sin(base + al) * l1];
+          const c2 = [a[0] + Math.cos(base - al) * l1, a[1] + Math.sin(base - al) * l1];
+          return [pick(c1, c2), b];
+        }
+        const P = (pts) => "M" + pts.map((p) => r1(p[0]) + " " + r1(p[1])).join("L");
+        const setD = (pair, d) => {
+          pair[0].setAttribute("d", d);
+          pair[1].setAttribute("d", d);
+        };
+        // flat pose: hx hy torso head ax ay bx by | per arm a*/b*: sh el w tx ty
+        function drawFig(parts, s, f) {
+          const hip = [s.hx, s.hy];
+          const tu = up(s.torso, f);
+          const sh = [hip[0] + tu[0] * TORSO, hip[1] + tu[1] * TORSO];
+          const nk = [hip[0] + tu[0] * (TORSO + NECK), hip[1] + tu[1] * (TORSO + NECK)];
+          const hu = up(s.torso + s.head, f);
+          const hc = [nk[0] + hu[0] * HEADR, nk[1] + hu[1] * HEADR];
+          setD(parts.torso, P([hip, sh, nk]));
+          parts.head.setAttribute("cx", r1(hc[0]));
+          parts.head.setAttribute("cy", r1(hc[1]));
+          const knee = (c1, c2) => (c1[0] * f > c2[0] * f ? c1 : c2);
+          const elbow = (c1, c2) => (c1[1] - 0.5 * f * c1[0] > c2[1] - 0.5 * f * c2[0] ? c1 : c2);
+          [["legF", [s.ax, s.ay]], ["legB", [s.bx, s.by]]].forEach(([n, ft]) => {
+            const [kn, fo] = ik(hip, ft, THIGH, SHIN, knee);
+            setD(parts[n], P([hip, kn, fo]));
+          });
+          const hands = [];
+          [["armF", "a"], ["armB", "b"]].forEach(([n, k]) => {
+            const u = down(s[k + "sh"], f);
+            const el = [sh[0] + u[0] * UARM, sh[1] + u[1] * UARM];
+            const v = down(s[k + "sh"] + s[k + "el"], f);
+            const fk = [el[0] + v[0] * FARM, el[1] + v[1] * FARM];
+            const w = clamp(s[k + "w"], 0, 1);
+            const hand = [lerp(fk[0], s[k + "tx"], w), lerp(fk[1], s[k + "ty"], w)];
+            const [e2, h2] = ik(sh, hand, UARM, FARM, elbow);
+            setD(parts[n], P([sh, e2, h2]));
+            hands.push(h2);
+          });
+          return { head: hc, hands, hip };
+        }
+        const KER = [-4, -3, -2, -1, 0, 1, 2, 3, 4].map((k) => [k * 0.03, Math.exp(-((k / 2.3) ** 2))]);
+        function blend(raw, t) {
+          const out = {};
+          let ws = 0;
+          for (const [dt, w] of KER) {
+            const p = raw(clamp(t + dt, 0, DUR));
+            for (const k in p) out[k] = (out[k] || 0) + p[k] * w;
+            ws += w;
+          }
+          for (const k in out) out[k] /= ws;
+          return out;
+        }
+        const LAGGED = ["head", "ash", "ael", "aw", "atx", "aty", "bsh", "bel", "bw", "btx", "bty"];
+        function livePose(raw, t, phase) {
+          const s = blend(raw, t);
+          const lag = blend(raw, t - 0.05);
+          for (const k of LAGGED) s[k] = lag[k];
+          const br = Math.sin(t * 1.9 + phase);
+          s.hy += br * 1.3;
+          s.torso += br * 0.8;
+          s.head += Math.sin(t * 1.2 + phase * 2) * 1.6;
+          return s;
+        }
+        const ARMS = { ash: 8, ael: 12, aw: 0, atx: 0, aty: 0, bsh: -4, bel: 10, bw: 0, btx: 0, bty: 0 };
+        const base = (o) => ({ hx: 0, hy: 0, torso: 3, head: 0, ax: 0, ay: FL, bx: 0, by: FL, ...ARMS, ...o });
+        function standOn(x, f, fy) {
+          return base({ hx: x, hy: fy - Math.sqrt(LEG * LEG - 15 * 15), ax: x + f * 15, ay: fy, bx: x - f * 15, by: fy });
+        }
+        const mixPose = (a, b, p) => {
+          const o = {};
+          for (const k in a) o[k] = lerp(a[k], b[k], p);
+          return o;
+        };
+
+        // ---------- scene: nothing shows above the soil for 89 days while the roots grow underneath ----------
+        const W = E("world");
+        const SOILX0 = 330, SOILX1 = 500, MX = 415;
+        const soilG = svgEl("g", {}, W.parentNode);
+        svgEl("rect", { x: SOILX0, y: FL, width: SOILX1 - SOILX0, height: 140, fill: "#241a12", stroke: "#000", "stroke-width": 3 }, soilG);
+        svgEl("rect", { x: SOILX0, y: FL, width: SOILX1 - SOILX0, height: 8, fill: "#3a2b1c" }, soilG);
+        [[350, 650], [372, 700], [455, 668], [478, 715], [395, 735], [430, 700], [490, 665]].forEach(([x, y]) => svgEl("circle", { cx: x, cy: y, r: 3, fill: "#3a2b1c" }, soilG));
+        const rootsG = svgEl("g", {}, W.parentNode);
+        const seedEl = svgEl("ellipse", { cx: MX, cy: 646, rx: 9, ry: 6, fill: "#e8d9b0", stroke: "#000", "stroke-width": 2 }, rootsG);
+        const mound = svgEl("path", { d: `M${MX - 34} ${FL} Q${MX} ${FL - 22} ${MX + 34} ${FL} Z`, fill: "#3a2b1c", stroke: "#000", "stroke-width": 3 }, W);
+        // roots: main root + branches, drawn as a growing length
+        const ROOTS = [
+          [[MX, 650], [MX - 4, 672], [MX + 3, 696], [MX - 2, 722], [MX + 2, 742]],
+          [[MX - 3, 668], [MX - 26, 684], [MX - 44, 704], [MX - 60, 716]],
+          [[MX + 1, 684], [MX + 24, 698], [MX + 46, 716], [MX + 62, 724]],
+          [[MX - 2, 708], [MX - 20, 724], [MX - 30, 738]],
+          [[MX + 2, 716], [MX + 22, 730], [MX + 34, 742]],
+        ];
+        const ROOT_AT = [0, 0.18, 0.34, 0.52, 0.66]; // when each root starts (0..1 of the growth)
+        const rootPaths = ROOTS.map((_, i) => svgEl("path", { fill: "none", stroke: "#f2eadb", "stroke-width": i ? 3 : 4.5, "stroke-linecap": "round", "stroke-linejoin": "round" }, rootsG));
+        const plantG = svgEl("g", {}, W);
+        const stem = svgEl("path", { fill: "none", stroke: "#ffffff", "stroke-width": 9, "stroke-linecap": "round" }, plantG);
+        const stemGlow = svgEl("path", { fill: "none", stroke: "#ffffff", "stroke-width": 16, "stroke-linecap": "round", filter: "url(#blur)", opacity: 0.5 }, plantG);
+        const leaves = [0, 1, 2, 3, 4, 5].map(() => svgEl("path", { fill: "#ffffff", stroke: "#000", "stroke-width": 2.5 }, plantG));
+        const figG = svgEl("g", {}, W);
+        const can = svgEl("g", {}, W);
+        svgEl("path", { d: "M-22 -14 L18 -14 L22 18 L-26 18 Z", fill: "#a9a9a9", stroke: "#000", "stroke-width": 3 }, can);
+        svgEl("path", { d: "M18 4 L48 -18 L52 -12 L24 14 Z", fill: "#a9a9a9", stroke: "#000", "stroke-width": 3 }, can);
+        svgEl("path", { d: "M-22 -8 Q-44 -8 -36 14", fill: "none", stroke: "#000", "stroke-width": 7, "stroke-linecap": "round" }, can);
+        svgEl("path", { d: "M-22 -8 Q-44 -8 -36 14", fill: "none", stroke: "#a9a9a9", "stroke-width": 3, "stroke-linecap": "round" }, can);
+        const drops = [0, 1, 2, 3, 4, 5, 6, 7].map(() => svgEl("circle", { r: 3.5, fill: "#bfe3ff", opacity: 0 }, W));
+        const LBL = svgEl("text", { "text-anchor": "middle", "font-family": "HFMono", "font-weight": 700, "font-size": 18, "letter-spacing": 3, fill: "#9a9a9a", opacity: 0 }, W.parentNode);
+        LBL.textContent = "NOTHING.";
+        const env = (p, a, b, c, d) => ease((p - a) / (b - a)) * (1 - ease((p - c) / (d - c)));
+        const POUR = [1.0, 2.3, 3.6, 4.9, 6.2, 7.5];
+        const SPROUT = [8.4, 9.5];
+        const HX = 262;
+        const pourAt = (t) => POUR.reduce((m, tp) => Math.max(m, env(t, tp, tp + 0.35, tp + 0.9, tp + 1.2)), 0);
+        const doubt = (t) => env(t, 3.8, 4.8, 5.8, 6.8);
+        function heroRaw(t) {
+          const pr = pourAt(t), cheer = win(t, 9.0, 9.6);
+          const s = standOn(HX, 1, FL);
+          return {
+            ...s, torso: 3 + 5 * pr - 5 * doubt(t) - 3 * cheer, head: 0 + 14 * doubt(t) - 6 * cheer,
+            ash: 8, ael: 12, aw: pr, atx: 372, aty: 452,
+            bsh: lerp(-4, 150, cheer), bel: lerp(10, 12, cheer), bw: 0, btx: 0, bty: 0,
+          };
+        }
+        const hero = makeFig(figG, "#ffffff", "#e2e2e2", true, "hero");
+
+        const typed = (id, text, t, t0, cps) => {
+          const n = clamp(Math.floor((t - t0) * cps), 0, text.length);
+          E(id).innerHTML = "<span>" + text.slice(0, n) + '</span><span class="ghost">' + text.slice(n) + "</span>";
+        };
+        const pad = (n) => String(n).padStart(2, "0");
+        const growth = (t) => clamp((t - 0.8) / 7.7, 0, 1);
+
+        // ---------- per-frame render ----------
+        function render(t) {
+          const j = drawFig(hero, livePose(heroRaw, t, 0.4), 1);
+          // watering can follows the front hand, tipping while he pours
+          const pr = pourAt(t), hnd = j.hands[0];
+          can.setAttribute("transform", `translate(${r1(hnd[0] + 4)} ${r1(hnd[1] - 8)}) rotate(${r1(lerp(0, 38, pr))})`);
+          const spout = [hnd[0] + 4 + Math.cos(rad(38 * pr - 18)) * 48, hnd[1] - 8 + Math.sin(rad(38 * pr - 18)) * 48 - 10];
+          drops.forEach((d, i) => {
+            const tp = POUR.find((x) => t >= x + 0.3 && t < x + 1.1);
+            if (tp === undefined) { d.setAttribute("opacity", 0); return; }
+            const a = (((t - tp - 0.3) * 1.6 + i / drops.length) % 1);
+            d.setAttribute("cx", r1(lerp(spout[0], MX - 6 + (i % 3) * 6, a)));
+            d.setAttribute("cy", r1(lerp(spout[1], FL - 8, a * a)));
+            d.setAttribute("opacity", (1 - a * 0.4).toFixed(3));
+          });
+          // roots grow slowly and steadily, underground
+          const g = growth(t);
+          rootPaths.forEach((rp, i) => {
+            const pts = ROOTS[i], gl = clamp((g - ROOT_AT[i]) / (1 - ROOT_AT[i]) * 1.1, 0, 1) * (pts.length - 1);
+            const seg = Math.floor(gl), fr = gl - seg;
+            const out = pts.slice(0, seg + 1);
+            if (seg < pts.length - 1) out.push([lerp(pts[seg][0], pts[seg + 1][0], fr), lerp(pts[seg][1], pts[seg + 1][1], fr)]);
+            rp.setAttribute("d", out.length > 1 ? P(out) : "M0 0");
+            rp.setAttribute("opacity", out.length > 1 ? 1 : 0);
+          });
+          seedEl.setAttribute("opacity", 1 - win(t, 8.4, 8.8));
+          // the shoot breaks through at the end
+          const sp = clamp((t - SPROUT[0]) / (SPROUT[1] - SPROUT[0]), 0, 1), rise = backOut(sp);
+          const topY = FL - 14 - 270 * rise;
+          const sway = Math.sin(t * 2.2) * 3 * sp;
+          const sd = `M${MX} ${FL - 8} Q${MX + 10 + sway} ${r1((FL + topY) / 2)} ${r1(MX + sway * 2)} ${r1(topY)}`;
+          stem.setAttribute("d", sd);
+          stem.setAttribute("opacity", sp > 0 ? 1 : 0);
+          stemGlow.setAttribute("d", sd);
+          stemGlow.setAttribute("opacity", sp > 0 ? 0.5 * sp : 0);
+          leaves.forEach((lf, i) => {
+            const lv = clamp((sp - 0.3 - i * 0.09) / 0.4, 0, 1), side = i % 2 ? 1 : -1;
+            const ly = FL - 14 - (60 + i * 38) * rise;
+            const L = 46 * backOut(lv);
+            lf.setAttribute("d", lv > 0 ? `M${MX} ${r1(ly)} Q${MX + side * L * 0.55} ${r1(ly - L * 0.7)} ${MX + side * L} ${r1(ly - L * 0.25)} Q${MX + side * L * 0.5} ${r1(ly + L * 0.1)} ${MX} ${r1(ly)} Z` : "M0 0");
+          });
+          mound.setAttribute("opacity", 1);
+          // doubt: a grey label above the soil
+          const nl = env(t, 3.4, 3.9, 5.6, 6.2);
+          LBL.setAttribute("x", MX);
+          LBL.setAttribute("y", r1(FL - 52));
+          LBL.setAttribute("opacity", nl.toFixed(3));
+
+          const day = 1 + Math.floor(89 * g);
+          E("num").textContent = pad(day);
+          typed("h1", "IT GREW THE WHOLE TIME.", t, 9.9, 26);
+          typed("h2", "YOU JUST COULDN'T SEE IT.", t, 11.0, 26);
+        }
+
+        window.__timelines = window.__timelines || {};
+        const tl = gsap.timeline({ paused: true });
+        const clock = { t: 0 };
+        tl.to(clock, { t: DUR, duration: DUR, ease: "none", onUpdate: () => render(clock.t) }, 0);
+        window.__timelines["main"] = tl;
+        render(0);
+        tl.seek(0);
+      })();
+    </script>
+  </body>
+</html>

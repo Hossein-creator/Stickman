@@ -1,0 +1,496 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+    <style>
+      @font-face {
+        font-family: "HFMono";
+        src: url("assets/fonts/consolab.ttf") format("truetype");
+        font-weight: 700;
+      }
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      html,
+      body {
+        width: 1080px;
+        height: 1920px;
+        overflow: hidden;
+        background: #000;
+      }
+      #root {
+        position: relative;
+        width: 1080px;
+        height: 1920px;
+        overflow: hidden;
+        background: #000;
+      }
+      #stage {
+        position: absolute;
+        inset: 0;
+        width: 1080px;
+        height: 1920px;
+      }
+      #stage svg {
+        position: absolute;
+        inset: 0;
+      }
+      .mono {
+        position: absolute;
+        font-family: "HFMono", monospace;
+        font-weight: 700;
+        white-space: nowrap;
+      }
+      /* everything readable stays inside the Instagram safe area: x 120-960, y 220-1500 */
+      #head {
+        position: absolute;
+        left: 0;
+        right: 0;
+        top: 222px;
+        text-align: center;
+        font-family: "HFMono", monospace;
+        font-weight: 700;
+        font-size: 38px;
+        letter-spacing: 0.12em;
+        line-height: 1.45;
+        color: #fff;
+        text-shadow: 0 0 16px rgba(255, 255, 255, 0.3);
+      }
+      #head .ghost {
+        visibility: hidden;
+      }
+      #ctr {
+        position: absolute;
+        left: 0;
+        right: 0;
+        top: 430px;
+        text-align: center;
+        font-family: "HFMono", monospace;
+        font-weight: 700;
+        white-space: nowrap;
+      }
+      #ctr .lbl {
+        font-size: 26px;
+        letter-spacing: 0.24em;
+        color: #9a9a9a;
+        vertical-align: middle;
+      }
+      #num {
+        display: inline-block;
+        min-width: 2.4ch;
+        font-size: 58px;
+        letter-spacing: 0.08em;
+        color: #fff;
+        vertical-align: middle;
+        text-shadow: 0 0 14px rgba(255, 255, 255, 0.35);
+      }
+      #tag {
+        display: inline-block;
+        min-width: 5.2ch;
+        padding: 6px 12px 4px;
+        font-size: 26px;
+        letter-spacing: 0.18em;
+        vertical-align: middle;
+        visibility: hidden;
+      }
+      #tag.fail {
+        visibility: visible;
+        background: #d62a2a;
+        color: #fff;
+      }
+      #tag.pass {
+        visibility: visible;
+        background: #fff;
+        color: #000;
+        box-shadow: 0 0 22px rgba(255, 255, 255, 0.6);
+      }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="14" data-width="1080" data-height="1920">
+      <div id="stage" class="clip" data-start="0" data-duration="14" data-track-index="0">
+        <svg id="svg" width="1080" height="1920" viewBox="0 0 1080 1920" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <linearGradient id="beam" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0" stop-color="#ffffff" stop-opacity="0.55" />
+              <stop offset="0.7" stop-color="#ffffff" stop-opacity="0.12" />
+              <stop offset="1" stop-color="#ffffff" stop-opacity="0.04" />
+            </linearGradient>
+            <radialGradient id="pool" cx="0.5" cy="0.5" r="0.5">
+              <stop offset="0" stop-color="#ffffff" stop-opacity="0.32" />
+              <stop offset="1" stop-color="#ffffff" stop-opacity="0" />
+            </radialGradient>
+            <radialGradient id="dustG" cx="0.5" cy="0.5" r="0.5">
+              <stop offset="0" stop-color="#b5b5b5" stop-opacity="0.8" />
+              <stop offset="1" stop-color="#b5b5b5" stop-opacity="0" />
+            </radialGradient>
+            <linearGradient id="ply" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0" stop-color="#d9c29b" />
+              <stop offset="1" stop-color="#8f7858" />
+            </linearGradient>
+            <linearGradient id="floorFade" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0" stop-color="#000" stop-opacity="0.45" />
+              <stop offset="1" stop-color="#000" stop-opacity="1" />
+            </linearGradient>
+            <filter id="blur" x="-50%" y="-50%" width="200%" height="200%">
+              <feGaussianBlur stdDeviation="12" />
+            </filter>
+            <filter id="soft" x="-50%" y="-50%" width="200%" height="200%">
+              <feGaussianBlur stdDeviation="16" />
+            </filter>
+                      <radialGradient id="boom" cx="0.5" cy="0.5" r="0.5">
+              <stop offset="0" stop-color="#ffffff" stop-opacity="1" />
+              <stop offset="0.35" stop-color="#ffd27a" stop-opacity="0.9" />
+              <stop offset="0.7" stop-color="#ff6a2a" stop-opacity="0.45" />
+              <stop offset="1" stop-color="#ff6a2a" stop-opacity="0" />
+            </radialGradient>
+            <radialGradient id="smoke" cx="0.5" cy="0.5" r="0.5">
+              <stop offset="0" stop-color="#9a9a9a" stop-opacity="0.85" />
+              <stop offset="1" stop-color="#9a9a9a" stop-opacity="0" />
+            </radialGradient>
+            <linearGradient id="flame" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0" stop-color="#ffffff" />
+              <stop offset="0.35" stop-color="#ffd27a" />
+              <stop offset="1" stop-color="#ff5a1f" stop-opacity="0" />
+            </linearGradient>
+          </defs>
+          <!-- world: floor at world y 600 -> screen y 1400, world x 400 -> screen x 540 -->
+          <g transform="translate(540 1400) scale(1.45) translate(-400 -600)">
+            <g id="beams"></g>
+            <g id="back"></g>
+            
+            <use href="#world" transform="translate(0 1200) scale(1 -1)" opacity="0.16" />
+            <rect x="-200" y="600" width="1200" height="260" fill="url(#floorFade)" />
+            <rect x="-600" y="858" width="2000" height="1400" fill="#000" />
+            <rect x="-200" y="599" width="1200" height="2" fill="#2a2a2a" />
+            <g id="world"></g>
+          </g>
+        </svg>
+        <div id="ctr"><span class="lbl">ATTEMPT</span> <span id="num">01</span> <span id="tag">FAIL</span></div>
+        <div id="head">
+          <div id="h1"></div>
+          <div id="h2"></div>
+        </div>
+      </div>
+      <audio id="mix" src="assets/audio/mix.wav" data-start="0" data-duration="14" data-track-index="1"></audio>
+    </div>
+
+    <script>
+      (function () {
+        const DUR = 14;
+        const FL = 600, BX0 = 380, BX1 = 520, BTOP = 410, TOPF = 404, SX = 250;
+        const THIGH = 80, SHIN = 78, LEG = 154;
+        const UARM = 64, FARM = 60, TORSO = 116, NECK = 12, HEADR = 31;
+        const NS = "http://www.w3.org/2000/svg";
+        const svgEl = (tag, attrs, parent) => {
+          const e = document.createElementNS(NS, tag);
+          for (const k in attrs || {}) e.setAttribute(k, attrs[k]);
+          if (parent) parent.appendChild(e);
+          return e;
+        };
+        const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
+        const lerp = (a, b, p) => a + (b - a) * p;
+        const ease = (p) => 0.5 - 0.5 * Math.cos(Math.PI * clamp(p, 0, 1));
+        const backOut = (p) => { p = clamp(p, 0, 1); const s = 2.2; return 1 + (s + 1) * Math.pow(p - 1, 3) + s * Math.pow(p - 1, 2); };
+        const win = (t, a, b) => ease((t - a) / (b - a));
+        const rad = (x) => (x * Math.PI) / 180;
+        const down = (a, f) => [Math.sin(rad(a)) * f, Math.cos(rad(a))];
+        const up = (a, f) => [Math.sin(rad(a)) * f, -Math.cos(rad(a))];
+        const r1 = (v) => Math.round(v * 10) / 10;
+        const E = (id) => document.getElementById(id);
+        let seed = 31;
+        const rnd = () => ((seed = (seed * 16807) % 2147483647) / 2147483647);
+
+        // ---------- rig v2 (from reel 05): blended poses, head/arm follow-through, breathing ----------
+        function makeFig(parent, front, back, glow, id) {
+          const g = svgEl("g", { id }, parent);
+          if (glow) parent.insertBefore(svgEl("use", { href: "#" + id, filter: "url(#blur)", opacity: 0.45 }), g);
+          const parts = { g };
+          for (const [n, col] of [["armB", back], ["legB", back], ["torso", front], ["legF", front], ["armF", front]]) {
+            const o = svgEl("path", { fill: "none", stroke: "#000", "stroke-width": 34, "stroke-linecap": "round", "stroke-linejoin": "round" }, g);
+            const w = svgEl("path", { fill: "none", stroke: col, "stroke-width": 22, "stroke-linecap": "round", "stroke-linejoin": "round" }, g);
+            parts[n] = [o, w];
+          }
+          parts.head = svgEl("circle", { r: HEADR, fill: front, stroke: "#000", "stroke-width": 6 }, g);
+          return parts;
+        }
+        function ik(a, b, l1, l2, pick) {
+          let dx = b[0] - a[0], dy = b[1] - a[1];
+          let d = Math.hypot(dx, dy);
+          const maxd = l1 + l2 - 0.5;
+          if (d > maxd) {
+            b = [a[0] + (dx / d) * maxd, a[1] + (dy / d) * maxd];
+            dx = b[0] - a[0];
+            dy = b[1] - a[1];
+            d = maxd;
+          }
+          d = Math.max(d, Math.abs(l1 - l2) + 1);
+          const al = Math.acos(clamp((l1 * l1 + d * d - l2 * l2) / (2 * l1 * d), -1, 1));
+          const base = Math.atan2(dy, dx);
+          const c1 = [a[0] + Math.cos(base + al) * l1, a[1] + Math.sin(base + al) * l1];
+          const c2 = [a[0] + Math.cos(base - al) * l1, a[1] + Math.sin(base - al) * l1];
+          return [pick(c1, c2), b];
+        }
+        const P = (pts) => "M" + pts.map((p) => r1(p[0]) + " " + r1(p[1])).join("L");
+        const setD = (pair, d) => {
+          pair[0].setAttribute("d", d);
+          pair[1].setAttribute("d", d);
+        };
+        // flat pose: hx hy torso head ax ay bx by | per arm a*/b*: sh el w tx ty
+        function drawFig(parts, s, f) {
+          const hip = [s.hx, s.hy];
+          const tu = up(s.torso, f);
+          const sh = [hip[0] + tu[0] * TORSO, hip[1] + tu[1] * TORSO];
+          const nk = [hip[0] + tu[0] * (TORSO + NECK), hip[1] + tu[1] * (TORSO + NECK)];
+          const hu = up(s.torso + s.head, f);
+          const hc = [nk[0] + hu[0] * HEADR, nk[1] + hu[1] * HEADR];
+          setD(parts.torso, P([hip, sh, nk]));
+          parts.head.setAttribute("cx", r1(hc[0]));
+          parts.head.setAttribute("cy", r1(hc[1]));
+          const knee = (c1, c2) => (c1[0] * f > c2[0] * f ? c1 : c2);
+          const elbow = (c1, c2) => (c1[1] - 0.5 * f * c1[0] > c2[1] - 0.5 * f * c2[0] ? c1 : c2);
+          [["legF", [s.ax, s.ay]], ["legB", [s.bx, s.by]]].forEach(([n, ft]) => {
+            const [kn, fo] = ik(hip, ft, THIGH, SHIN, knee);
+            setD(parts[n], P([hip, kn, fo]));
+          });
+          const hands = [];
+          [["armF", "a"], ["armB", "b"]].forEach(([n, k]) => {
+            const u = down(s[k + "sh"], f);
+            const el = [sh[0] + u[0] * UARM, sh[1] + u[1] * UARM];
+            const v = down(s[k + "sh"] + s[k + "el"], f);
+            const fk = [el[0] + v[0] * FARM, el[1] + v[1] * FARM];
+            const w = clamp(s[k + "w"], 0, 1);
+            const hand = [lerp(fk[0], s[k + "tx"], w), lerp(fk[1], s[k + "ty"], w)];
+            const [e2, h2] = ik(sh, hand, UARM, FARM, elbow);
+            setD(parts[n], P([sh, e2, h2]));
+            hands.push(h2);
+          });
+          return { head: hc, hands, hip };
+        }
+        const KER = [-4, -3, -2, -1, 0, 1, 2, 3, 4].map((k) => [k * 0.03, Math.exp(-((k / 2.3) ** 2))]);
+        function blend(raw, t) {
+          const out = {};
+          let ws = 0;
+          for (const [dt, w] of KER) {
+            const p = raw(clamp(t + dt, 0, DUR));
+            for (const k in p) out[k] = (out[k] || 0) + p[k] * w;
+            ws += w;
+          }
+          for (const k in out) out[k] /= ws;
+          return out;
+        }
+        const LAGGED = ["head", "ash", "ael", "aw", "atx", "aty", "bsh", "bel", "bw", "btx", "bty"];
+        function livePose(raw, t, phase) {
+          const s = blend(raw, t);
+          const lag = blend(raw, t - 0.05);
+          for (const k of LAGGED) s[k] = lag[k];
+          const br = Math.sin(t * 1.9 + phase);
+          s.hy += br * 1.3;
+          s.torso += br * 0.8;
+          s.head += Math.sin(t * 1.2 + phase * 2) * 1.6;
+          return s;
+        }
+        const ARMS = { ash: 8, ael: 12, aw: 0, atx: 0, aty: 0, bsh: -4, bel: 10, bw: 0, btx: 0, bty: 0 };
+        const base = (o) => ({ hx: 0, hy: 0, torso: 3, head: 0, ax: 0, ay: FL, bx: 0, by: FL, ...ARMS, ...o });
+        function standOn(x, f, fy) {
+          return base({ hx: x, hy: fy - Math.sqrt(LEG * LEG - 15 * 15), ax: x + f * 15, ay: fy, bx: x - f * 15, by: fy });
+        }
+        const mixPose = (a, b, p) => {
+          const o = {};
+          for (const k in a) o[k] = lerp(a[k], b[k], p);
+          return o;
+        };
+
+        // ---------- scene: one rocket, one engineer. 62 explosions nobody saw, then the launch everybody saw ----------
+        const cam = E("svg").children[1];
+        const W = E("world");
+        const beams = E("beams");
+        const backG = E("back");
+        const padG = svgEl("g", {}, W);
+        const smokeG = svgEl("g", {}, W);
+        const rocketG = svgEl("g", {}, W);
+        const figG = svgEl("g", {}, W);
+        const fxG = svgEl("g", {}, W);
+        const RX = 430, PADY = FL - 26;
+
+        // stars, beam, pad + tower, control box
+        for (let i = 0; i < 60; i++) svgEl("circle", { cx: -200 + rnd() * 1200, cy: -900 + rnd() * 1100, r: 1 + rnd() * 1.6, fill: "#fff", opacity: 0.25 + rnd() * 0.5 }, backG);
+        const beam = svgEl("polygon", { points: `${RX - 60},-500 ${RX + 60},-500 ${RX + 170},600 ${RX - 170},600`, fill: "url(#beam)", filter: "url(#soft)", opacity: 0.35 }, beams);
+        svgEl("rect", { x: RX - 80, y: PADY, width: 160, height: 26, fill: "#4a4a4a", stroke: "#000", "stroke-width": 5 }, padG);
+        for (const x of [RX + 64, RX + 104]) svgEl("rect", { x: x - 5, y: FL - 300, width: 10, height: 300 - 26, fill: "#5a5a5a", stroke: "#000", "stroke-width": 4 }, padG);
+        for (let y = FL - 290; y < FL - 40; y += 40) svgEl("path", { d: `M${RX + 64} ${y} L${RX + 104} ${y + 40} M${RX + 104} ${y} L${RX + 64} ${y + 40}`, stroke: "#5a5a5a", "stroke-width": 4 }, padG);
+        svgEl("rect", { x: 230, y: FL - 70, width: 54, height: 70, rx: 6, fill: "#3a3a3a", stroke: "#000", "stroke-width": 5 }, padG);
+        const button = svgEl("rect", { x: 245, y: FL - 82, width: 24, height: 12, rx: 4, fill: "#d62a2a", stroke: "#000", "stroke-width": 3 }, padG);
+
+        // the rocket
+        const rocket = svgEl("g", {}, rocketG);
+        const flameEl = svgEl("path", { fill: "url(#flame)" }, rocket);
+        svgEl("path", { d: "M-22 -18 L-40 6 L-22 0 Z M22 -18 L40 6 L22 0 Z", fill: "#d62a2a", stroke: "#000", "stroke-width": 4, "stroke-linejoin": "round" }, rocket);
+        svgEl("path", { d: "M-22 0 L-22 -110 Q-22 -150 0 -168 Q22 -150 22 -110 L22 0 Z", fill: "#f2f2f2", stroke: "#000", "stroke-width": 5, "stroke-linejoin": "round" }, rocket);
+        svgEl("circle", { cx: 0, cy: -100, r: 9, fill: "#8fbaff", stroke: "#000", "stroke-width": 4 }, rocket);
+        svgEl("rect", { x: -12, y: 0, width: 24, height: 10, fill: "#555", stroke: "#000", "stroke-width": 3 }, rocket);
+        const trail = svgEl("path", { fill: "none", stroke: "#e8e8e8", "stroke-width": 16, "stroke-linecap": "round", filter: "url(#blur)", opacity: 0 }, smokeG);
+        const trailCore = svgEl("path", { fill: "none", stroke: "#ffffff", "stroke-width": 4, "stroke-linecap": "round", opacity: 0 }, smokeG);
+        const groundGlow = svgEl("ellipse", { cx: RX, cy: FL, rx: 220, ry: 34, fill: "url(#boom)", opacity: 0 }, backG);
+
+        // explosions: flash + smoke puffs + debris
+        function makeBoom() {
+          const g = svgEl("g", {}, fxG);
+          const puffs = [], deb = [];
+          for (let i = 0; i < 7; i++) puffs.push(svgEl("circle", { fill: "url(#smoke)" }, smokeG));
+          for (let i = 0; i < 9; i++) deb.push(svgEl("rect", { width: 12, height: 6, fill: i % 3 ? "#e8e8e8" : "#d62a2a", stroke: "#000", "stroke-width": 2 }, g));
+          const flash = svgEl("circle", { fill: "url(#boom)" }, g);
+          return { puffs, deb, flash };
+        }
+        function drawBoom(b, x, y, t0, sc, t) {
+          const q = t - t0;
+          const on = q >= 0 && q < 2.2;
+          b.flash.setAttribute("cx", r1(x)); b.flash.setAttribute("cy", r1(y));
+          b.flash.setAttribute("r", r1(on ? 30 + 170 * sc * ease(Math.min(1, q / 0.18)) : 0));
+          b.flash.setAttribute("opacity", on ? Math.max(0, 1 - q / 0.6).toFixed(3) : 0);
+          b.puffs.forEach((p, i) => {
+            const a = (i / 7) * Math.PI * 2;
+            p.setAttribute("cx", r1(x + Math.cos(a) * 50 * sc * Math.min(1, q * 2)));
+            p.setAttribute("cy", r1(y + Math.sin(a) * 30 * sc * Math.min(1, q * 2) - 60 * q));
+            p.setAttribute("r", r1(on ? (40 + 60 * Math.min(1, q)) * sc : 0));
+            p.setAttribute("opacity", on ? clamp(1 - q / 2.2, 0, 1).toFixed(3) : 0);
+          });
+          b.deb.forEach((d, i) => {
+            const a = -Math.PI / 2 + (i / 8 - 0.5) * 2.6, v = (200 + (i % 4) * 60) * sc;
+            const dq = Math.min(q, 1.0);
+            d.setAttribute("x", r1(x + Math.cos(a) * v * dq));
+            d.setAttribute("y", r1(y + Math.sin(a) * v * dq + 500 * dq * dq));
+            d.setAttribute("transform", `rotate(${r1(q * 700 + i * 40)} ${r1(x + Math.cos(a) * v * dq)} ${r1(y + Math.sin(a) * v * dq + 500 * dq * dq)})`);
+            d.setAttribute("opacity", on && q < 1.0 ? 1 : 0);
+          });
+        }
+        const booms = [makeBoom(), makeBoom(), makeBoom(), makeBoom()];
+        const MONT0 = 5.9, MONT1 = 8.2, MSTEP = 0.26;
+        const montT = [];
+        for (let t = MONT0 + 0.1; t < MONT1; t += MSTEP) montT.push(t);
+        const bigSmoke = [];
+        for (let i = 0; i < 10; i++) bigSmoke.push(svgEl("circle", { fill: "url(#smoke)" }, smokeG));
+
+        // ---------- rocket state per attempt ----------
+        const IG = [0.8, 3.0, 4.3], BOOM = [1.6, 3.35, 5.3], BACK = [2.6, 4.0, 5.9];
+        const T_P = 8.6, T_IG = 8.7, T_LIFT = 9.0;
+        function rk(t) {
+          // returns x, h (height above pad), rot, visible, flame strength
+          if (t < IG[0]) return [RX, 0, 0, 1, 0];
+          if (t < BOOM[0]) return [RX, 90 * ease((t - IG[0]) / 0.8), 7 * Math.sin(t * 22) * win(t, 1.15, 1.6), 1, 1];
+          if (t < BACK[0]) return [RX, 0, 0, 0, 0];
+          if (t < IG[1]) return [RX, 0, 0, win(t, BACK[0], BACK[0] + 0.3), 0];
+          if (t < BOOM[1]) return [RX + Math.sin(t * 80) * 2, 0, 0, 1, 0.6];
+          if (t < BACK[1]) return [RX, 0, 0, 0, 0];
+          if (t < IG[2]) return [RX, 0, 0, win(t, BACK[1], BACK[1] + 0.3), 0];
+          if (t < BOOM[2]) {
+            const r = win(t, 4.8, 5.3);
+            return [RX + 240 * r * r, 210 * ease((t - IG[2]) / 0.6) - 60 * r * r, 115 * r, 1, 1];
+          }
+          if (t < BACK[2]) return [RX, 0, 0, 0, 0];
+          if (t < T_IG) return [RX, 0, 0, win(t, BACK[2], BACK[2] + 0.2), 0];
+          if (t < T_LIFT) return [RX + Math.sin(t * 70) * 1.5, 0, 0, 1, 0.8];
+          return [RX, 230 * (t - T_LIFT) ** 2, 0, 1, 1.3];
+        }
+        const attempt = (t) => (t < BACK[0] ? 1 : t < BACK[1] ? 2 : t < BACK[2] ? 3 : t < MONT1 ? Math.round(lerp(4, 62, (t - MONT0) / (MONT1 - MONT0))) : 63);
+        const montFlash = (t) => montT.reduce((v, m) => (t >= m && t < m + 0.16 ? 1 - (t - m) / 0.16 : v), 0);
+
+        // ---------- the engineer ----------
+        const eng = makeFig(figG, "#ffffff", "#dedede", true, "eng");
+        const PRESS = [0.7, 2.9, 4.2, T_P];
+        for (let t = MONT0; t < MONT1; t += MSTEP) PRESS.push(t);
+        const EX = 170;
+        function engRaw(t) {
+          const s = standOn(EX, 1, FL);
+          let pr = 0;
+          for (const p of PRESS) pr = Math.max(pr, Math.sin(Math.PI * clamp((t - p + 0.15) / 0.3, 0, 1)));
+          s.aw = pr; s.atx = 257; s.aty = FL - 84;
+          s.torso = 4 + 10 * pr;
+          let sad = 0;
+          for (const b of BOOM) sad = Math.max(sad, win(t, b + 0.2, b + 0.5) * (1 - win(t, b + 0.9, b + 1.2)));
+          s.head = 4 + 22 * sad - 20 * win(t, T_LIFT, T_LIFT + 0.6);
+          const yay = win(t, 9.8, 10.2);
+          s.ash = lerp(s.ash, 160, yay); s.ael = lerp(s.ael, -10, yay); s.bsh = lerp(s.bsh, 150, yay); s.bel = lerp(s.bel, -10, yay);
+          s.aw *= 1 - yay;
+          s.hy -= 10 * yay * Math.abs(Math.sin((t - 9.8) * 7));
+          return s;
+        }
+
+        const typed = (id, text, t, t0, cps) => {
+          const n = clamp(Math.floor((t - t0) * cps), 0, text.length);
+          E(id).innerHTML = "<span>" + text.slice(0, n) + '</span><span class="ghost">' + text.slice(n) + "</span>";
+        };
+        const fade = document.createElement("div");
+        fade.style.cssText = "position:absolute;inset:0;background:#000;opacity:0";
+        E("stage").appendChild(fade);
+        const pad = (n) => String(n).padStart(2, "0");
+
+        // ---------- per-frame render ----------
+        function render(t) {
+          // camera: shake on explosions and lift-off, small tilt up after launch
+          let sh = 0;
+          for (const b of BOOM) sh += Math.max(0, 1 - Math.abs(t - b - 0.1) / 0.35);
+          sh += montFlash(t) * 0.4 + win(t, T_IG, T_LIFT) * (1 - win(t, 10.2, 10.8)) * 0.7;
+          const ox = Math.sin(t * 61) * 7 * sh, oy = Math.cos(t * 53) * 6 * sh;
+          const up = win(t, 9.6, 11.6);
+          cam.setAttribute("transform", `translate(${r1(540 + ox)} ${r1(1380 + oy + 170 * up)}) scale(1.5) translate(-340 -600)`);
+
+          const [x, h, rot, vis, fl] = rk(t);
+          const mf = t > MONT0 && t < MONT1 ? montFlash(t) : 0;
+          rocket.setAttribute("transform", `translate(${r1(x)} ${r1(PADY - 10 - h)}) rotate(${r1(rot)})`);
+          rocket.setAttribute("opacity", (vis * (1 - 0.9 * mf)).toFixed(3));
+          const fll = fl * (70 + 30 * Math.sin(t * 40) + 18 * Math.sin(t * 23));
+          flameEl.setAttribute("d", fl > 0 ? `M-15 8 Q${r1(-10 + 4 * Math.sin(t * 30))} ${r1(8 + fll * 0.6)} 0 ${r1(8 + fll)} Q${r1(10 + 4 * Math.sin(t * 27))} ${r1(8 + fll * 0.6)} 15 8 Z` : "");
+          groundGlow.setAttribute("opacity", (clamp(fl, 0, 1) * (h < 260 ? 1 - h / 260 : 0) * 0.9 + mf * 0.6).toFixed(3));
+          const ty = Math.max(-80, PADY - 10 - h + 20);
+          for (const tr of [trail, trailCore]) { tr.setAttribute("d", t > T_LIFT ? `M${RX} ${PADY - 20} L${RX} ${r1(ty)}` : ""); tr.setAttribute("opacity", (win(t, T_LIFT, T_LIFT + 0.3) * (tr === trail ? 0.55 : 0.8) * (1 - 0.4 * win(t, 11.5, 13))).toFixed(3)); }
+          beam.setAttribute("opacity", (0.35 + 0.2 * win(t, T_LIFT, 9.8)).toFixed(3));
+
+          drawBoom(booms[0], RX, PADY - 10 - 90 - 70, BOOM[0], 1, t);
+          drawBoom(booms[1], RX, PADY - 60, BOOM[1], 1.1, t);
+          drawBoom(booms[2], RX + 240, PADY - 10 - 150 - 40, BOOM[2], 0.9, t);
+          // montage: small booms on every press
+          let lastM = -9;
+          for (const m of montT) if (t >= m) lastM = m;
+          drawBoom(booms[3], RX + ((lastM * 37) % 30) - 15, PADY - 70, lastM, 0.55, t < MONT1 + 0.6 ? t : -9);
+          // lift-off smoke billows out to the sides
+          bigSmoke.forEach((c, i) => {
+            const q = t - T_IG - i * 0.06, side = i % 2 ? 1 : -1;
+            const r = q > 0 ? 30 + 70 * Math.min(1, q / 1.2) : 0;
+            c.setAttribute("cx", r1(RX + side * (20 + 40 * (i >> 1)) * Math.min(1, q > 0 ? q * 1.5 : 0)));
+            c.setAttribute("cy", r1(FL - 30 - 10 * (i >> 1)));
+            c.setAttribute("r", r1(r));
+            c.setAttribute("opacity", q > 0 ? clamp(1 - (q - 1.2) / 2.5, 0, 0.9).toFixed(3) : 0);
+          });
+
+          drawFig(eng, livePose(engRaw, t, 0.5), 1);
+          button.setAttribute("fill", PRESS.some((p) => t > p && t < p + 0.18) ? "#ff6a5a" : "#d62a2a");
+
+          // counter + FAIL / PASS
+          E("num").textContent = pad(attempt(t));
+          const tag = E("tag");
+          let failOn = BOOM.some((b) => t > b && t < b + 0.9) || mf > 0.2;
+          tag.className = t > 9.6 ? "pass" : failOn ? "fail" : "";
+          tag.textContent = t > 9.6 ? "PASS" : "FAIL";
+
+          typed("h1", "YOU SAW ONE LAUNCH.", t, 0.3, 24);
+          typed("h2", "NOT THE 62 EXPLOSIONS.", t, 10.5, 22);
+          E("h1").style.color = `rgba(255,255,255,${(1 - 0.55 * win(t, 10.3, 10.7)).toFixed(3)})`;
+          fade.style.opacity = win(t, 13.35, 13.95).toFixed(3);
+        }
+
+        window.__timelines = window.__timelines || {};
+        const tl = gsap.timeline({ paused: true });
+        const clock = { t: 0 };
+        tl.to(clock, { t: DUR, duration: DUR, ease: "none", onUpdate: () => render(clock.t) }, 0);
+        window.__timelines["main"] = tl;
+        render(0);
+        tl.seek(0);
+      })();
+    </script>
+  </body>
+</html>

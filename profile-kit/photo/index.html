@@ -1,0 +1,133 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1080" />
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      html,
+      body,
+      #root {
+        width: 1080px;
+        height: 1080px;
+        overflow: hidden;
+        background: #000;
+      }
+      #root {
+        position: relative;
+      }
+      #art {
+        position: absolute;
+        inset: 0;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="1" data-width="1080" data-height="1080">
+      <svg id="art" class="clip" data-start="0" data-duration="1" data-track-index="0" width="1080" height="1080" viewBox="0 0 1080 1080" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <linearGradient id="cone" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0" stop-color="#fff" stop-opacity="0.42" />
+            <stop offset="0.6" stop-color="#fff" stop-opacity="0.1" />
+            <stop offset="1" stop-color="#fff" stop-opacity="0.02" />
+          </linearGradient>
+          <radialGradient id="pool" cx="0.5" cy="0.5" r="0.5">
+            <stop offset="0" stop-color="#fff" stop-opacity="0.28" />
+            <stop offset="1" stop-color="#fff" stop-opacity="0" />
+          </radialGradient>
+          <radialGradient id="vig" cx="0.5" cy="0.45" r="0.62">
+            <stop offset="0.6" stop-color="#000" stop-opacity="0" />
+            <stop offset="1" stop-color="#000" stop-opacity="0.85" />
+          </radialGradient>
+          <linearGradient id="stone" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0" stop-color="#e2dbcd" />
+            <stop offset="1" stop-color="#8f897d" />
+          </linearGradient>
+          <linearGradient id="fade" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0" stop-color="#000" stop-opacity="0.35" />
+            <stop offset="1" stop-color="#000" stop-opacity="1" />
+          </linearGradient>
+          <filter id="blur" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="18" /></filter>
+          <filter id="blurS" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="8" /></filter>
+          <filter id="cone-blur" x="-20%" y="-20%" width="140%" height="140%"><feGaussianBlur stdDeviation="14" /></filter>
+        </defs>
+        <rect width="1080" height="1080" fill="#050505" />
+        <polygon points="440,-40 660,-40 1010,960 70,960" fill="url(#cone)" filter="url(#cone-blur)" />
+        <g id="dust"></g>
+        <ellipse cx="540" cy="960" rx="470" ry="70" fill="url(#pool)" />
+        <g id="stairs"></g>
+        <g id="reflect" opacity="0.22" transform="translate(0 1920) scale(1 -1)"></g>
+        <rect x="0" y="960" width="1080" height="120" fill="url(#fade)" />
+        <g id="fig"></g>
+        <rect width="1080" height="1080" fill="url(#vig)" />
+      </svg>
+    </div>
+    <script>
+      (() => {
+        const NS = "http://www.w3.org/2000/svg";
+        const el = (tag, attrs, parent) => {
+          const n = document.createElementNS(NS, tag);
+          for (const k in attrs) n.setAttribute(k, attrs[k]);
+          parent.appendChild(n);
+          return n;
+        };
+        const pl = (...pts) => "M" + pts.map((p) => p.join(" ")).join(" L");
+        const round = { fill: "none", "stroke-linecap": "round", "stroke-linejoin": "round" };
+
+        // Stone stairs up to the right; the top step edge is the one red accent.
+        function stairs(g, x0, y0, sw, sh, n) {
+          for (let k = 0; k < n; k++) {
+            const x = x0 + k * sw, y = y0 - (k + 1) * sh;
+            el("rect", { x, y, width: 1200, height: (k + 1) * sh, fill: "url(#stone)" }, g);
+            el("rect", { x, y, width: 1200, height: 9, fill: k === n - 1 ? "#ff2d2d" : "#f6f1e7" }, g);
+            el("rect", { x: x - 3, y, width: 6, height: (k + 1) * sh, fill: "#000", opacity: 0.35 }, g);
+          }
+        }
+        const S = [400, 960, 175, 135, 3];
+        stairs(document.getElementById("stairs"), ...S);
+        stairs(document.getElementById("reflect"), ...S);
+        // red glow on the top step
+        el("rect", { x: S[0] + 2 * S[2], y: S[1] - 3 * S[3] - 6, width: 700, height: 20, fill: "#ff2d2d", filter: "url(#blurS)", opacity: 0.9 }, document.getElementById("stairs"));
+
+        // Dust in the light (fixed positions so the frame is deterministic).
+        const dust = document.getElementById("dust");
+        let seed = 7;
+        const rnd = () => ((seed = (seed * 16807) % 2147483647) / 2147483647);
+        for (let i = 0; i < 46; i++) {
+          const y = 40 + rnd() * 860, half = 110 + (y / 960) * 360;
+          el("circle", { cx: 550 + (rnd() * 2 - 1) * half * 0.8, cy: y, r: 1.5 + rnd() * 3, fill: "#fff", opacity: 0.12 + rnd() * 0.35 }, dust);
+        }
+
+        // The doer: glowing white stickman stepping up onto the second step.
+        const f = {
+          head: [586, 300], r: 66,
+          neck: [566, 388], hip: [528, 580], sh: [562, 414],
+          lk: [660, 545], lf: [690, 690],
+          rk: [548, 712], rf: [470, 825],
+          le: [646, 478], lh: [712, 414],
+          re: [508, 512], rh: [446, 568],
+        };
+        const W = 36;
+        const g = document.getElementById("fig");
+        const limbs = [pl(f.neck, f.hip), pl(f.hip, f.lk, f.lf), pl(f.hip, f.rk, f.rf), pl(f.sh, f.le, f.lh), pl(f.sh, f.re, f.rh)];
+        const glow = el("g", { filter: "url(#blur)", opacity: 0.85 }, g);
+        for (const d of limbs) el("path", { d, stroke: "#fff", "stroke-width": W * 1.7, ...round }, glow);
+        el("circle", { cx: f.head[0], cy: f.head[1], r: f.r * 1.2, fill: "#fff" }, glow);
+        for (const d of limbs) el("path", { d, stroke: "#000", "stroke-width": W + 18, ...round }, g);
+        el("circle", { cx: f.head[0], cy: f.head[1], r: f.r + 9, fill: "#000" }, g);
+        for (const d of limbs) el("path", { d, stroke: "#fff", "stroke-width": W, ...round }, g);
+        el("circle", { cx: f.head[0], cy: f.head[1], r: f.r, fill: "#fff" }, g);
+
+        window.__timelines = window.__timelines || {};
+        const tl = gsap.timeline({ paused: true });
+        tl.to({}, { duration: 1 }, 0);
+        window.__timelines["main"] = tl;
+      })();
+    </script>
+  </body>
+</html>

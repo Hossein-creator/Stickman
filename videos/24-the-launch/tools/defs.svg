@@ -1,0 +1,15 @@
+            <radialGradient id="boom" cx="0.5" cy="0.5" r="0.5">
+              <stop offset="0" stop-color="#ffffff" stop-opacity="1" />
+              <stop offset="0.35" stop-color="#ffd27a" stop-opacity="0.9" />
+              <stop offset="0.7" stop-color="#ff6a2a" stop-opacity="0.45" />
+              <stop offset="1" stop-color="#ff6a2a" stop-opacity="0" />
+            </radialGradient>
+            <radialGradient id="smoke" cx="0.5" cy="0.5" r="0.5">
+              <stop offset="0" stop-color="#9a9a9a" stop-opacity="0.85" />
+              <stop offset="1" stop-color="#9a9a9a" stop-opacity="0" />
+            </radialGradient>
+            <linearGradient id="flame" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0" stop-color="#ffffff" />
+              <stop offset="0.35" stop-color="#ffd27a" />
+              <stop offset="1" stop-color="#ff5a1f" stop-opacity="0" />
+            </linearGradient>

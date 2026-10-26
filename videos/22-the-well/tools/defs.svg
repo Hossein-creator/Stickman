@@ -1,0 +1,14 @@
+            <linearGradient id="earth" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0" stop-color="#4a3a2d" />
+              <stop offset="0.5" stop-color="#33271e" />
+              <stop offset="1" stop-color="#140f0b" />
+            </linearGradient>
+            <linearGradient id="water" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0" stop-color="#d9f3ff" />
+              <stop offset="0.4" stop-color="#5cc4ff" />
+              <stop offset="1" stop-color="#1d6fb0" />
+            </linearGradient>
+            <radialGradient id="waterGlow" cx="0.5" cy="0.5" r="0.5">
+              <stop offset="0" stop-color="#7fd3ff" stop-opacity="0.7" />
+              <stop offset="1" stop-color="#7fd3ff" stop-opacity="0" />
+            </radialGradient>

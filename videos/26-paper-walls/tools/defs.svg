@@ -1,0 +1,19 @@
+            <linearGradient id="brick" x1="0" y1="0" x2="1" y2="0">
+              <stop offset="0" stop-color="#6a6a6a" />
+              <stop offset="1" stop-color="#3a3a3a" />
+            </linearGradient>
+            <radialGradient id="lightBeyond" cx="0.5" cy="0.5" r="0.5">
+              <stop offset="0" stop-color="#ffffff" stop-opacity="0.7" />
+              <stop offset="1" stop-color="#ffffff" stop-opacity="0" />
+            </radialGradient>
+            <linearGradient id="streak" x1="0" y1="0" x2="1" y2="0">
+              <stop offset="0" stop-color="#ffffff" stop-opacity="0" />
+              <stop offset="1" stop-color="#ffffff" stop-opacity="0.9" />
+            </linearGradient>
+            <filter id="chromaF" x="-30%" y="-30%" width="160%" height="160%" color-interpolation-filters="sRGB">
+              <feOffset id="chR" in="SourceGraphic" dx="0" dy="0" result="r" />
+              <feColorMatrix in="r" type="matrix" values="1 0 0 0 0  0 0.15 0 0 0  0 0 0.2 0 0  0 0 0 0.85 0" result="rr" />
+              <feOffset id="chB" in="SourceGraphic" dx="0" dy="0" result="b" />
+              <feColorMatrix in="b" type="matrix" values="0.1 0 0 0 0  0 0.9 0 0 0  0 0 1 0 0  0 0 0 0.85 0" result="bb" />
+              <feMerge><feMergeNode in="rr" /><feMergeNode in="bb" /><feMergeNode in="SourceGraphic" /></feMerge>
+            </filter>

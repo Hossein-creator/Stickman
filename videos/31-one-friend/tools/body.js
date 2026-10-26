@@ -1,0 +1,417 @@
+        // ---------- "one friend": gold car, money rain, champagne, a crowd. The money crashes, the crowd leaves, the car is towed. One friend lights a fire. They grow old together ----------
+        const cam = E("svg").children[1];
+        for (const el of Array.from(cam.children)) {
+          const fill = el.getAttribute("fill") || "";
+          if (fill.includes("floorFade") || fill === "#2a2a2a") { el.setAttribute("x", -1400); el.setAttribute("width", 3400); }
+        }
+        const W = E("world");
+        const backG = E("back");
+        const beams = E("beams");
+        const skyG = svgEl("g", {}, backG);
+        const carG = svgEl("g", {}, W);
+        const fireBack = svgEl("g", {}, W);
+        const figG = svgEl("g", {}, W);
+        const fireG = svgEl("g", {}, W);
+        const fxG = svgEl("g", {}, W);
+        const frac = (v) => v - Math.floor(v);
+        const pw = (s, K) => { for (let i = 1; i < K.length; i++) if (s < K[i][0]) return lerp(K[i - 1][1], K[i][1], ease((s - K[i - 1][0]) / (K[i][0] - K[i - 1][0]))); return K[K.length - 1][1]; };
+
+        // ---------- time warp: slow motion on the crash ----------
+        const SLOWS = [[3.05, 4.05]], SLOWK = 0.33;
+        const speedAt = (t) => { let w = 0; for (const [a, b] of SLOWS) w += win(t, a, a + 0.1) * (1 - win(t, b - 0.3, b)); return 1 - (1 - SLOWK) * w; };
+        const TSTEP = 1 / 400, TS = [0];
+        for (let i = 1; i <= DUR / TSTEP; i++) TS.push(TS[i - 1] + speedAt((i - 0.5) * TSTEP) * TSTEP);
+        const story = (t) => { const f = clamp(t / TSTEP, 0, TS.length - 1), i = Math.floor(f); return TS[i] + (TS[Math.min(i + 1, TS.length - 1)] - TS[i]) * (f - i); };
+        const realOf = (s) => { let lo = 0, hi = TS.length - 1; while (hi - lo > 1) { const m = (lo + hi) >> 1; if (TS[m] < s) lo = m; else hi = m; } return lo * TSTEP; };
+
+        // ---------- story beats ----------
+        const T_STOP = 0.55, T_OUT = 0.6, T_POP = 1.55, T_CRASH = 3.1, T_HOOK = 4.9, T_TOW = 5.1, T_DOWN = 5.3;
+        const T_FWALK = 5.6, T_MATCH = 6.3, T_LIT = 6.55, T_AGE0 = 7.2, T_AGE1 = 10.8, T_TOAST = 11.0;
+        const BEAT = 0.42, BEATS = [];
+        for (let b = T_STOP; b < T_CRASH; b += BEAT) BEATS.push(b);
+        const beatAt = (s) => (s < T_STOP || s > T_CRASH ? 0 : Math.exp(-frac((s - T_STOP) / BEAT) * BEAT / 0.12));
+        const HX = 450, HXS = 490, FRX = 220, FX = 355, CARX = 780;
+        const stand = FL - Math.sqrt(LEG * LEG - 15 * 15);
+
+        // ---------- sky for the years: sun and moon racing over, stars ----------
+        const dayGlow = svgEl("rect", { x: -1200, y: -1600, width: 3200, height: 2200, fill: "#22304a", opacity: 0 }, skyG);
+        const stars = Array.from({ length: 24 }, (_, i) => svgEl("circle", { cx: -300 + ((i * 397) % 1400), cy: -900 + ((i * 251) % 700), r: 2 + (i % 3), fill: "#fff", opacity: 0 }, skyG));
+        const orb = svgEl("circle", { r: 46, fill: "#ffd27a", opacity: 0 }, skyG);
+        const orbGlow = svgEl("circle", { r: 160, fill: "url(#fireGlow)", opacity: 0 }, skyG);
+        // party lights
+        const PARTY = [["#c58bff", 120], ["#ffd27a", 420], ["#4fd1ff", 720]].map(([c, x], i) => ({ x, i, el: svgEl("polygon", { fill: c, filter: "url(#soft)", opacity: 0 }, beams) }));
+        const partyPool = svgEl("ellipse", { cx: 430, cy: FL, rx: 520, ry: 70, fill: "url(#partyGlow)", opacity: 0 }, backG);
+
+        // ---------- the gold car ----------
+        const car = svgEl("g", {}, carG);
+        const carBody = svgEl("path", { d: "M-205 -22 L-205 -48 Q-196 -64 -130 -68 L-58 -100 Q12 -110 84 -98 L152 -68 Q200 -64 205 -44 L205 -22 Z", fill: "url(#gold)", stroke: "#000", "stroke-width": 6, "stroke-linejoin": "round" }, car);
+        svgEl("path", { d: "M-50 -94 L-100 -70 L-4 -70 L-4 -100 Z M8 -100 L8 -70 L124 -70 L76 -96 Z", fill: "#151515", stroke: "#000", "stroke-width": 4 }, car);
+        svgEl("rect", { x: -202, y: -44, width: 20, height: 7, rx: 3, fill: "#fff6d0" }, car);
+        svgEl("path", { d: "M150 -66 L196 -78 L200 -66 Z", fill: "#1a1a1a", stroke: "#000", "stroke-width": 3 }, car);
+        const wheels = [-118, 118].map((wx) => {
+          const g = svgEl("g", { transform: `translate(${wx} -24)` }, car);
+          svgEl("circle", { r: 30, fill: "#111", stroke: "#000", "stroke-width": 5 }, g);
+          const rim = svgEl("g", {}, g);
+          svgEl("circle", { r: 15, fill: "none", stroke: "#e0a93a", "stroke-width": 5 }, rim);
+          for (const a of [0, 60, 120]) svgEl("line", { x1: -15, y1: 0, x2: 15, y2: 0, stroke: "#e0a93a", "stroke-width": 4, transform: `rotate(${a})` }, rim);
+          return rim;
+        });
+        const smoke = Array.from({ length: 8 }, () => svgEl("circle", { r: 30, fill: "url(#dustG)", opacity: 0 }, carG));
+        const towLine = svgEl("line", { stroke: "#9a9a9a", "stroke-width": 5, opacity: 0 }, carG);
+        const towHook = svgEl("path", { d: "M0 0 l0 18 q0 14 -14 14", fill: "none", stroke: "#9a9a9a", "stroke-width": 6, opacity: 0 }, carG);
+        function carAt(s) {
+          if (s < T_STOP) { const k = ease(s / T_STOP); return [lerp(1500, CARX, 1 - (1 - k) * (1 - k)), -7 * Math.sin(Math.PI * k)]; }
+          if (s < T_TOW) return [CARX, 3 * Math.exp(-(s - T_STOP) * 9) * Math.sin((s - T_STOP) * 40)];
+          const k = (s - T_TOW) / 1.0;
+          return [CARX + 900 * k * k, -6 * Math.min(1, k * 3)];
+        }
+
+        // ---------- fire (lit later by the friend) ----------
+        const pool = svgEl("ellipse", { cx: FX, cy: FL, rx: 330, ry: 46, fill: "url(#fireGlow)", opacity: 0 }, backG);
+        const halo = svgEl("circle", { cx: FX, cy: FL - 90, r: 330, fill: "url(#fireGlow)", opacity: 0 }, backG);
+        const fireWood = svgEl("g", { opacity: 0 }, fireBack);
+        for (const a of [-18, 18]) svgEl("rect", { x: FX - 40, y: FL - 14, width: 80, height: 14, rx: 7, fill: "#4a3a2c", stroke: "#000", "stroke-width": 4, transform: `rotate(${a} ${FX} ${FL - 7})` }, fireWood);
+        for (let i = 0; i < 6; i++) svgEl("ellipse", { cx: FX - 50 + i * 20, cy: FL - 4, rx: 10, ry: 6, fill: "#3a3a3a", stroke: "#000", "stroke-width": 3 }, fireWood);
+        const FL_DEF = [[-18, 0.62, "#d62a2a"], [16, 0.7, "#d62a2a"], [0, 1, "#ff6a2a"], [-8, 0.7, "#ffb347"], [8, 0.62, "#ffb347"], [0, 0.45, "#fff1c2"]];
+        const flames = FL_DEF.map(([dx, k, col]) => [svgEl("path", { fill: col, stroke: "#000", "stroke-width": col === "#fff1c2" ? 0 : 3, "stroke-linejoin": "round" }, fireG), dx, k]);
+        const embers = Array.from({ length: 12 }, () => svgEl("circle", { r: 2.4, fill: "#ffc070", opacity: 0 }, fireG));
+        const match = svgEl("circle", { r: 7, fill: "#ffb347", opacity: 0 }, fireG);
+        const fireK = (s) => (s < T_LIT ? 0 : 1.35 * win(s, T_LIT, T_LIT + 0.15) - 0.35 * win(s, T_LIT + 0.2, T_LIT + 0.7));
+
+        // ---------- people ----------
+        const tint = (parts, front, back) => {
+          for (const n of ["torso", "legF", "armF"]) parts[n][1].setAttribute("stroke", front);
+          for (const n of ["legB", "armB"]) parts[n][1].setAttribute("stroke", back);
+          parts.head.setAttribute("fill", front);
+        };
+        const gray = (v) => { v = Math.round(v); return `rgb(${v},${v},${v})`; };
+        // crowd: x, facing, start x for the run-in, arrive time, leave time
+        const CROWD = [[70, 1, -380, 0.75, 4.35], [170, 1, -420, 0.8, 3.75], [270, 1, -460, 0.88, 4.85], [620, -1, 1500, 0.9, 4.05], [730, -1, 1550, 0.95, 5.1], [840, -1, 1600, 1.0, 4.6]];
+        const crowd = CROWD.map(([x], i) => { const box = svgEl("g", {}, figG); return { box, parts: makeFig(box, "#d8d8d8", "#b4b4b4", false, "c" + i) }; });
+        const friendBox = svgEl("g", {}, figG);
+        const friend = makeFig(friendBox, "#ffffff", "#dedede", true, "friend");
+        const heroBox = svgEl("g", {}, figG);
+        const hero = makeFig(heroBox, "#ffffff", "#dedede", true, "hero");
+        function feetOn(x0, hx, ST, lift) {
+          const p = (hx - x0) / ST;
+          return [0, 0.5].map((o) => {
+            const q = frac(Math.abs(p) + o + 1e-6), d = Math.sign(hx - x0) || 1;
+            if (q < 0.5) return [hx + d * ST * (0.25 - q), FL];
+            const ss = (q - 0.5) / 0.5;
+            return [hx + d * ST * (-0.25 + 0.5 * ease(ss)), FL - Math.sin(Math.PI * ss) * lift];
+          });
+        }
+        const walking = (x0, x, ST, lift, torso, head) => {
+          const ft = feetOn(x0, x, ST, lift), sw = Math.sin((Math.PI * 2 * (x - x0)) / ST);
+          return base({ hx: x, hy: stand + 3 + 3 * Math.abs(sw), torso, head, ax: ft[0][0], ay: ft[0][1], bx: ft[1][0], by: ft[1][1], ash: 8 + 30 * sw, ael: 20, bsh: -4 - 30 * sw, bel: 20 });
+        };
+        const running = (x0, x, f) => {
+          const ft = feetOn(x0, x, 135, 30), sw = Math.sin((Math.PI * 2 * (x - x0)) / 135);
+          return base({ hx: x, hy: stand + 10 + 4 * Math.abs(sw), torso: 18, head: -10, ax: ft[0][0], ay: ft[0][1], bx: ft[1][0], by: ft[1][1], ash: 8 - 55 * sw * f, ael: 85, bsh: -4 + 55 * sw * f, bel: 85 });
+        };
+        const floorSit = (x, f, look) => base({ hx: x, hy: FL - 24, torso: 20 - 14 * look, head: 26 - 46 * look, ax: x + f * 66, ay: FL, bx: x + f * 52, by: FL, ash: 30, ael: 30, aw: 1, atx: x + f * 60, aty: FL - 92, bsh: 20, bel: 30, bw: 1, btx: x + f * 52, bty: FL - 88 });
+        const age = (s) => win(s, T_AGE0, T_AGE1);
+        const laughK = (s) => Math.max(win(s, 8.3, 8.4) * (1 - win(s, 8.75, 8.9)), win(s, 9.7, 9.8) * (1 - win(s, 10.15, 10.3)));
+        // sitting by the fire, getting older; a cup in the hand; the toast at the end
+        function oldSit(x, f, s, ph) {
+          const a = age(s), st = floorSit(x, f, 0.75);
+          st.torso += 16 * a; st.head += 18 * a; st.hy += 4 * a;
+          const lg = laughK(s);
+          st.torso += lg * 6 * Math.abs(Math.sin(s * 18 + ph)); st.head -= lg * 22;
+          st.aw = 1; st.atx = x + f * 46; st.aty = FL - 120;
+          const toast = win(s, T_TOAST, T_TOAST + 0.25);
+          st.atx = lerp(st.atx, FX - f * 26, toast); st.aty = lerp(st.aty, FL - 205, toast); st.head = lerp(st.head, -20, toast); st.torso = lerp(st.torso, 10, toast);
+          return st;
+        }
+
+        function crowdRaw(i, s) {
+          const [x, f, x0, ta, tl] = CROWD[i];
+          if (s < ta) return running(x0, x0, f);
+          if (s < ta + 0.45) return running(x0, lerp(x0, x, ease((s - ta) / 0.45)), f);
+          if (s < tl) {
+            const st = standOn(x, f, FL), b = beatAt(s), ph = i * 1.3;
+            const party = s < T_CRASH ? 1 : 1 - win(s, T_CRASH, T_CRASH + 0.25);
+            st.hy -= 24 * party * b * (i % 2 ? 1 : 0.6);
+            st.ay -= 18 * party * b; st.by -= 22 * party * b;
+            st.aw = party; st.atx = x - f * 14 + 18 * Math.sin(s * 9 + ph); st.aty = stand - 250 + 10 * Math.sin(s * 12 + ph);
+            st.bw = party; st.btx = x - f * 40 + 16 * Math.sin(s * 9 + ph + 1); st.bty = stand - 240;
+            st.head = party * (-16 + 6 * Math.sin(s * 10 + ph)) + (1 - party) * 8 * Math.sin(i + 2);
+            return st;
+          }
+          // turns away and leaves
+          const dir = -f, dist = dir < 0 ? 70 : 520;
+          const q = clamp((s - tl) / (dir < 0 ? 0.7 : 1.3), 0, 1);
+          return walking(x, x + dir * dist * q, 120, 14, 5, 6);
+        }
+        const crowdF = (i, s) => (s < CROWD[i][4] ? CROWD[i][1] : -CROWD[i][1]);
+
+        function heroRaw(s) {
+          if (s < T_OUT + 0.4) return walking(690, lerp(690, HX, ease((s - T_OUT) / 0.4)), 130, 16, -4, -10);
+          const st = standOn(HX, -1, FL);
+          if (s < T_CRASH) {
+            const b = beatAt(s);
+            st.hy -= 10 * b; st.torso = -4; st.head = -12;
+            const pop = win(s, 1.35, 1.5);
+            st.aw = 1; st.atx = lerp(HX - 80, HX - 70, pop); st.aty = lerp(stand - 150, stand - 235, pop);
+            st.bw = 1; st.btx = HX + 40 + 10 * Math.sin(s * 9); st.bty = lerp(stand - 150, stand - 230, pop) + 14 * b;
+            return st;
+          }
+          if (s < T_DOWN) {
+            // the crash: arms fall, he looks around at them leaving
+            const fall = win(s, T_CRASH, T_CRASH + 0.4);
+            st.aw = 1 - fall; st.atx = HX - 70; st.aty = stand - 235; st.bw = 1 - fall; st.btx = HX + 70; st.bty = stand - 230;
+            st.head = lerp(-12, 6, fall) + 10 * Math.sin(s * 2.2);
+            st.torso = 2 + 4 * fall;
+            return st;
+          }
+          const sit = floorSit(HXS, -1, 0); sit.head = 48; sit.torso = 12;
+          if (s < T_DOWN + 0.5) return mixPose(st, sit, win(s, T_DOWN, T_DOWN + 0.5));
+          if (s < T_AGE0) { const look = win(s, 6.7, 7.0); return mixPose(sit, oldSit(HXS, -1, s, 0), look); }
+          return oldSit(HXS, -1, s, 0);
+        }
+        const heroF = (s) => (s > 4.3 && s < 4.95 ? 1 : -1);
+
+        function friendRaw(s) {
+          if (s < T_FWALK) {
+            // at the edge, never cheering. arms folded
+            const st = standOn(-60, 1, FL);
+            st.aw = 1; st.atx = -60 + 30; st.aty = stand - 92; st.bw = 1; st.btx = -60 + 20; st.bty = stand - 86;
+            st.head = 6 + 4 * Math.sin(s * 1.4);
+            return st;
+          }
+          if (s < 6.1) return walking(-60, lerp(-60, 250, ease((s - T_FWALK) / 0.5)), 120, 14, 6, 4);
+          // kneels, strikes a match, lights the fire
+          const kn = base({ hx: 250, hy: FL - 58, torso: 28, head: 16, ax: 286, ay: FL, bx: 180, by: FL, aw: 1, bw: 1, atx: FX - 16, aty: FL - 30, btx: FX - 24, bty: FL - 24 });
+          const strike = Math.sin(Math.PI * clamp((s - 6.22) / 0.16, 0, 1));
+          kn.atx += 18 * strike; kn.aty -= 10 * strike;
+          if (s < 6.25) return mixPose(walking(-60, 250, 120, 14, 6, 4), kn, win(s, 6.1, 6.25));
+          if (s < 6.65) return kn;
+          if (s < 7.0) return mixPose(kn, oldSit(FRX, 1, s, 1.7), win(s, 6.65, 7.0));
+          return oldSit(FRX, 1, s, 1.7);
+        }
+
+        // ---------- money, champagne, chain, shades ----------
+        const bills = Array.from({ length: 34 }, (_, i) => {
+          const g = svgEl("g", { opacity: 0 }, fxG);
+          const r = svgEl("rect", { x: -16, y: -9, width: 32, height: 18, rx: 2, fill: "#3fae5a", stroke: "#000", "stroke-width": 3 }, g);
+          svgEl("circle", { r: 4, fill: "none", stroke: "#1f6b34", "stroke-width": 2 }, g);
+          return { g, r, x: -120 + ((i * 263) % 1000), off: (i * 0.137) % 1, burst: i < 12 };
+        });
+        const bottle = svgEl("g", {}, fxG);
+        svgEl("path", { d: "M-9 30 L-9 -2 Q-9 -12 -4 -16 L-4 -30 L4 -30 L4 -16 Q9 -12 9 -2 L9 30 Z", fill: "#1f3d2a", stroke: "#000", "stroke-width": 4, "stroke-linejoin": "round" }, bottle);
+        svgEl("rect", { x: -5, y: -32, width: 10, height: 9, fill: "#e0a93a", stroke: "#000", "stroke-width": 3 }, bottle);
+        const cork = svgEl("circle", { r: 6, fill: "#e8d2a0", stroke: "#000", "stroke-width": 3, opacity: 0 }, fxG);
+        const spray = Array.from({ length: 22 }, (_, i) => ({ off: (i * 0.173) % 1, a: -0.35 + ((i * 37) % 70) / 100, el: svgEl("circle", { r: 4 + (i % 3), fill: "#ffe9a8", opacity: 0 }, fxG) }));
+        const chainA = svgEl("path", { fill: "none", stroke: "#ffd27a", "stroke-width": 6, "stroke-linecap": "round", opacity: 0 }, fxG);
+        const chainB = svgEl("path", { fill: "none", stroke: "#ffd27a", "stroke-width": 6, "stroke-linecap": "round", opacity: 0 }, fxG);
+        const shades = svgEl("rect", { x: -22, y: -8, width: 44, height: 13, rx: 5, fill: "#0a0a0a", stroke: "#000", "stroke-width": 3 }, fxG);
+        const cups = [0, 1].map(() => svgEl("rect", { x: -8, y: -12, width: 16, height: 20, rx: 3, fill: "#d9c7a7", stroke: "#000", "stroke-width": 3, opacity: 0 }, fxG));
+        const canes = [0, 1].map(() => svgEl("path", { fill: "none", stroke: "#8a6a4a", "stroke-width": 7, "stroke-linecap": "round", opacity: 0 }, figG));
+
+        const slam = (words, times, t, red) => words.map((w, i) => {
+          const q = clamp((t - times[i]) / 0.2, 0, 1);
+          if (q <= 0) return `<span class="w" style="opacity:0">${w}</span>`;
+          const sc = lerp(2.3, 1, backOut(q)), bl = (1 - q) * 6;
+          return `<span class="w" style="transform:scale(${sc.toFixed(3)});filter:blur(${bl.toFixed(1)}px);${red.includes(i) ? "color:#ff3b30;" : ""}">${w}</span>`;
+        }).join("");
+        const redFlash = document.createElement("div");
+        redFlash.style.cssText = "position:absolute;inset:0;background:#ff2a1f;opacity:0;pointer-events:none";
+        E("stage").insertBefore(redFlash, E("head"));
+        const fade = document.createElement("div");
+        fade.style.cssText = "position:absolute;inset:0;background:#000;opacity:0";
+        E("stage").appendChild(fade);
+        const ageNum = (s) => (s < T_CRASH ? 25 : s < T_AGE0 ? 26 : Math.round(lerp(26, 80, age(s))));
+
+        // ---------- camera keys (story): time, scale, world x, world y at screen 1180, roll ----------
+        const CK = [
+          [0, 1.25, 860, 460, 0], [0.55, 1.4, 760, 480, 2], [0.8, 1.3, 600, 450, 0], [1.3, 1.15, 430, 440, 0],
+          [1.6, 1.45, 450, 400, -2], [2.3, 1.2, 420, 430, 1], [2.95, 1.3, 440, 420, 0], [3.15, 1.75, 450, 380, -3],
+          [3.6, 1.25, 430, 430, 0], [5.3, 1.1, 360, 440, 0], [5.9, 1.3, 250, 460, 0], [6.4, 1.8, 330, 500, 0],
+          [7.0, 1.45, 355, 470, 0], [10.8, 1.6, 355, 470, 0], [11.3, 1.8, 355, 480, 0], [99, 1.8, 355, 480, 0],
+        ];
+        function camAt(s) {
+          let i = 1;
+          while (i < CK.length - 1 && s > CK[i][0]) i++;
+          const a = CK[i - 1], b = CK[i], k = ease((s - a[0]) / (b[0] - a[0]));
+          return a.map((x, j) => lerp(x, b[j], k));
+        }
+
+        // ---------- per-frame render ----------
+        function render(t) {
+          const s = story(t);
+          let kick = 0, chroma = 0, flash = 0, red = 0;
+          const hit = (tr, k, c, f, d) => { if (t >= tr) { const dt = t - tr; kick += k * Math.exp(-dt / d); chroma += c * Math.exp(-dt / d); flash += f * Math.exp(-dt / (d * 0.35)); } };
+          BEATS.forEach((b) => hit(realOf(b), 0.14, 0.12, 0, 0.09));
+          hit(realOf(T_STOP), 0.9, 0.7, 0, 0.25);
+          hit(realOf(T_POP), 0.5, 0.4, 0.25, 0.2);
+          hit(realOf(T_CRASH), 1.8, 1, 0, 0.4);
+          hit(realOf(T_TOW), 0.45, 0.3, 0, 0.2);
+          hit(realOf(T_LIT), 0.5, 0.2, 0.15, 0.3);
+          hit(realOf(T_TOAST + 0.25), 0.3, 0, 0.1, 0.2);
+          if (t >= realOf(T_CRASH)) red = 0.45 * Math.exp(-(t - realOf(T_CRASH)) / 0.15);
+
+          const [, cs, cx, cy, cr] = camAt(s);
+          const sc = cs * (1 + 0.06 * Math.min(kick, 1.6));
+          const shx = Math.sin(t * 67) * 12 * Math.min(kick, 1.5), shy = Math.cos(t * 59) * 10 * Math.min(kick, 1.5);
+          cam.setAttribute("transform", `translate(${r1(540 + shx)} ${r1(1180 + shy)}) rotate(${(cr + Math.sin(t * 31) * Math.min(kick, 1)).toFixed(2)}) scale(${sc.toFixed(4)}) translate(${r1(-cx)} ${r1(-cy)})`);
+          const ch = Math.min(1, chroma) * 9;
+          if (ch > 0.3) { W.setAttribute("filter", "url(#chromaF)"); E("chR").setAttribute("dx", (ch / sc).toFixed(2)); E("chB").setAttribute("dx", (-ch / sc).toFixed(2)); }
+          else W.removeAttribute("filter");
+          E("flash").style.opacity = Math.min(0.85, flash).toFixed(3);
+          redFlash.style.opacity = red.toFixed(3);
+
+          // party lights: swing and pulse on the beat, die on the crash
+          const party = win(s, T_STOP - 0.05, T_STOP + 0.1) * (s < T_CRASH ? 1 : 0), b = beatAt(s);
+          PARTY.forEach((p) => {
+            const sw = Math.sin(s * 2.4 + p.i * 2.1) * 260;
+            p.el.setAttribute("points", `${p.x - 40},-900 ${p.x + 40},-900 ${p.x + sw + 170},${FL} ${p.x + sw - 170},${FL}`);
+            p.el.setAttribute("opacity", (party * (0.12 + 0.2 * b)).toFixed(3));
+          });
+          partyPool.setAttribute("opacity", (party * (0.5 + 0.5 * b)).toFixed(3));
+
+          // car: drifts in, gold until the crash, towed away
+          const [carx, rot] = carAt(s);
+          car.setAttribute("transform", `translate(${r1(carx)} ${FL}) rotate(${rot.toFixed(2)})`);
+          const spin = s < T_STOP ? -2000 * s : s > T_TOW ? 900 * (s - T_TOW) ** 2 : -2000 * T_STOP;
+          wheels.forEach((w) => w.setAttribute("transform", `rotate(${r1(spin)})`));
+          carBody.setAttribute("fill", s < T_CRASH ? "url(#gold)" : "#5a5a5a");
+          smoke.forEach((c, i) => {
+            const st0 = 0.06 * i, dt = s - st0, on = dt > 0 && dt < 0.9;
+            const x0 = lerp(1500, CARX, 1 - (1 - ease(st0 / T_STOP)) ** 2) + 150;
+            c.setAttribute("cx", r1(x0 + 40 * dt)); c.setAttribute("cy", r1(FL - 20 - 60 * dt));
+            c.setAttribute("r", r1(26 + 80 * dt)); c.setAttribute("opacity", on ? (0.8 * (1 - dt / 0.9)).toFixed(3) : 0);
+          });
+          const hookY = s < T_HOOK ? -900 : lerp(-900, FL - 150, win(s, T_HOOK, T_TOW));
+          const hx0 = s < T_TOW ? CARX : carx;
+          towLine.setAttribute("x1", r1(hx0 + 300)); towLine.setAttribute("y1", -900); towLine.setAttribute("x2", r1(hx0)); towLine.setAttribute("y2", r1(hookY));
+          towLine.setAttribute("opacity", s > T_HOOK && s < 6.3 ? 1 : 0);
+          towHook.setAttribute("transform", `translate(${r1(hx0)} ${r1(hookY)})`); towHook.setAttribute("opacity", s > T_HOOK && s < 6.3 ? 1 : 0);
+
+          // the people
+          const hp = drawFig(hero, livePose(heroRaw, s, 0.2), heroF(s));
+          heroBox.setAttribute("opacity", s < T_OUT ? 0 : 1);
+          const fp = drawFig(friend, livePose(friendRaw, s, 1.1), 1);
+          crowd.forEach((c, i) => {
+            drawFig(c.parts, livePose((tt) => crowdRaw(i, tt), s, i * 0.7), crowdF(i, s));
+            const [, f, , , tl] = CROWD[i];
+            const out = f > 0 ? win(s, tl + 0.2, tl + 0.7) : win(s, tl + 0.8, tl + 1.3);
+            c.box.setAttribute("opacity", (1 - out).toFixed(3));
+            const g = win(s, T_CRASH, T_CRASH + 0.5);
+            tint(c.parts, gray(lerp(216, 120, g)), gray(lerp(180, 100, g)));
+          });
+          const a = age(s);
+          tint(hero, gray(lerp(255, 196, a)), gray(lerp(222, 170, a)));
+          tint(friend, gray(lerp(255, 196, a)), gray(lerp(222, 170, a)));
+
+          // chain + shades on him until the crash, then they fall
+          const neck = [lerp(hp.hip[0], hp.head[0], 0.7), lerp(hp.hip[1], hp.head[1], 0.7)];
+          const fallT = Math.max(0, s - T_CRASH), drop = 600 * fallT * fallT;
+          const chainOn = s > T_OUT && s < T_CRASH + 1.0 ? 1 : 0;
+          const cy0 = Math.min(neck[1] + drop, FL - 6);
+          if (s < T_CRASH) chainA.setAttribute("d", `M${r1(neck[0] - 16)} ${r1(neck[1] - 6)} Q${r1(neck[0])} ${r1(neck[1] + 34)} ${r1(neck[0] + 16)} ${r1(neck[1] - 6)}`);
+          else chainA.setAttribute("d", `M${r1(neck[0] - 30 - 30 * fallT)} ${r1(cy0 - 10)} Q${r1(neck[0] - 20 - 30 * fallT)} ${r1(cy0 + 14)} ${r1(neck[0] - 4 - 30 * fallT)} ${r1(cy0)}`);
+          chainB.setAttribute("d", `M${r1(neck[0] + 4 + 26 * fallT)} ${r1(cy0)} Q${r1(neck[0] + 18 + 26 * fallT)} ${r1(cy0 + 16)} ${r1(neck[0] + 30 + 26 * fallT)} ${r1(cy0 - 8)}`);
+          chainA.setAttribute("opacity", chainOn); chainB.setAttribute("opacity", s > T_CRASH ? chainOn : 0);
+          const hf = heroF(s);
+          shades.setAttribute("transform", s < T_CRASH ? `translate(${r1(hp.head[0] + hf * 12)} ${r1(hp.head[1] - 4)})` : `translate(${r1(hp.head[0] + hf * 12 + 40 * fallT)} ${r1(Math.min(hp.head[1] - 4 + drop, FL - 6))}) rotate(${r1(200 * fallT)})`);
+          shades.setAttribute("opacity", s > T_OUT && s < T_CRASH + 1.2 ? 1 : 0);
+
+          // champagne: in his hand, pops, sprays; drops on the crash
+          const hand = hp.hands[0];
+          const tilt = s < 1.45 ? 10 : -38;
+          if (s < T_CRASH) bottle.setAttribute("transform", `translate(${r1(hand[0])} ${r1(hand[1] - 18)}) rotate(${tilt})`);
+          else bottle.setAttribute("transform", `translate(${r1(hand[0] - 20 * fallT)} ${r1(Math.min(hand[1] - 18 + drop, FL - 10))}) rotate(${r1(tilt - 120 * Math.min(1, fallT * 1.5))})`);
+          bottle.setAttribute("opacity", s > 1.15 && s < T_CRASH + 1.3 ? 1 : 0);
+          const tip = [hand[0] - 20, hand[1] - 46];
+          const cq = s - T_POP;
+          cork.setAttribute("cx", r1(tip[0] - 160 * cq)); cork.setAttribute("cy", r1(tip[1] - 900 * cq + 900 * cq * cq));
+          cork.setAttribute("opacity", cq > 0 && cq < 0.8 ? 1 : 0);
+          spray.forEach((p) => {
+            const q = frac(s * 1.8 + p.off), on = s > T_POP && s < T_CRASH;
+            p.el.setAttribute("cx", r1(tip[0] - (120 + 200 * p.a) * q)); p.el.setAttribute("cy", r1(tip[1] - 260 * q + 300 * q * q));
+            p.el.setAttribute("opacity", on ? (1 - q).toFixed(2) : 0);
+          });
+
+          // money: a burst from the car, then rain until the crash; then it greys out and drops
+          bills.forEach((m) => {
+            let x, y, r, op;
+            if (m.burst) {
+              const dt = s - T_STOP - 0.05, ang = -1.2 + ((m.x * 7) % 100) / 60;
+              x = CARX + Math.cos(ang) * 420 * dt * (m.x % 2 ? 1 : -1); y = FL - 150 - 700 * dt + 700 * dt * dt; r = 400 * dt;
+              op = dt > 0 && y < FL ? 1 : 0;
+            } else {
+              const q = frac((Math.min(s, T_CRASH) - 0.6) * 0.42 + m.off);
+              x = m.x + 34 * Math.sin(q * 9 + m.off * 20); y = lerp(-520, FL - 6, q); r = 50 * Math.sin(q * 7 + m.off * 9);
+              op = s > 0.6 + m.off * 0.8 ? Math.min(1, (1 - q) * 6) : 0;
+            }
+            if (s > T_CRASH) { y = Math.min(FL - 6, y + 700 * fallT * fallT); op *= 1 - win(s, T_CRASH + 0.3, T_CRASH + 0.9); }
+            m.r.setAttribute("fill", s > T_CRASH ? "#4a4a4a" : "#3fae5a");
+            m.g.setAttribute("opacity", op.toFixed(3));
+            m.g.setAttribute("transform", `translate(${r1(x)} ${r1(y)}) rotate(${r1(r)})`);
+          });
+
+          // the fire
+          const k = fireK(s);
+          fireWood.setAttribute("opacity", win(s, 6.1, 6.25).toFixed(3));
+          flames.forEach(([el, dx, kk], i) => {
+            const fl = 1 + 0.12 * Math.sin(t * 11 + i * 1.7) + 0.08 * Math.sin(t * 17.3 + i);
+            const h = 110 * k * kk * fl, w = 27 * Math.sqrt(k) * kk;
+            const x = FX + dx * Math.sqrt(k), bb = FL - 10, tipX = x + Math.sin(t * 7 + i * 2.1) * 8 * k;
+            el.setAttribute("d", k > 0.01 ? `M${r1(x - w)} ${bb} Q${r1(x - w * 1.1)} ${r1(bb - h * 0.45)} ${r1(tipX)} ${r1(bb - h)} Q${r1(x + w * 1.1)} ${r1(bb - h * 0.45)} ${r1(x + w)} ${bb} Z` : "M0 0");
+          });
+          embers.forEach((sp, i) => {
+            const per = 1.3 + (i % 5) * 0.21, ph = frac(t / per + i * 0.137);
+            sp.setAttribute("cx", r1(FX + Math.sin(i * 2.3 + ph * 3) * (20 + 30 * ph) * k));
+            sp.setAttribute("cy", r1(FL - 40 - ph * 160 * k));
+            sp.setAttribute("opacity", k > 0.05 ? ((1 - ph) * 0.6).toFixed(3) : 0);
+          });
+          const glow = clamp(k, 0, 1.5) * (0.92 + 0.08 * Math.sin(t * 13));
+          halo.setAttribute("opacity", (0.55 * glow).toFixed(3));
+          pool.setAttribute("opacity", (0.8 * glow).toFixed(3));
+          const mh = fp.hands[0];
+          match.setAttribute("cx", r1(mh[0])); match.setAttribute("cy", r1(mh[1] - 6));
+          match.setAttribute("opacity", s > T_MATCH && s < T_LIT + 0.05 ? (0.8 + 0.2 * Math.sin(t * 40)).toFixed(3) : 0);
+
+          // cups and canes
+          [[hp, -1], [fp, 1]].forEach(([p, f], i) => {
+            const cupOn = s > T_AGE0 - 0.1 ? 1 : 0;
+            cups[i].setAttribute("transform", `translate(${r1(p.hands[0][0])} ${r1(p.hands[0][1] - 8)})`);
+            cups[i].setAttribute("opacity", cupOn);
+            const x = i === 0 ? HXS : FRX;
+            canes[i].setAttribute("d", `M${x - f * 40} ${FL} L${x - f * 18} ${FL - 150} q${-f * 4} -14 ${-f * 18} -6`);
+            canes[i].setAttribute("opacity", win(s, 9.3, 9.7).toFixed(3));
+          });
+
+          // the years: sun and moon race across the sky, faster and faster
+          const yr = a > 0 && a < 1 ? 1 : 0, cyc = Math.pow(clamp((s - T_AGE0) / (T_AGE1 - T_AGE0), 0, 1), 1.5) * 8, ph = frac(cyc), day = Math.floor(cyc) % 2 === 0;
+          orb.setAttribute("cx", r1(-260 + 1320 * ph)); orb.setAttribute("cy", r1(-260 - 300 * Math.sin(Math.PI * ph)));
+          orb.setAttribute("fill", day ? "#ffd27a" : "#e6e8f0");
+          orb.setAttribute("opacity", (yr * Math.sin(Math.PI * ph)).toFixed(3));
+          orbGlow.setAttribute("cx", orb.getAttribute("cx")); orbGlow.setAttribute("cy", orb.getAttribute("cy"));
+          orbGlow.setAttribute("opacity", (yr * (day ? 0.6 : 0.2) * Math.sin(Math.PI * ph)).toFixed(3));
+          dayGlow.setAttribute("opacity", (yr * (day ? 0.45 : 0) * Math.sin(Math.PI * ph)).toFixed(3));
+          stars.forEach((st, i) => st.setAttribute("opacity", (yr * (day ? 0 : 0.8) * Math.sin(Math.PI * ph) * (0.6 + 0.4 * Math.sin(t * 5 + i))).toFixed(3)));
+
+          // age counter
+          E("num").textContent = ageNum(s);
+          const counting = s > T_AGE0 && s < T_AGE1 ? 1 : 0;
+          E("num").style.transform = `scale(${(1 + 0.12 * counting * Math.abs(Math.sin(t * 22)) + 0.3 * Math.exp(-Math.max(0, s - T_AGE1) * 6) * (s > T_AGE1 ? 1 : 0)).toFixed(3)})`;
+          E("num").style.color = s > T_AGE1 - 0.05 ? "#ffb35c" : "#fff";
+
+          E("h1").innerHTML = slam(["MONEY", "BROUGHT", "A", "CROWD."], [11.6, 11.75, 11.88, 12.0], t, []);
+          E("h2").innerHTML = slam(["ONE", "FRIEND", "STAYED", "FOR", "LIFE."], [12.45, 12.58, 12.72, 12.9, 13.05], t, [4]);
+          E("h1").style.opacity = (1 - 0.45 * win(t, 12.4, 12.7)).toFixed(3);
+          fade.style.opacity = win(t, 13.6, 13.98).toFixed(3);
+        }
+
+        window.__timelines = window.__timelines || {};
+        const tl = gsap.timeline({ paused: true });
+        const clock = { t: 0 };
+        tl.to(clock, { t: DUR, duration: DUR, ease: "none", onUpdate: () => render(clock.t) }, 0);
+        window.__timelines["main"] = tl;
+        render(0);
+        tl.seek(0);
+      })();
+    </script>
+  </body>
+</html>

@@ -1,0 +1,460 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+    <style>
+      @font-face {
+        font-family: "HFMono";
+        src: url("assets/fonts/consolab.ttf") format("truetype");
+        font-weight: 700;
+      }
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      html,
+      body {
+        width: 1080px;
+        height: 1920px;
+        overflow: hidden;
+        background: #000;
+      }
+      #root {
+        position: relative;
+        width: 1080px;
+        height: 1920px;
+        overflow: hidden;
+        background: #000;
+      }
+      #stage {
+        position: absolute;
+        inset: 0;
+        width: 1080px;
+        height: 1920px;
+      }
+      #stage svg {
+        position: absolute;
+        inset: 0;
+      }
+      .mono {
+        position: absolute;
+        font-family: "HFMono", monospace;
+        font-weight: 700;
+        white-space: nowrap;
+      }
+      /* everything readable stays inside the Instagram safe area: x 120-960, y 220-1500 */
+      #head {
+        position: absolute;
+        left: 0;
+        right: 0;
+        top: 222px;
+        text-align: center;
+        font-family: "HFMono", monospace;
+        font-weight: 700;
+        font-size: 38px;
+        letter-spacing: 0.12em;
+        line-height: 1.45;
+        color: #fff;
+        text-shadow: 0 0 16px rgba(255, 255, 255, 0.3);
+      }
+      #head .ghost {
+        visibility: hidden;
+      }
+      #ctr {
+        position: absolute;
+        left: 0;
+        right: 0;
+        top: 430px;
+        text-align: center;
+        font-family: "HFMono", monospace;
+        font-weight: 700;
+        white-space: nowrap;
+      }
+      #ctr .lbl {
+        font-size: 26px;
+        letter-spacing: 0.24em;
+        color: #9a9a9a;
+        vertical-align: middle;
+      }
+      #num {
+        display: inline-block;
+        min-width: 2.4ch;
+        font-size: 58px;
+        letter-spacing: 0.08em;
+        color: #fff;
+        vertical-align: middle;
+        text-shadow: 0 0 14px rgba(255, 255, 255, 0.35);
+      }
+      #tag {
+        display: inline-block;
+        min-width: 5.2ch;
+        padding: 6px 12px 4px;
+        font-size: 26px;
+        letter-spacing: 0.18em;
+        vertical-align: middle;
+        visibility: hidden;
+      }
+      #tag.fail {
+        visibility: visible;
+        background: #d62a2a;
+        color: #fff;
+      }
+      #tag.pass {
+        visibility: visible;
+        background: #fff;
+        color: #000;
+        box-shadow: 0 0 22px rgba(255, 255, 255, 0.6);
+      }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="14" data-width="1080" data-height="1920">
+      <div id="stage" class="clip" data-start="0" data-duration="14" data-track-index="0">
+        <svg id="svg" width="1080" height="1920" viewBox="0 0 1080 1920" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <linearGradient id="beam" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0" stop-color="#ffffff" stop-opacity="0.55" />
+              <stop offset="0.7" stop-color="#ffffff" stop-opacity="0.12" />
+              <stop offset="1" stop-color="#ffffff" stop-opacity="0.04" />
+            </linearGradient>
+            <radialGradient id="pool" cx="0.5" cy="0.5" r="0.5">
+              <stop offset="0" stop-color="#ffffff" stop-opacity="0.32" />
+              <stop offset="1" stop-color="#ffffff" stop-opacity="0" />
+            </radialGradient>
+            <radialGradient id="dustG" cx="0.5" cy="0.5" r="0.5">
+              <stop offset="0" stop-color="#b5b5b5" stop-opacity="0.8" />
+              <stop offset="1" stop-color="#b5b5b5" stop-opacity="0" />
+            </radialGradient>
+            <linearGradient id="ply" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0" stop-color="#d9c29b" />
+              <stop offset="1" stop-color="#8f7858" />
+            </linearGradient>
+            <linearGradient id="floorFade" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0" stop-color="#000" stop-opacity="0.45" />
+              <stop offset="1" stop-color="#000" stop-opacity="1" />
+            </linearGradient>
+            <filter id="blur" x="-50%" y="-50%" width="200%" height="200%">
+              <feGaussianBlur stdDeviation="12" />
+            </filter>
+            <filter id="soft" x="-50%" y="-50%" width="200%" height="200%">
+              <feGaussianBlur stdDeviation="16" />
+            </filter>
+          </defs>
+          <!-- world: floor at world y 600 -> screen y 1400, world x 400 -> screen x 540 -->
+          <g transform="translate(540 1400) scale(1.45) translate(-400 -600)">
+            <g id="beams"></g>
+            <ellipse cx="455" cy="600" rx="230" ry="26" fill="url(#pool)" />
+            <use href="#world" transform="translate(0 1200) scale(1 -1)" opacity="0.16" />
+            <rect x="-200" y="600" width="1200" height="260" fill="url(#floorFade)" />
+            <rect x="-200" y="599" width="1200" height="2" fill="#2a2a2a" />
+            <g id="world"></g>
+          </g>
+        </svg>
+        <div id="ctr"><span class="lbl">ATTEMPT</span> <span id="num">01</span> <span id="tag">FAIL</span></div>
+        <div id="head">
+          <div id="h1"></div>
+          <div id="h2"></div>
+        </div>
+      </div>
+      <audio id="mix" src="assets/audio/mix.wav" data-start="0" data-duration="14" data-track-index="1"></audio>
+    </div>
+
+    <script>
+      (function () {
+        const DUR = 14;
+        const FL = 600, BX0 = 380, BX1 = 520, BTOP = 410, TOPF = 404, SX = 250;
+        const THIGH = 80, SHIN = 78, LEG = 154;
+        const UARM = 64, FARM = 60, TORSO = 116, NECK = 12, HEADR = 31;
+        const NS = "http://www.w3.org/2000/svg";
+        const svgEl = (tag, attrs, parent) => {
+          const e = document.createElementNS(NS, tag);
+          for (const k in attrs || {}) e.setAttribute(k, attrs[k]);
+          if (parent) parent.appendChild(e);
+          return e;
+        };
+        const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
+        const lerp = (a, b, p) => a + (b - a) * p;
+        const ease = (p) => 0.5 - 0.5 * Math.cos(Math.PI * clamp(p, 0, 1));
+        const backOut = (p) => { p = clamp(p, 0, 1); const s = 2.2; return 1 + (s + 1) * Math.pow(p - 1, 3) + s * Math.pow(p - 1, 2); };
+        const win = (t, a, b) => ease((t - a) / (b - a));
+        const rad = (x) => (x * Math.PI) / 180;
+        const down = (a, f) => [Math.sin(rad(a)) * f, Math.cos(rad(a))];
+        const up = (a, f) => [Math.sin(rad(a)) * f, -Math.cos(rad(a))];
+        const r1 = (v) => Math.round(v * 10) / 10;
+        const E = (id) => document.getElementById(id);
+        let seed = 31;
+        const rnd = () => ((seed = (seed * 16807) % 2147483647) / 2147483647);
+
+        // ---------- scene ----------
+        const beams = E("beams");
+        const beamBox = svgEl("polygon", { points: "430,-90 490,-90 610,600 310,600", fill: "url(#beam)", filter: "url(#soft)", opacity: 0.55 }, beams);
+        const beamStart = svgEl("polygon", { points: "225,-90 270,-90 350,600 140,600", fill: "url(#beam)", filter: "url(#soft)", opacity: 0.4 }, beams);
+        const W = E("world");
+        // plyo box: front face, top face, side face, red goal edge
+        svgEl("polygon", { points: `${BX1},${BTOP} ${BX1 + 26},${BTOP - 15} ${BX1 + 26},${FL - 15} ${BX1},${FL}`, fill: "#6f5d45", stroke: "#000", "stroke-width": 3, "stroke-linejoin": "round" }, W);
+        svgEl("polygon", { points: `${BX0},${BTOP} ${BX1},${BTOP} ${BX1 + 26},${BTOP - 15} ${BX0 + 26},${BTOP - 15}`, fill: "#e8d6b2", stroke: "#000", "stroke-width": 3, "stroke-linejoin": "round" }, W);
+        svgEl("rect", { x: BX0, y: BTOP, width: BX1 - BX0, height: FL - BTOP, fill: "url(#ply)", stroke: "#000", "stroke-width": 3 }, W);
+        svgEl("rect", { x: BX0 + 16, y: BTOP + 70, width: BX1 - BX0 - 32, height: 26, rx: 13, fill: "#2a2119", opacity: 0.55 }, W);
+        const edgeGlow = svgEl("rect", { x: BX0 - 4, y: BTOP - 5, width: BX1 - BX0 + 8, height: 10, fill: "#ff2d2d", filter: "url(#blur)", opacity: 0.7 }, W);
+        svgEl("rect", { x: BX0, y: BTOP - 2, width: BX1 - BX0, height: 5, fill: "#e0322b" }, W);
+        const scuffG = svgEl("g", {}, W);
+        const figG = svgEl("g", {}, W);
+        const fxG = svgEl("g", {}, W);
+
+        // ---------- rig v2 (from reel 05): blended poses, head/arm follow-through, breathing ----------
+        function makeFig(parent, front, back, glow, id) {
+          const g = svgEl("g", { id }, parent);
+          if (glow) parent.insertBefore(svgEl("use", { href: "#" + id, filter: "url(#blur)", opacity: 0.45 }), g);
+          const parts = { g };
+          for (const [n, col] of [["armB", back], ["legB", back], ["torso", front], ["legF", front], ["armF", front]]) {
+            const o = svgEl("path", { fill: "none", stroke: "#000", "stroke-width": 34, "stroke-linecap": "round", "stroke-linejoin": "round" }, g);
+            const w = svgEl("path", { fill: "none", stroke: col, "stroke-width": 22, "stroke-linecap": "round", "stroke-linejoin": "round" }, g);
+            parts[n] = [o, w];
+          }
+          parts.head = svgEl("circle", { r: HEADR, fill: front, stroke: "#000", "stroke-width": 6 }, g);
+          return parts;
+        }
+        function ik(a, b, l1, l2, pick) {
+          let dx = b[0] - a[0], dy = b[1] - a[1];
+          let d = Math.hypot(dx, dy);
+          const maxd = l1 + l2 - 0.5;
+          if (d > maxd) {
+            b = [a[0] + (dx / d) * maxd, a[1] + (dy / d) * maxd];
+            dx = b[0] - a[0];
+            dy = b[1] - a[1];
+            d = maxd;
+          }
+          d = Math.max(d, Math.abs(l1 - l2) + 1);
+          const al = Math.acos(clamp((l1 * l1 + d * d - l2 * l2) / (2 * l1 * d), -1, 1));
+          const base = Math.atan2(dy, dx);
+          const c1 = [a[0] + Math.cos(base + al) * l1, a[1] + Math.sin(base + al) * l1];
+          const c2 = [a[0] + Math.cos(base - al) * l1, a[1] + Math.sin(base - al) * l1];
+          return [pick(c1, c2), b];
+        }
+        const P = (pts) => "M" + pts.map((p) => r1(p[0]) + " " + r1(p[1])).join("L");
+        const setD = (pair, d) => {
+          pair[0].setAttribute("d", d);
+          pair[1].setAttribute("d", d);
+        };
+        // flat pose: hx hy torso head ax ay bx by | per arm a*/b*: sh el w tx ty
+        function drawFig(parts, s, f) {
+          const hip = [s.hx, s.hy];
+          const tu = up(s.torso, f);
+          const sh = [hip[0] + tu[0] * TORSO, hip[1] + tu[1] * TORSO];
+          const nk = [hip[0] + tu[0] * (TORSO + NECK), hip[1] + tu[1] * (TORSO + NECK)];
+          const hu = up(s.torso + s.head, f);
+          const hc = [nk[0] + hu[0] * HEADR, nk[1] + hu[1] * HEADR];
+          setD(parts.torso, P([hip, sh, nk]));
+          parts.head.setAttribute("cx", r1(hc[0]));
+          parts.head.setAttribute("cy", r1(hc[1]));
+          const knee = (c1, c2) => (c1[0] * f > c2[0] * f ? c1 : c2);
+          const elbow = (c1, c2) => (c1[1] - 0.5 * f * c1[0] > c2[1] - 0.5 * f * c2[0] ? c1 : c2);
+          [["legF", [s.ax, s.ay]], ["legB", [s.bx, s.by]]].forEach(([n, ft]) => {
+            const [kn, fo] = ik(hip, ft, THIGH, SHIN, knee);
+            setD(parts[n], P([hip, kn, fo]));
+          });
+          const hands = [];
+          [["armF", "a"], ["armB", "b"]].forEach(([n, k]) => {
+            const u = down(s[k + "sh"], f);
+            const el = [sh[0] + u[0] * UARM, sh[1] + u[1] * UARM];
+            const v = down(s[k + "sh"] + s[k + "el"], f);
+            const fk = [el[0] + v[0] * FARM, el[1] + v[1] * FARM];
+            const w = clamp(s[k + "w"], 0, 1);
+            const hand = [lerp(fk[0], s[k + "tx"], w), lerp(fk[1], s[k + "ty"], w)];
+            const [e2, h2] = ik(sh, hand, UARM, FARM, elbow);
+            setD(parts[n], P([sh, e2, h2]));
+            hands.push(h2);
+          });
+          return { head: hc, hands, hip };
+        }
+        const KER = [-4, -3, -2, -1, 0, 1, 2, 3, 4].map((k) => [k * 0.03, Math.exp(-((k / 2.3) ** 2))]);
+        function blend(raw, t) {
+          const out = {};
+          let ws = 0;
+          for (const [dt, w] of KER) {
+            const p = raw(clamp(t + dt, 0, DUR));
+            for (const k in p) out[k] = (out[k] || 0) + p[k] * w;
+            ws += w;
+          }
+          for (const k in out) out[k] /= ws;
+          return out;
+        }
+        const LAGGED = ["head", "ash", "ael", "aw", "atx", "aty", "bsh", "bel", "bw", "btx", "bty"];
+        function livePose(raw, t, phase) {
+          const s = blend(raw, t);
+          const lag = blend(raw, t - 0.05);
+          for (const k of LAGGED) s[k] = lag[k];
+          const br = Math.sin(t * 1.9 + phase);
+          s.hy += br * 1.3;
+          s.torso += br * 0.8;
+          s.head += Math.sin(t * 1.2 + phase * 2) * 1.6;
+          return s;
+        }
+        const ARMS = { ash: 8, ael: 12, aw: 0, atx: 0, aty: 0, bsh: -4, bel: 10, bw: 0, btx: 0, bty: 0 };
+        const base = (o) => ({ hx: 0, hy: 0, torso: 3, head: 0, ax: 0, ay: FL, bx: 0, by: FL, ...ARMS, ...o });
+        function standOn(x, f, fy) {
+          return base({ hx: x, hy: fy - Math.sqrt(LEG * LEG - 15 * 15), ax: x + f * 15, ay: fy, bx: x - f * 15, by: fy });
+        }
+        const mixPose = (a, b, p) => {
+          const o = {};
+          for (const k in a) o[k] = lerp(a[k], b[k], p);
+          return o;
+        };
+
+        // ---------- the attempts: each fall leaves a scuff on the box ----------
+        // miss = how far below the top edge the feet clip the box (gets smaller: he is improving)
+        const ATT = [
+          { n: 1, T: 0.5, D: 2.0, miss: 62 },
+          { n: 2, T: 2.5, D: 1.7, miss: 46 },
+          { n: 3, T: 4.2, D: 1.5, miss: 32 },
+          { n: 17, T: 5.7, D: 1.3, miss: 20 },
+          { n: 46, T: 7.0, D: 1.2, miss: 10 },
+        ];
+        const PASS_T = 8.2;
+        const S0 = standOn(SX, 1, FL);
+        const CROUCH = { ...S0, hx: SX - 4, hy: S0.hy + 58, torso: 38, head: -16, ash: -55, ael: 25, bsh: -62, bel: 25 };
+        const SIT = base({ hx: 225, hy: FL - 24, torso: -22, head: 12, ax: 362, ay: FL, bx: 345, by: FL - 2, ash: -30, ael: -10, aw: 1, atx: 196, aty: FL - 4, bsh: -36, bel: -10, bw: 1, btx: 186, bty: FL - 4 });
+        const MID = base({ hx: 245, hy: FL - 90, torso: 44, head: -4, ax: 292, ay: FL, bx: 255, by: FL, ash: 25, ael: 20, bsh: 15, bel: 20 });
+        function flightFail(a, q) {
+          const edgeY = BTOP + a.miss, ix = BX0 - 40, iy = edgeY - 74;
+          const hx = lerp(SX - 4, ix, q), hy = lerp(CROUCH.hy, iy, q) - 4 * 70 * q * (1 - q);
+          const tk = ease(q / 0.3);
+          return {
+            ...CROUCH, hx, hy, torso: lerp(38, 14, ease(q / 0.4)), head: -6,
+            ax: lerp(CROUCH.ax, hx + 36, tk), ay: lerp(FL, hy + 74, tk), bx: lerp(CROUCH.bx, hx + 16, tk), by: lerp(FL, hy + 82, tk),
+            ash: lerp(-55, 150, ease(q / 0.5)), ael: 15, bsh: lerp(-62, 140, ease(q / 0.5)), bel: 15,
+          };
+        }
+        function failRaw(a, t) {
+          const k = a.D / 2.0, u = (t - a.T) / k;
+          if (u < 0.3) return mixPose(S0, CROUCH, ease(u / 0.26));
+          if (u < 0.62) return flightFail(a, (u - 0.3) / 0.32);
+          if (u < 0.95) {
+            const r = (u - 0.62) / 0.33, imp = flightFail(a, 1);
+            const p = mixPose(imp, SIT, ease(r));
+            p.hy = lerp(imp.hy, SIT.hy, r * r);
+            return p;
+          }
+          if (u < 1.15) return { ...SIT, head: SIT.head + 5 * Math.sin((u - 0.95) * 28) * (1 - (u - 0.95) / 0.2) };
+          if (u < 1.35) return mixPose(SIT, MID, ease((u - 1.15) / 0.2));
+          if (u < 1.6) return mixPose(MID, S0, ease((u - 1.35) / 0.25));
+          return S0;
+        }
+        const CRP = { ...S0, hx: SX - 6, hy: S0.hy + 70, torso: 46, head: -20, ash: -70, ael: 25, bsh: -74, bel: 25 };
+        const LAND = base({ hx: 455, hy: TOPF - 84, torso: 30, head: -6, ax: 470, ay: TOPF, bx: 440, by: TOPF, ash: 70, ael: 20, bsh: 60, bel: 20 });
+        const TOP = standOn(455, 1, TOPF);
+        const VIC = { ...TOP, torso: 0, head: -6, ash: 110, ael: 62, bsh: 10, bel: 14 };
+        function passRaw(t) {
+          const u = t - PASS_T;
+          if (u < 0.45) return mixPose(S0, CRP, ease(u / 0.4));
+          if (u < 0.8) {
+            const q = (u - 0.45) / 0.35;
+            const hx = lerp(SX - 6, LAND.hx, q), hy = lerp(CRP.hy, LAND.hy, q) - 4 * 110 * q * (1 - q);
+            const tk = ease(q / 0.3), out = ease((q - 0.7) / 0.3);
+            const tuck = { ax: hx + 36, ay: hy + 74, bx: hx + 16, by: hy + 82 };
+            const fa = (key, from) => lerp(lerp(from, tuck[key], tk), LAND[key], out);
+            return {
+              ...CRP, hx, hy, torso: lerp(46, 22, ease(q / 0.4)), head: -6,
+              ax: fa("ax", CRP.ax), ay: fa("ay", FL), bx: fa("bx", CRP.bx), by: fa("by", FL),
+              ash: lerp(-70, 150, ease(q / 0.5)), ael: 15, bsh: lerp(-74, 140, ease(q / 0.5)), bel: 15,
+            };
+          }
+          if (u < 1.15) return mixPose(LAND, TOP, ease((u - 0.8) / 0.35));
+          return mixPose(TOP, VIC, ease((u - 1.15) / 0.3));
+        }
+        function heroRaw(t) {
+          if (t < ATT[0].T) return S0;
+          for (const a of ATT) if (t < a.T + a.D) return failRaw(a, t);
+          return passRaw(t);
+        }
+        const hero = makeFig(figG, "#ffffff", "#e2e2e2", true, "hero");
+
+        // scuffs: one per failed attempt (1-46); the skipped attempts appear while the counter rolls
+        const SC = [];
+        const addScuff = (time, y) => SC.push({ time, x: BX0 + 6 + rnd() * 34, y: y + (rnd() * 8 - 4), dx: 10 + rnd() * 14, dy: rnd() * 6 - 3 });
+        for (const a of ATT) addScuff(a.T + 0.62 * (a.D / 2), BTOP + a.miss);
+        for (let i = 4; i <= 16; i++) addScuff(lerp(5.36, 5.68, (i - 4) / 12), BTOP + lerp(32, 20, (i - 4) / 12));
+        for (let i = 18; i <= 45; i++) addScuff(lerp(6.66, 6.98, (i - 18) / 27), BTOP + lerp(20, 10, (i - 18) / 27));
+        SC.forEach((s) => (s.el = svgEl("path", { d: `M${r1(s.x)} ${r1(s.y)} l${r1(s.dx)} ${r1(s.dy)}`, stroke: "#3b2d20", "stroke-width": 3, "stroke-linecap": "round", opacity: 0 }, scuffG)));
+
+        // fx: impact sparks at the edge, dust when he lands on the floor, burst on the pass
+        const sparks = ATT.map(() => [0, 1, 2, 3].map(() => svgEl("path", { stroke: "#fff", "stroke-width": 3, "stroke-linecap": "round", opacity: 0 }, fxG)));
+        const dust = ATT.map(() => [-1, 0, 1].map(() => svgEl("ellipse", { rx: 10, ry: 6, fill: "url(#dustG)", opacity: 0 }, fxG)));
+        const burst = Array.from({ length: 12 }, () => svgEl("circle", { r: 4, fill: "#fff", opacity: 0 }, fxG));
+
+        const typed = (id, text, t, t0, cps) => {
+          const n = clamp(Math.floor((t - t0) * cps), 0, text.length);
+          E(id).innerHTML = "<span>" + text.slice(0, n) + '</span><span class="ghost">' + text.slice(n) + "</span>";
+        };
+        const pad = (n) => String(n).padStart(2, "0");
+        function counter(t) {
+          // roll from 4 -> 17 and 18 -> 46 just before those attempts
+          if (t >= 5.35 && t < 5.7) return { n: Math.round(lerp(4, 17, (t - 5.35) / 0.35)), tag: "" };
+          if (t >= 6.65 && t < 7.0) return { n: Math.round(lerp(18, 46, (t - 6.65) / 0.35)), tag: "" };
+          if (t >= PASS_T) return { n: 47, tag: t >= PASS_T + 0.8 ? "pass" : "" };
+          let cur = ATT[0];
+          for (const a of ATT) if (t >= a.T) cur = a;
+          return { n: cur.n, tag: t >= cur.T + 0.68 * (cur.D / 2) ? "fail" : "" };
+        }
+
+        // ---------- per-frame render ----------
+        function render(t) {
+          drawFig(hero, livePose(heroRaw, t, 0.4), 1);
+
+          const red = win(t, 11.0, 11.8);
+          SC.forEach((s) => {
+            s.el.setAttribute("opacity", t >= s.time ? 0.85 : 0);
+            s.el.setAttribute("stroke", red > 0 ? `rgb(${Math.round(lerp(59, 214, red))},${Math.round(lerp(45, 42, red))},${Math.round(lerp(32, 42, red))})` : "#3b2d20");
+          });
+          ATT.forEach((a, i) => {
+            const k = a.D / 2, ti = a.T + 0.62 * k, edgeY = BTOP + a.miss;
+            const sa = (t - ti) / 0.14;
+            sparks[i].forEach((ln, j) => {
+              const ang = rad(-150 + j * 34), l0 = 10 + 22 * clamp(sa, 0, 1), l1 = l0 + 14;
+              ln.setAttribute("d", `M${r1(BX0 + Math.cos(ang) * l0)} ${r1(edgeY + Math.sin(ang) * l0)} L${r1(BX0 + Math.cos(ang) * l1)} ${r1(edgeY + Math.sin(ang) * l1)}`);
+              ln.setAttribute("opacity", sa > 0 && sa < 1 ? (1 - sa).toFixed(3) : 0);
+            });
+            const td = a.T + 0.93 * k, da = (t - td) / 0.6;
+            dust[i].forEach((c, j) => {
+              const dir = j - 1, g = ease(da);
+              c.setAttribute("cx", r1(228 + dir * 46 * g));
+              c.setAttribute("cy", r1(FL - 8 - (dir === 0 ? 16 : 6) * g));
+              c.setAttribute("rx", r1(14 + 30 * g));
+              c.setAttribute("ry", r1(8 + 12 * g));
+              c.setAttribute("opacity", da > 0 && da < 1 ? (0.7 * (1 - da)).toFixed(3) : 0);
+            });
+          });
+          const ba = (t - (PASS_T + 0.8)) / 0.9;
+          burst.forEach((c, j) => {
+            const ang = rad(-170 + j * 15), d = 30 + 110 * ease(ba);
+            c.setAttribute("cx", r1(455 + Math.cos(ang) * d));
+            c.setAttribute("cy", r1(TOPF - 60 + Math.sin(ang) * d * 0.8));
+            c.setAttribute("opacity", ba > 0 && ba < 1 ? (0.9 * (1 - ba)).toFixed(3) : 0);
+          });
+          const win2 = win(t, PASS_T + 0.8, PASS_T + 1.4);
+          beamBox.setAttribute("opacity", (0.55 + 0.45 * win2).toFixed(3));
+          beamStart.setAttribute("opacity", (0.4 - 0.3 * win2).toFixed(3));
+          edgeGlow.setAttribute("opacity", (0.7 + 0.3 * win2).toFixed(3));
+
+          const c = counter(t);
+          E("num").textContent = pad(c.n);
+          E("tag").className = c.tag;
+          E("tag").textContent = c.tag === "pass" ? "PASS" : "FAIL";
+          typed("h1", "EVERYONE SAW THE JUMP.", t, 9.8, 26);
+          typed("h2", "NOBODY SAW THE 46 FALLS.", t, 11.0, 26);
+        }
+
+        window.__timelines = window.__timelines || {};
+        const tl = gsap.timeline({ paused: true });
+        const clock = { t: 0 };
+        tl.to(clock, { t: DUR, duration: DUR, ease: "none", onUpdate: () => render(clock.t) }, 0);
+        window.__timelines["main"] = tl;
+        render(0);
+        tl.seek(0);
+      })();
+    </script>
+  </body>
+</html>

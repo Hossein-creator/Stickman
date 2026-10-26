@@ -1,0 +1,12 @@
+            <linearGradient id="doorLight" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0" stop-color="#fff6dc" />
+              <stop offset="1" stop-color="#ffd98a" />
+            </linearGradient>
+            <radialGradient id="phoneGlow" cx="0.5" cy="0.5" r="0.5">
+              <stop offset="0" stop-color="#8fbaff" stop-opacity="0.75" />
+              <stop offset="1" stop-color="#8fbaff" stop-opacity="0" />
+            </radialGradient>
+            <radialGradient id="warmPool" cx="0.5" cy="0.5" r="0.5">
+              <stop offset="0" stop-color="#ffe2a0" stop-opacity="0.45" />
+              <stop offset="1" stop-color="#ffe2a0" stop-opacity="0" />
+            </radialGradient>

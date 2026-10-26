@@ -1,0 +1,5 @@
+            <radialGradient id="fireGlow" cx="0.5" cy="0.5" r="0.5">
+              <stop offset="0" stop-color="#ffb35c" stop-opacity="0.7" />
+              <stop offset="0.45" stop-color="#ff7a3a" stop-opacity="0.22" />
+              <stop offset="1" stop-color="#ff7a3a" stop-opacity="0" />
+            </radialGradient>

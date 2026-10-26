@@ -1,0 +1,521 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+    <style>
+      @font-face {
+        font-family: "HFMono";
+        src: url("assets/fonts/consolab.ttf") format("truetype");
+        font-weight: 700;
+      }
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      html,
+      body {
+        width: 1080px;
+        height: 1920px;
+        overflow: hidden;
+        background: #000;
+      }
+      #root {
+        position: relative;
+        width: 1080px;
+        height: 1920px;
+        overflow: hidden;
+        background: #000;
+      }
+      #stage {
+        position: absolute;
+        inset: 0;
+        width: 1080px;
+        height: 1920px;
+      }
+      #stage svg {
+        position: absolute;
+        inset: 0;
+      }
+      .mono {
+        position: absolute;
+        font-family: "HFMono", monospace;
+        font-weight: 700;
+        white-space: nowrap;
+      }
+      .main {
+        font-size: 34px;
+        letter-spacing: 0.2em;
+        color: #fff;
+        text-shadow: 0 0 12px rgba(0, 0, 0, 0.8);
+      }
+      .sub {
+        font-size: 24px;
+        letter-spacing: 0.16em;
+        color: #d2d2d2;
+        text-shadow: 0 0 10px rgba(0, 0, 0, 0.9);
+      }
+      #lab-t {
+        left: 124px;
+        top: 414px;
+      }
+      #sub-t {
+        left: 124px;
+        top: 458px;
+      }
+      #lab-b {
+        left: 124px;
+        top: 997px;
+        color: #b9b9b9;
+      }
+      #sub-b {
+        left: 124px;
+        top: 1041px;
+      }
+      #head {
+        position: absolute;
+        left: 0;
+        right: 0;
+        top: 222px;
+        text-align: center;
+        font-family: "HFMono", monospace;
+        font-weight: 700;
+        font-size: 36px;
+        letter-spacing: 0.12em;
+        line-height: 1.45;
+        color: #fff;
+        text-shadow: 0 0 16px rgba(255, 255, 255, 0.3);
+      }
+      #head .ghost {
+        visibility: hidden;
+      }
+    </style>
+  </head>
+  <body>
+    <div
+      id="root"
+      data-composition-id="main"
+      data-start="0"
+      data-duration="14"
+      data-width="1080"
+      data-height="1920"
+    >
+      <div id="stage" class="clip" data-start="0" data-duration="14" data-track-index="0">
+        <svg id="svg" width="1080" height="1920" viewBox="0 0 1080 1920" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <clipPath id="clipP" clipPathUnits="userSpaceOnUse">
+              <rect x="310" y="288" width="800" height="455" />
+            </clipPath>
+            <linearGradient id="skyDusk" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0" stop-color="#151a3a" />
+              <stop offset="0.65" stop-color="#43325e" />
+              <stop offset="1" stop-color="#b0605a" />
+            </linearGradient>
+            <linearGradient id="lampCone" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0" stop-color="#ffd38a" stop-opacity="0.7" />
+              <stop offset="1" stop-color="#ffd38a" stop-opacity="0.12" />
+            </linearGradient>
+            <radialGradient id="phoneGlow">
+              <stop offset="0" stop-color="#8ab8ff" stop-opacity="0.75" />
+              <stop offset="1" stop-color="#8ab8ff" stop-opacity="0" />
+            </radialGradient>
+            <radialGradient id="warmGlow">
+              <stop offset="0" stop-color="#ffcf87" stop-opacity="0.55" />
+              <stop offset="1" stop-color="#ffcf87" stop-opacity="0" />
+            </radialGradient>
+            <radialGradient id="heartGlow">
+              <stop offset="0" stop-color="#ff3b3b" stop-opacity="0.6" />
+              <stop offset="1" stop-color="#ff3b3b" stop-opacity="0" />
+            </radialGradient>
+            <filter id="blur" x="-50%" y="-50%" width="200%" height="200%">
+              <feGaussianBlur stdDeviation="14" />
+            </filter>
+            <filter id="soft" x="-50%" y="-50%" width="200%" height="200%">
+              <feGaussianBlur stdDeviation="18" />
+            </filter>
+          </defs>
+          <g transform="translate(80 400) scale(1.15) translate(-310 -288)"><g clip-path="url(#clipP)" id="roomT"></g></g>
+          <g transform="translate(80 983) scale(1.15) translate(-310 -288)"><g clip-path="url(#clipP)" id="roomB"></g></g>
+          <!-- panels sit inside the Instagram full-screen safe area -->
+          <rect x="79" y="399" width="922" height="525" fill="none" stroke="#3a3a3a" stroke-width="2" />
+          <rect x="79" y="982" width="922" height="525" fill="none" stroke="#3a3a3a" stroke-width="2" />
+          <g id="badge" transform="translate(540 953)">
+            <circle r="54" fill="#000" stroke="#3b3b3b" stroke-width="6" />
+            <circle id="badgeArc" r="54" fill="none" stroke="#ffffff" stroke-width="6" stroke-dasharray="339.3" stroke-dashoffset="339.3" transform="rotate(-90)" />
+            <text y="-10" text-anchor="middle" font-family="HFMono" font-weight="700" font-size="17" fill="#bdbdbd" letter-spacing="3">DAY</text>
+            <text id="badgeTxt" y="22" text-anchor="middle" font-family="HFMono" font-weight="700" font-size="30" fill="#fff">1</text>
+          </g>
+        </svg>
+        <div id="lab-t" class="mono main">PRESENT</div>
+        <div id="sub-t" class="mono sub"></div>
+        <div id="lab-b" class="mono main">DISTRACTED</div>
+        <div id="sub-b" class="mono sub"></div>
+        <div id="head">
+          <div>SAME TABLE.</div>
+          <div id="h2"></div>
+          <div id="h3"></div>
+        </div>
+      </div>
+      <audio id="mix" src="assets/audio/mix.wav" data-start="0" data-duration="14" data-track-index="1"></audio>
+    </div>
+
+    <script>
+      (function () {
+        const DUR = 14;
+        const FL = 730;
+        const THIGH = 80, SHIN = 78;
+        const UARM = 64, FARM = 60, TORSO = 116, NECK = 12, HEADR = 31;
+        const NS = "http://www.w3.org/2000/svg";
+        const svgEl = (tag, attrs, parent) => {
+          const e = document.createElementNS(NS, tag);
+          for (const k in attrs || {}) e.setAttribute(k, attrs[k]);
+          if (parent) parent.appendChild(e);
+          return e;
+        };
+        const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
+        const lerp = (a, b, p) => a + (b - a) * p;
+        const lerp2 = (a, b, p) => [lerp(a[0], b[0], p), lerp(a[1], b[1], p)];
+        const ease = (p) => 0.5 - 0.5 * Math.cos(Math.PI * clamp(p, 0, 1));
+        const easeOut = (p) => 1 - Math.pow(1 - clamp(p, 0, 1), 3);
+        const backOut = (p) => { p = clamp(p, 0, 1); const s = 2.2; return 1 + (s + 1) * Math.pow(p - 1, 3) + s * Math.pow(p - 1, 2); };
+        const win = (t, a, b) => ease((t - a) / (b - a));
+        const rad = (d) => (d * Math.PI) / 180;
+        const down = (a, f) => [Math.sin(rad(a)) * f, Math.cos(rad(a))];
+        const up = (a, f) => [Math.sin(rad(a)) * f, -Math.cos(rad(a))];
+        const r1 = (v) => Math.round(v * 10) / 10;
+        const E = (id) => document.getElementById(id);
+        const hexLerp = (a, b, p) => {
+          const pa = [1, 3, 5].map((i) => parseInt(a.slice(i, i + 2), 16));
+          const pb = [1, 3, 5].map((i) => parseInt(b.slice(i, i + 2), 16));
+          return "rgb(" + pa.map((v, i) => Math.round(lerp(v, pb[i], p))).join(",") + ")";
+        };
+        const HEART = "M0 7 C -16 -5 -11 -19 0 -10 C 11 -19 16 -5 0 7 Z";
+
+        // ---------- rooms ----------
+        const POT = [752, 502];
+        const GLASS = [648, 530];
+        function buildRoom(g, good) {
+          const R = {};
+          svgEl("rect", { x: 0, y: 0, width: 1421, height: 730, fill: good ? "#3a2f45" : "#1b1e2c" }, g);
+          svgEl("rect", { x: 0, y: 730, width: 1421, height: 75, fill: "#2b231f" }, g);
+          svgEl("rect", { x: 0, y: 722, width: 1421, height: 8, fill: "#15131a" }, g);
+          svgEl("rect", { x: 150, y: 140, width: 300, height: 280, fill: "#15141f" }, g);
+          svgEl("rect", { x: 162, y: 152, width: 276, height: 256, fill: "url(#skyDusk)", opacity: good ? 1 : 0.6 }, g);
+          svgEl("rect", { x: 296, y: 152, width: 8, height: 256, fill: "#15141f" }, g);
+          svgEl("rect", { x: 162, y: 276, width: 276, height: 8, fill: "#15141f" }, g);
+          svgEl("rect", { x: 1060, y: 200, width: 150, height: 190, fill: "#15141f" }, g);
+          svgEl("rect", { x: 1072, y: 212, width: 126, height: 166, fill: good ? "#4d405c" : "#262a3c" }, g);
+          // lamp
+          svgEl("rect", { x: 708, y: 0, width: 4, height: 250, fill: "#0d0d10" }, g);
+          if (good) R.cone = svgEl("polygon", { points: "680,290 740,290 900,560 520,560", fill: "url(#lampCone)", filter: "url(#soft)", opacity: 0.55 }, g);
+          if (good) svgEl("circle", { cx: 710, cy: 292, r: 70, fill: "url(#warmGlow)" }, g);
+          svgEl("polygon", { points: "668,292 752,292 730,250 690,250", fill: good ? "#f0cf8f" : "#33343d", stroke: "#000", "stroke-width": 3 }, g);
+          // chairs (backrests behind the figures)
+          svgEl("rect", { x: 516, y: 470, width: 14, height: 152, rx: 4, fill: "#4c382c" }, g);
+          svgEl("rect", { x: 516, y: 606, width: 106, height: 14, rx: 3, fill: "#5a4334" }, g);
+          svgEl("rect", { x: 522, y: 620, width: 9, height: 110, fill: "#3f2f25" }, g);
+          svgEl("rect", { x: 606, y: 620, width: 9, height: 110, fill: "#3f2f25" }, g);
+          svgEl("rect", { x: 890, y: 470, width: 14, height: 152, rx: 4, fill: "#4c382c" }, g);
+          svgEl("rect", { x: 798, y: 606, width: 106, height: 14, rx: 3, fill: "#5a4334" }, g);
+          svgEl("rect", { x: 806, y: 620, width: 9, height: 110, fill: "#3f2f25" }, g);
+          svgEl("rect", { x: 890, y: 620, width: 9, height: 110, fill: "#3f2f25" }, g);
+          R.figs = svgEl("g", {}, g);
+          // table in front of the legs
+          svgEl("rect", { x: 702, y: 560, width: 16, height: 170, fill: "#3f2f25" }, g);
+          svgEl("rect", { x: 655, y: 720, width: 110, height: 10, rx: 3, fill: "#3f2f25" }, g);
+          svgEl("rect", { x: 596, y: 546, width: 228, height: 15, rx: 3, fill: "#6a4e3c", stroke: "#000", "stroke-width": 3 }, g);
+          // plant
+          R.heartGlow = svgEl("circle", { r: 80, fill: "url(#heartGlow)", opacity: 0 }, g);
+          R.stem = svgEl("path", { fill: "none", stroke: "#3f7d47", "stroke-width": 7, "stroke-linecap": "round" }, g);
+          R.leaves = [0, 1, 2].map(() => svgEl("ellipse", { rx: 22, ry: 9, fill: "#4f9a5a", stroke: "#000", "stroke-width": 2.5 }, g));
+          R.heart = svgEl("path", { d: HEART, fill: "#e0322b", stroke: "#000", "stroke-width": 2.5 }, g);
+          svgEl("rect", { x: 726, y: 496, width: 52, height: 10, rx: 3, fill: "#c06d3e", stroke: "#000", "stroke-width": 2.5 }, g);
+          svgEl("polygon", { points: "730,506 774,506 766,546 738,546", fill: "#a85d35", stroke: "#000", "stroke-width": 2.5 }, g);
+          R.minis = [0, 1, 2, 3, 4].map(() => svgEl("path", { d: HEART, fill: "#ff4a4a", opacity: 0 }, g));
+          // glass, water stream, phones, bubbles
+          R.water = svgEl("path", { fill: "none", stroke: "#9fd0ff", "stroke-width": 5, "stroke-linecap": "round", opacity: 0 }, g);
+          R.glass = svgEl("g", {}, g);
+          svgEl("rect", { x: -10, y: -16, width: 20, height: 32, rx: 3, fill: "rgba(220,235,255,0.35)", stroke: "#e8f1ff", "stroke-width": 2 }, R.glass);
+          R.glassWater = svgEl("rect", { x: -8, y: -4, width: 16, height: 18, fill: "#8cc3ff", opacity: 0.8 }, R.glass);
+          R.phones = [0, 1].map(() => {
+            const glow = svgEl("circle", { r: 115, fill: "url(#phoneGlow)", opacity: 0 }, g);
+            const ph = svgEl("g", {}, g);
+            svgEl("rect", { x: -11, y: -19, width: 22, height: 38, rx: 4, fill: "#111", stroke: "#000", "stroke-width": 2 }, ph);
+            const scr = svgEl("rect", { x: -8, y: -15, width: 16, height: 30, rx: 2, fill: "#1b2233" }, ph);
+            return { glow, ph, scr };
+          });
+          R.bubbles = [0, 1].map(() => {
+            const b = svgEl("g", { opacity: 0 }, g);
+            svgEl("rect", { x: -40, y: -24, width: 80, height: 48, rx: 22, fill: "#ffffff", stroke: "#000", "stroke-width": 3 }, b);
+            for (const x of [-18, 0, 18]) svgEl("circle", { cx: x, cy: 0, r: 5.5, fill: "#222" }, b);
+            return b;
+          });
+          return R;
+        }
+        const RT = buildRoom(E("roomT"), true);
+        const RB = buildRoom(E("roomB"), false);
+
+        // ---------- rig ----------
+        function makeFig(parent, front, back, hair, glow) {
+          const g = svgEl("g", {}, parent);
+          if (glow) {
+            const id = "fig" + Math.floor(front.length * 1000 + parent.childNodes.length * 7 + (hair ? 1 : 0));
+            g.setAttribute("id", id);
+            parent.insertBefore(svgEl("use", { href: "#" + id, filter: "url(#blur)", opacity: 0.4 }), g);
+          }
+          const parts = { g };
+          const order = [["armB", back], ["legB", back], ["torso", front], ["legF", front], ["armF", front]];
+          for (const [n, col] of order) {
+            const o = svgEl("path", { fill: "none", stroke: "#000", "stroke-width": 34, "stroke-linecap": "round", "stroke-linejoin": "round" }, g);
+            const w = svgEl("path", { fill: "none", stroke: col, "stroke-width": 22, "stroke-linecap": "round", "stroke-linejoin": "round" }, g);
+            parts[n] = [o, w];
+          }
+          if (hair) parts.hair = svgEl("circle", { r: 15, fill: front, stroke: "#000", "stroke-width": 5 }, g);
+          parts.head = svgEl("circle", { r: HEADR, fill: front, stroke: "#000", "stroke-width": 6 }, g);
+          return parts;
+        }
+        function ik(a, b, l1, l2, pick) {
+          let dx = b[0] - a[0], dy = b[1] - a[1];
+          let d = Math.hypot(dx, dy);
+          const maxd = l1 + l2 - 0.5;
+          if (d > maxd) {
+            b = [a[0] + (dx / d) * maxd, a[1] + (dy / d) * maxd];
+            dx = b[0] - a[0];
+            dy = b[1] - a[1];
+            d = maxd;
+          }
+          d = Math.max(d, Math.abs(l1 - l2) + 1);
+          const al = Math.acos(clamp((l1 * l1 + d * d - l2 * l2) / (2 * l1 * d), -1, 1));
+          const base = Math.atan2(dy, dx);
+          const c1 = [a[0] + Math.cos(base + al) * l1, a[1] + Math.sin(base + al) * l1];
+          const c2 = [a[0] + Math.cos(base - al) * l1, a[1] + Math.sin(base - al) * l1];
+          return [pick(c1, c2), b];
+        }
+        const P = (pts) => "M" + pts.map((p) => r1(p[0]) + " " + r1(p[1])).join("L");
+        const setD = (pair, d) => {
+          pair[0].setAttribute("d", d);
+          pair[1].setAttribute("d", d);
+        };
+        // seated pose: {hip, f, torso, head, feet:[near, far], arms:[{t, w}, {t, w}]} (hands go to world targets)
+        function drawFig(parts, s) {
+          const f = s.f, hip = s.hip;
+          const tu = up(s.torso, f);
+          const sh = [hip[0] + tu[0] * TORSO, hip[1] + tu[1] * TORSO];
+          const nk = [hip[0] + tu[0] * (TORSO + NECK), hip[1] + tu[1] * (TORSO + NECK)];
+          const hu = up(s.torso + s.head, f);
+          const hc = [nk[0] + hu[0] * HEADR, nk[1] + hu[1] * HEADR];
+          setD(parts.torso, P([hip, sh, nk]));
+          parts.head.setAttribute("cx", r1(hc[0]));
+          parts.head.setAttribute("cy", r1(hc[1]));
+          if (parts.hair) {
+            parts.hair.setAttribute("cx", r1(hc[0] - f * 27));
+            parts.hair.setAttribute("cy", r1(hc[1] - 12));
+          }
+          const legPick = (c1, c2) => (c1[0] * f > c2[0] * f ? c1 : c2);
+          ["legF", "legB"].forEach((n, i) => {
+            const [kn, ft] = ik(hip, s.feet[i], THIGH, SHIN, legPick);
+            setD(parts[n], P([hip, kn, ft]));
+          });
+          const hands = [];
+          ["armF", "armB"].forEach((n, i) => {
+            const a = s.arms[i];
+            const u = down(52, f);
+            const el = [sh[0] + u[0] * UARM, sh[1] + u[1] * UARM];
+            const pick = (c1, c2) =>
+              Math.hypot(c1[0] - el[0], c1[1] - el[1]) < Math.hypot(c2[0] - el[0], c2[1] - el[1]) ? c1 : c2;
+            const [e2, h2] = ik(sh, a.t, UARM, FARM, pick);
+            setD(parts[n], P([sh, e2, h2]));
+            hands.push(h2);
+          });
+          return { head: hc, hands };
+        }
+        function keyAt(K, t) {
+          let i = 0;
+          while (i < K.length - 2 && t >= K[i + 1][0]) i++;
+          const [ta, a] = K[i], [tb, b] = K[i + 1];
+          const p = ease((t - ta) / (tb - ta));
+          const o = {};
+          for (const k in a) o[k] = lerp(a[k], b[k] === undefined ? a[k] : b[k], p);
+          return o;
+        }
+        // move a hand along a list of [time, point] stops
+        function path(stops, t) {
+          if (t <= stops[0][0]) return stops[0][1];
+          for (let i = 1; i < stops.length; i++) {
+            if (t <= stops[i][0]) {
+              const [ta, a] = stops[i - 1], [tb, b] = stops[i];
+              return tb - ta < 1e-6 ? b : lerp2(a, b, ease((t - ta) / (tb - ta)));
+            }
+          }
+          return stops[stops.length - 1][1];
+        }
+
+        // ---------- the couples ----------
+        const MAN = { hip: [580, 598], f: 1, feet: [[652, FL], [670, FL]], rest: [[662, 544], [648, 546]] };
+        const WOM = { hip: [840, 598], f: -1, feet: [[768, FL], [750, FL]], rest: [[758, 544], [772, 546]] };
+        const MEET = [712, 534];
+        const POUR = [722, 450];
+        const talk = (t) => [662 + 22 * Math.sin(t * 7), 504 - 28 * Math.abs(Math.sin(t * 3.5))];
+
+        const KTM = [[0, { torso: 4, head: 0 }], [4.9, { torso: 4, head: 0 }], [5.4, { torso: 10, head: 2 }], [7.0, { torso: 10, head: 2 }], [7.6, { torso: 10, head: 10 }], [DUR, { torso: 10, head: 10 }]];
+        const KTW = [
+          [0, { torso: 4, head: 0 }], [1.6, { torso: 4, head: 0 }], [1.85, { torso: -6, head: -16 }], [2.5, { torso: -6, head: -16 }], [2.8, { torso: 6, head: 6 }],
+          [4.9, { torso: 6, head: 6 }], [5.4, { torso: 8, head: 2 }], [7.0, { torso: 8, head: 2 }], [7.6, { torso: 8, head: 14 }], [DUR, { torso: 8, head: 14 }],
+        ];
+        function topMan(t) {
+          const q = keyAt(KTM, t);
+          const nod = t < 5 ? Math.sin(t * 5) * 3 : 0;
+          const handF = t < 2.8 ? talk(t) : path([[2.8, talk(2.8)], [3.1, GLASS], [3.4, POUR], [4.3, POUR], [4.6, GLASS], [4.85, MAN.rest[0]], [5.0, MAN.rest[0]], [5.35, MEET]], t);
+          return { hip: MAN.hip, f: 1, torso: q.torso, head: q.head + nod, feet: MAN.feet, arms: [{ t: handF }, { t: MAN.rest[1] }] };
+        }
+        function topWom(t) {
+          const q = keyAt(KTW, t);
+          const laugh = t > 1.8 && t < 2.6 ? Math.sin(t * 30) * 2.5 : 0;
+          const handF = path([[5.0, WOM.rest[0]], [5.4, MEET]], t);
+          return { hip: [WOM.hip[0], WOM.hip[1] + laugh], f: -1, torso: q.torso, head: q.head, feet: WOM.feet, arms: [{ t: handF }, { t: WOM.rest[1] }] };
+        }
+        const PHM = [646, 454], PHW = [776, 454];
+        function botMan(t) {
+          const look = win(t, 5.25, 5.5) * (1 - win(t, 5.95, 6.2));
+          const handF = path([[0.4, MAN.rest[0]], [0.8, PHM], [5.2, PHM], [5.5, [636, 520]], [6.0, [636, 520]], [6.3, PHM]], t);
+          const onPh = win(t, 0.5, 0.9);
+          return { hip: MAN.hip, f: 1, torso: 4 + 6 * onPh, head: 28 * onPh * (1 - look) - 6 * look, feet: MAN.feet, arms: [{ t: handF }, { t: MAN.rest[1] }] };
+        }
+        function botWom(t) {
+          const handF = path([[0.6, WOM.rest[0]], [1.0, PHW]], t);
+          const onPh = win(t, 0.7, 1.1);
+          return { hip: WOM.hip, f: -1, torso: 4 + 7 * onPh, head: 30 * onPh, feet: WOM.feet, arms: [{ t: handF }, { t: WOM.rest[1] }] };
+        }
+        const figs = {
+          tm: makeFig(RT.figs, "#ffffff", "#e2e2e2", false, true),
+          tw: makeFig(RT.figs, "#ffffff", "#e2e2e2", true, true),
+          bm: makeFig(RB.figs, "#9a9a9a", "#7c7c7c", false, false),
+          bw: makeFig(RB.figs, "#9a9a9a", "#7c7c7c", true, false),
+        };
+
+        // ---------- plant ----------
+        function plant(R, s) {
+          const B = POT;
+          const T = [B[0] - 62 * s.wilt, B[1] - s.h + s.h * 0.72 * s.wilt];
+          const C = [B[0] + 6 * s.wilt, B[1] - s.h * 0.85];
+          R.stem.setAttribute("d", "M" + B[0] + " " + B[1] + " Q" + r1(C[0]) + " " + r1(C[1]) + " " + r1(T[0]) + " " + r1(T[1]));
+          R.stem.setAttribute("stroke", hexLerp("#3f7d47", "#6b6a35", s.wilt));
+          const at = (u) => [
+            (1 - u) * (1 - u) * B[0] + 2 * u * (1 - u) * C[0] + u * u * T[0],
+            (1 - u) * (1 - u) * B[1] + 2 * u * (1 - u) * C[1] + u * u * T[1],
+          ];
+          [[0.3, -1], [0.55, 1], [0.78, -1]].forEach(([u, side], i) => {
+            const p = at(u);
+            const ang = side * 35 + side * -1 * 0 + (side > 0 ? 1 : -1) * -0 + s.wilt * 75 * (side > 0 ? 1 : -1) * -1;
+            const L = R.leaves[i];
+            const sc = clamp((s.h - 30 - i * 30) / 40, 0, 1);
+            L.setAttribute("transform", "translate(" + r1(p[0] + side * 16 * sc) + " " + r1(p[1]) + ") rotate(" + r1(-side * 30 + side * 80 * s.wilt) + ") scale(" + sc.toFixed(3) + ")");
+            L.setAttribute("fill", hexLerp("#4f9a5a", "#8a7d3c", s.wilt));
+          });
+          let hp = T, hr = -s.wilt * 120;
+          if (s.fall > 0) {
+            const y0 = T[1], y1 = 534;
+            const p = clamp(s.fall, 0, 1);
+            hp = [lerp(T[0], T[0] - 16, p), p < 0.8 ? lerp(y0, y1, (p / 0.8) ** 2) : y1 - Math.sin(((p - 0.8) / 0.2) * Math.PI) * 6];
+            hr = lerp(-s.wilt * 120, -180, p);
+          }
+          R.heart.setAttribute("transform", "translate(" + r1(hp[0]) + " " + r1(hp[1] - 4) + ") rotate(" + r1(hr) + ") scale(" + (1.8 * s.hs).toFixed(3) + ")");
+          R.heart.setAttribute("fill", hexLerp("#e0322b", "#4f1515", s.wilt));
+          R.heartGlow.setAttribute("cx", r1(hp[0]));
+          R.heartGlow.setAttribute("cy", r1(hp[1]));
+          R.heartGlow.setAttribute("opacity", (s.glow || 0).toFixed(3));
+          return T;
+        }
+
+        // ---------- labels ----------
+        const SUBT = [[0.3, "TALK"], [1.6, "LAUGH"], [2.9, "WATER IT"], [5.0, "HOLD HANDS"], [6.4, "IT GROWS"]];
+        const SUBB = [[0.4, "PHONE"], [3.0, "NO WATER"], [5.25, "ONE LOOK"], [6.1, "PHONE"], [8.6, "IT DIES"]];
+        const subAt = (Lst, t) => {
+          let s = "", t0 = 0;
+          for (const [tt, txt] of Lst) if (t >= tt) { s = txt; t0 = tt; }
+          return s.slice(0, clamp(Math.floor((t - t0) * 40), 0, s.length));
+        };
+        const typed = (id, text, t, t0, cps) => {
+          const n = clamp(Math.floor((t - t0) * cps), 0, text.length);
+          E(id).innerHTML = "<span>" + text.slice(0, n) + '</span><span class="ghost">' + text.slice(n) + "</span>";
+        };
+        const H2 = "NOBODY KILLED IT.";
+        const H3 = "THEY JUST STOPPED WATERING IT.";
+
+        // ---------- per-frame render ----------
+        function bubble(b, t0, t1, pos, t) {
+          const a = t - t0;
+          const vis = t >= t0 && t < t1;
+          const s = vis ? backOut(a / 0.25) * (1 - ease((t - t1 + 0.2) / 0.2)) : 0;
+          b.setAttribute("transform", "translate(" + pos[0] + " " + pos[1] + ") scale(" + Math.max(0, s).toFixed(3) + ")");
+          b.setAttribute("opacity", vis ? 1 : 0);
+        }
+        function render(t) {
+          // top: present
+          const jm = drawFig(figs.tm, topMan(t));
+          const jw = drawFig(figs.tw, topWom(t));
+          const bloom = backOut((t - 5.6) / 0.8) * (t > 5.6 ? 1 : 0);
+          const pulse = t > 6.4 ? 1 + 0.07 * Math.sin((t - 6.4) * 6) : 1;
+          const tipT = plant(RT, { h: 40 + 118 * ease(t / 9.5), wilt: 0, hs: Math.max(0.0, bloom) * pulse, fall: 0, glow: 0.8 * clamp((t - 6.0) / 0.6, 0, 1) });
+          RT.minis.forEach((m, k) => {
+            const a = t - (6.8 + k * 0.55);
+            const vis = a > 0 && a < 2.2;
+            m.setAttribute("transform", "translate(" + r1(tipT[0] + Math.sin(a * 3 + k) * 22) + " " + r1(tipT[1] - 20 - a * 70) + ") scale(0.7)");
+            m.setAttribute("opacity", vis ? (Math.sin((Math.PI * a) / 2.2) * 0.85).toFixed(3) : 0);
+          });
+          const holding = t > 2.98 && t < 4.6;
+          const gp = holding ? [jm.hands[0][0] + 6, jm.hands[0][1] - 4] : GLASS;
+          const tilt = 70 * win(t, 3.35, 3.55) * (1 - win(t, 4.2, 4.4));
+          RT.glass.setAttribute("transform", "translate(" + r1(gp[0]) + " " + r1(gp[1]) + ") rotate(" + r1(tilt) + ")");
+          RT.glassWater.setAttribute("height", r1(18 * (1 - 0.8 * win(t, 3.5, 4.2))));
+          const pouring = t > 3.5 && t < 4.2;
+          RT.water.setAttribute("d", "M" + r1(gp[0] + 14) + " " + r1(gp[1] + 4) + " Q" + r1(gp[0] + 24) + " " + r1(gp[1] + 30) + " " + POT[0] + " " + (POT[1] - 4));
+          RT.water.setAttribute("opacity", pouring ? 0.85 : 0);
+          bubble(RT.bubbles[0], 0.3, 1.5, [jm.head[0] + 60, jm.head[1] - 62], t);
+          bubble(RT.bubbles[1], 1.0, 2.0, [jw.head[0] - 60, jw.head[1] - 62], t);
+          RB.glass.setAttribute("transform", "translate(" + GLASS[0] + " " + GLASS[1] + ")");
+          RT.phones.forEach((p, i) => {
+            p.ph.setAttribute("transform", "translate(" + (i ? 610 : 812) + " 541) rotate(90)");
+            p.glow.setAttribute("opacity", 0);
+          });
+
+          // bottom: distracted
+          const bm = drawFig(figs.bm, botMan(t));
+          const bw = drawFig(figs.bw, botWom(t));
+          const wilt = ease((t - 3.4) / 5.2);
+          plant(RB, { h: 40 + 55 * ease(t / 3), wilt, hs: 0.55 * clamp((t - 1.4) / 0.6, 0, 1), fall: (t - 8.55) / 0.45, glow: 0 });
+          [[bm, 0.6, [610, 541]], [bw, 0.8, [812, 541]]].forEach(([j, t0, spot], i) => {
+            const p = RB.phones[i];
+            const inHand = t > t0;
+            const pos = inHand ? j.hands[0] : spot;
+            p.ph.setAttribute("transform", "translate(" + r1(pos[0]) + " " + r1(pos[1]) + ") rotate(" + (inHand ? -i * 10 : 90) + ")");
+            p.scr.setAttribute("fill", inHand ? "#9cc4ff" : "#1b2233");
+            p.glow.setAttribute("cx", r1(pos[0]));
+            p.glow.setAttribute("cy", r1(pos[1]));
+            p.glow.setAttribute("opacity", inHand ? (0.75 + 0.15 * Math.sin(t * (8 + i * 3))).toFixed(3) : 0);
+          });
+          RB.bubbles.forEach((b) => b.setAttribute("opacity", 0));
+
+          // shared
+          E("badgeTxt").textContent = String(1 + Math.floor(364 * ease(t / 9.5)));
+          E("badgeArc").setAttribute("stroke-dashoffset", (339.3 * (1 - clamp(t / 9.5, 0, 1))).toFixed(1));
+          E("sub-t").textContent = subAt(SUBT, t);
+          E("sub-b").textContent = subAt(SUBB, t);
+          E("sub-b").style.color = t > 8.6 ? "#ff4a3d" : "#d2d2d2";
+          typed("h2", H2, t, 10.2, 26);
+          typed("h3", H3, t, 11.3, 30);
+        }
+
+        window.__timelines = window.__timelines || {};
+        const tl = gsap.timeline({ paused: true });
+        const clock = { t: 0 };
+        tl.to(clock, { t: DUR, duration: DUR, ease: "none", onUpdate: () => render(clock.t) }, 0);
+        window.__timelines["main"] = tl;
+        render(0);
+        tl.seek(0);
+      })();
+    </script>
+  </body>
+</html>

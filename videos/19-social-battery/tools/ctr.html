@@ -1,0 +1,19 @@
+<style>
+  .hud { position: absolute; top: 420px; width: 360px; text-align: center; font-family: "HFMono", monospace; font-weight: 700; }
+  .hud .who { font-size: 27px; letter-spacing: 0.22em; color: #fff; }
+  .hud .row { margin-top: 16px; display: flex; justify-content: center; align-items: center; gap: 12px; }
+  .bat { position: relative; width: 96px; height: 42px; border: 5px solid #fff; border-radius: 8px; padding: 4px; }
+  
+  .bat .fill { height: 100%; background: #fff; border-radius: 3px; }
+  .nub { width: 8px; height: 16px; border-radius: 0 3px 3px 0; background: #fff; margin-left: -10px; }
+  .pct { font-size: 30px; min-width: 3.4ch; text-align: left; color: #fff; letter-spacing: 0.04em; }
+  .bolt { width: 22px; height: 30px; }
+</style>
+<div class="hud" style="left: 120px">
+  <div class="who">INTROVERT</div>
+  <div class="row"><svg class="bolt" id="boltA" viewBox="0 0 22 30"><path d="M13 0 L2 17 H10 L7 30 L20 11 H12 Z" fill="#fff" /></svg><div class="bat" id="batA"><div class="fill" id="fillA"></div></div><div class="nub" id="nubA"></div><div class="pct" id="pctA">92%</div></div>
+</div>
+<div class="hud" style="left: 600px">
+  <div class="who">EXTROVERT</div>
+  <div class="row"><svg class="bolt" id="boltB" viewBox="0 0 22 30"><path d="M13 0 L2 17 H10 L7 30 L20 11 H12 Z" fill="#fff" /></svg><div class="bat" id="batB"><div class="fill" id="fillB"></div></div><div class="nub" id="nubB"></div><div class="pct" id="pctB">36%</div></div>
+</div>

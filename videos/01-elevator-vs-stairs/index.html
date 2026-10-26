@@ -1,0 +1,498 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+    <style>
+      @font-face {
+        font-family: "HFMono";
+        src: url("assets/fonts/consolab.ttf") format("truetype");
+        font-weight: 700;
+      }
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      html,
+      body {
+        width: 1080px;
+        height: 1920px;
+        overflow: hidden;
+        background: #000;
+      }
+      #root {
+        position: relative;
+        width: 1080px;
+        height: 1920px;
+        overflow: hidden;
+        background: #000;
+      }
+      #stage {
+        position: absolute;
+        inset: 0;
+        width: 1080px;
+        height: 1920px;
+        transform-origin: 540px 1100px;
+      }
+      #stage svg {
+        position: absolute;
+        inset: 0;
+      }
+      .label {
+        position: absolute;
+        font-family: "HFMono", monospace;
+        font-weight: 700;
+        font-size: 34px;
+        letter-spacing: 0.22em;
+        color: #f2f2f2;
+        white-space: nowrap;
+        text-shadow: 0 0 14px rgba(255, 255, 255, 0.25);
+      }
+      #lab-mot {
+        left: 92px;
+        top: 760px;
+        color: #b9b9b9;
+      }
+      #lab-dis {
+        right: 60px;
+        top: 352px;
+      }
+      #punch {
+        position: absolute;
+        left: 0;
+        right: 0;
+        top: 190px;
+        text-align: center;
+        font-family: "HFMono", monospace;
+        font-weight: 700;
+        font-size: 38px;
+        letter-spacing: 0.12em;
+        line-height: 1.55;
+        color: #fff;
+        text-shadow: 0 0 16px rgba(255, 255, 255, 0.3);
+      }
+      #punch .ghost {
+        visibility: hidden;
+      }
+    </style>
+  </head>
+  <body>
+    <div
+      id="root"
+      data-composition-id="main"
+      data-start="0"
+      data-duration="13"
+      data-width="1080"
+      data-height="1920"
+    >
+      <div id="stage" class="clip" data-start="0" data-duration="13" data-track-index="0">
+        <svg id="svg" width="1080" height="1920" viewBox="0 0 1080 1920" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <linearGradient id="beamGrad" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0" stop-color="#ffffff" stop-opacity="0.5" />
+              <stop offset="0.55" stop-color="#ffffff" stop-opacity="0.16" />
+              <stop offset="1" stop-color="#ffffff" stop-opacity="0.04" />
+            </linearGradient>
+            <linearGradient id="beamCold" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0" stop-color="#cfd8ff" stop-opacity="0.42" />
+              <stop offset="0.6" stop-color="#cfd8ff" stop-opacity="0.12" />
+              <stop offset="1" stop-color="#cfd8ff" stop-opacity="0.03" />
+            </linearGradient>
+            <radialGradient id="poolGrad">
+              <stop offset="0" stop-color="#ffffff" stop-opacity="0.35" />
+              <stop offset="1" stop-color="#ffffff" stop-opacity="0" />
+            </radialGradient>
+            <radialGradient id="redGlow">
+              <stop offset="0" stop-color="#ff2a2a" stop-opacity="0.9" />
+              <stop offset="1" stop-color="#ff2a2a" stop-opacity="0" />
+            </radialGradient>
+            <linearGradient id="floorGrad" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0" stop-color="#151515" />
+              <stop offset="0.35" stop-color="#070707" />
+              <stop offset="1" stop-color="#000000" />
+            </linearGradient>
+            <linearGradient id="steel" x1="0" y1="0" x2="1" y2="0">
+              <stop offset="0" stop-color="#5b5d61" />
+              <stop offset="0.45" stop-color="#85878c" />
+              <stop offset="1" stop-color="#55575b" />
+            </linearGradient>
+            <linearGradient id="stairShade" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0" stop-color="#000" stop-opacity="0" />
+              <stop offset="1" stop-color="#000" stop-opacity="0.55" />
+            </linearGradient>
+            <pattern id="bricks" patternUnits="userSpaceOnUse" width="52" height="50">
+              <rect width="52" height="50" fill="#c8c2b7" />
+              <path d="M0 0.5H52M0 25.5H52M0.5 0V25M26.5 25V50" stroke="#8c867c" stroke-width="2.2" fill="none" />
+            </pattern>
+            <linearGradient id="reflFade" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0" stop-color="#fff" stop-opacity="1" />
+              <stop offset="1" stop-color="#fff" stop-opacity="0" />
+            </linearGradient>
+            <mask id="reflMask" maskUnits="userSpaceOnUse" x="0" y="1350" width="1080" height="570">
+              <rect x="0" y="1350" width="1080" height="380" fill="url(#reflFade)" />
+            </mask>
+            <filter id="blur" x="-50%" y="-50%" width="200%" height="200%">
+              <feGaussianBlur stdDeviation="16" />
+            </filter>
+            <filter id="soft" x="-50%" y="-50%" width="200%" height="200%">
+              <feGaussianBlur stdDeviation="22" />
+            </filter>
+          </defs>
+
+          <rect x="0" y="1350" width="1080" height="570" fill="url(#floorGrad)" />
+
+          <g id="beams">
+            <polygon id="beamW" points="182,0 262,0 402,1350 42,1350" fill="url(#beamCold)" filter="url(#soft)" />
+            <polygon id="beamH" points="860,0 960,0 1150,1350 670,1350" fill="url(#beamGrad)" filter="url(#soft)" />
+          </g>
+
+          <g id="world">
+            <ellipse id="poolW" cx="232" cy="1352" rx="230" ry="34" fill="url(#poolGrad)" />
+            <ellipse id="poolH" cx="960" cy="752" rx="200" ry="26" fill="url(#poolGrad)" />
+            <g id="elevator" transform="translate(-28 0)">
+              <rect x="60" y="858" width="272" height="492" fill="#232426" stroke="#3d3f43" stroke-width="4" />
+              <rect x="82" y="918" width="114" height="432" fill="url(#steel)" />
+              <rect x="198" y="918" width="114" height="432" fill="url(#steel)" />
+              <rect x="195" y="918" width="4" height="432" fill="#1a1a1a" />
+              <rect x="146" y="872" width="100" height="36" rx="3" fill="#060606" stroke="#4d4f53" stroke-width="2" />
+              <polygon points="158,898 168,880 178,898" fill="#ff3b30" />
+              <text id="floorNum" x="214" y="899" text-anchor="middle" font-family="HFMono" font-weight="700" font-size="26" fill="#ff3b30">12</text>
+              <rect x="342" y="1138" width="32" height="84" rx="5" fill="#2e3033" stroke="#4d4f53" stroke-width="2" />
+              <circle id="btnGlow" cx="358" cy="1180" r="34" fill="url(#redGlow)" opacity="0" />
+              <circle id="btn" cx="358" cy="1180" r="9" fill="#5c1414" />
+            </g>
+            <g id="stairs"></g>
+            <g id="dust"></g>
+            <g id="waiter"></g>
+            <use id="heroGlow" href="#hero" filter="url(#blur)" opacity="0.5" />
+            <g id="hero"></g>
+          </g>
+
+          <g mask="url(#reflMask)" opacity="0.3">
+            <use href="#world" transform="translate(0 2700) scale(1 -1)" />
+          </g>
+          <rect x="0" y="1349" width="1080" height="2" fill="#2a2a2a" opacity="0.6" />
+        </svg>
+
+        <div id="lab-mot" class="label">MOTIVATION</div>
+        <div id="lab-dis" class="label">DISCIPLINE</div>
+        <div id="punch">
+          <div id="l1"></div>
+          <div id="l2"></div>
+        </div>
+      </div>
+
+      <audio
+        id="mix"
+        src="assets/audio/mix.wav"
+        data-start="0"
+        data-duration="13"
+        data-track-index="1"
+      ></audio>
+    </div>
+
+    <script>
+      (function () {
+        const DUR = 13;
+        const FLOOR = 1350;
+        const STX = 560;
+        const RUN = 52;
+        const RISE = 75;
+        const NST = 8;
+        const THIGH = 80, SHIN = 78, LEG = 154;
+        const UARM = 64, FARM = 60, TORSO = 116, NECK = 12, HEADR = 31;
+        const NS = "http://www.w3.org/2000/svg";
+        const svgEl = (tag, attrs) => {
+          const e = document.createElementNS(NS, tag);
+          for (const k in attrs || {}) e.setAttribute(k, attrs[k]);
+          return e;
+        };
+        const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
+        const lerp = (a, b, p) => a + (b - a) * p;
+        const ease = (p) => 0.5 - 0.5 * Math.cos(Math.PI * clamp(p, 0, 1));
+        const win = (t, a, b) => ease((t - a) / (b - a));
+        const rad = (d) => (d * Math.PI) / 180;
+        const down = (a, f) => [Math.sin(rad(a)) * f, Math.cos(rad(a))];
+        const up = (a, f) => [Math.sin(rad(a)) * f, -Math.cos(rad(a))];
+        const r1 = (v) => Math.round(v * 10) / 10;
+
+        // ---------- stairs ----------
+        const stairs = document.getElementById("stairs");
+        for (let j = 1; j <= NST; j++) {
+          const x = STX + (j - 1) * RUN;
+          const y = FLOOR - j * RISE;
+          const w = j === NST ? 1100 - x : RUN + 1;
+          stairs.appendChild(svgEl("rect", { x, y, width: w, height: j * RISE, fill: "url(#bricks)" }));
+          stairs.appendChild(svgEl("rect", { x, y, width: w, height: j * RISE, fill: "url(#stairShade)" }));
+          stairs.appendChild(svgEl("rect", { x, y: y - 3, width: w, height: 7, fill: "#ebe6dc" }));
+        }
+        const stepC = (j) => [STX + (j - 0.5) * RUN, FLOOR - j * RISE];
+
+        // ---------- dust in the hero beam (seeded) ----------
+        const dustG = document.getElementById("dust");
+        let seed = 7;
+        const rnd = () => ((seed = (seed * 16807) % 2147483647) / 2147483647);
+        const motes = [];
+        for (let i = 0; i < 28; i++) {
+          const m = { x: 700 + rnd() * 360, y: rnd() * 1300, s: 12 + rnd() * 26, r: 1.4 + rnd() * 2.2, ph: rnd() * 6.28 };
+          m.el = svgEl("circle", { r: m.r, fill: "#fff" });
+          dustG.appendChild(m.el);
+          motes.push(m);
+        }
+
+        // ---------- stick figure rig ----------
+        function makeFig(parent, front, back) {
+          const parts = {};
+          const order = [["armB", back], ["legB", back], ["torso", front], ["legF", front], ["armF", front]];
+          for (const [n, col] of order) {
+            const o = svgEl("path", { fill: "none", stroke: "#000", "stroke-width": 34, "stroke-linecap": "round", "stroke-linejoin": "round" });
+            const w = svgEl("path", { fill: "none", stroke: col, "stroke-width": 22, "stroke-linecap": "round", "stroke-linejoin": "round" });
+            parent.append(o, w);
+            parts[n] = [o, w];
+          }
+          parts.head = svgEl("circle", { r: HEADR, fill: front, stroke: "#000", "stroke-width": 6 });
+          parent.appendChild(parts.head);
+          return parts;
+        }
+        function ik(a, b, l1, l2, pick) {
+          let dx = b[0] - a[0], dy = b[1] - a[1];
+          let d = Math.hypot(dx, dy);
+          const maxd = l1 + l2 - 0.5;
+          if (d > maxd) {
+            b = [a[0] + (dx / d) * maxd, a[1] + (dy / d) * maxd];
+            dx = b[0] - a[0];
+            dy = b[1] - a[1];
+            d = maxd;
+          }
+          d = Math.max(d, Math.abs(l1 - l2) + 1);
+          const al = Math.acos(clamp((l1 * l1 + d * d - l2 * l2) / (2 * l1 * d), -1, 1));
+          const base = Math.atan2(dy, dx);
+          const c1 = [a[0] + Math.cos(base + al) * l1, a[1] + Math.sin(base + al) * l1];
+          const c2 = [a[0] + Math.cos(base - al) * l1, a[1] + Math.sin(base - al) * l1];
+          return [pick(c1, c2), b];
+        }
+        const P = (pts) => "M" + pts.map((p) => r1(p[0]) + " " + r1(p[1])).join("L");
+        const setD = (pair, d) => {
+          pair[0].setAttribute("d", d);
+          pair[1].setAttribute("d", d);
+        };
+        // pose: {hip:[x,y], f, torso, head, feet:[near, far], arms:[{sh,el,t,w},{sh,el}]}
+        function drawFig(parts, s) {
+          const f = s.f;
+          const hip = s.hip;
+          const tu = up(s.torso, f);
+          const sh = [hip[0] + tu[0] * TORSO, hip[1] + tu[1] * TORSO];
+          const nk = [hip[0] + tu[0] * (TORSO + NECK), hip[1] + tu[1] * (TORSO + NECK)];
+          const hu = up(s.torso + s.head, f);
+          const hc = [nk[0] + hu[0] * HEADR, nk[1] + hu[1] * HEADR];
+          setD(parts.torso, P([hip, sh, nk]));
+          parts.head.setAttribute("cx", r1(hc[0]));
+          parts.head.setAttribute("cy", r1(hc[1]));
+          const legPick = (c1, c2) => (c1[0] * f > c2[0] * f ? c1 : c2);
+          ["legF", "legB"].forEach((n, i) => {
+            const [kn, ft] = ik(hip, s.feet[i], THIGH, SHIN, legPick);
+            setD(parts[n], P([hip, kn, ft]));
+          });
+          ["armF", "armB"].forEach((n, i) => {
+            const a = s.arms[i];
+            const u = down(a.sh, f);
+            const el = [sh[0] + u[0] * UARM, sh[1] + u[1] * UARM];
+            const v = down(a.sh + a.el, f);
+            let hand = [el[0] + v[0] * FARM, el[1] + v[1] * FARM];
+            if (a.w && a.t) hand = [lerp(hand[0], a.t[0], a.w), lerp(hand[1], a.t[1], a.w)];
+            const pick = (c1, c2) =>
+              Math.hypot(c1[0] - el[0], c1[1] - el[1]) < Math.hypot(c2[0] - el[0], c2[1] - el[1]) ? c1 : c2;
+            const [e2, h2] = ik(sh, hand, UARM, FARM, pick);
+            setD(parts[n], P([sh, e2, h2]));
+          });
+        }
+
+        const heroParts = makeFig(document.getElementById("hero"), "#ffffff", "#e2e2e2");
+        const waitParts = makeFig(document.getElementById("waiter"), "#9a9a9a", "#7c7c7c");
+
+        // ---------- hero: climbs the stairs ----------
+        const T0 = 0.85, MD = 0.84, NM = 9;
+        const TEND = T0 + NM * MD;
+        const S = [{ A: [STX - 76, FLOOR], B: [STX - 38, FLOOR] }];
+        for (let k = 1; k <= NM; k++) {
+          const prev = S[k - 1];
+          const nx = { A: prev.A, B: prev.B };
+          const foot = k % 2 ? "A" : "B";
+          nx[foot] = k <= NST ? stepC(k) : [stepC(NST)[0] + 36, FLOOR - NST * RISE];
+          S.push(nx);
+        }
+        const hipFor = (st, f) => {
+          const hx = (st.A[0] + st.B[0]) / 2 + 9 * f;
+          let hy = -1e9;
+          for (const ft of [st.A, st.B]) {
+            const dx = ft[0] - hx;
+            hy = Math.max(hy, ft[1] - Math.sqrt(Math.max(0, LEG * LEG - dx * dx)));
+          }
+          return [hx, hy];
+        };
+        function heroPose(t) {
+          let feet, hip;
+          const k = Math.floor((t - T0) / MD) + 1;
+          if (t < T0 || k > NM) {
+            const st = t < T0 ? S[0] : S[NM];
+            feet = { A: st.A, B: st.B };
+            hip = hipFor(st, 1);
+          } else {
+            const p = (t - T0 - (k - 1) * MD) / MD;
+            const foot = k % 2 ? "A" : "B";
+            const other = foot === "A" ? "B" : "A";
+            const a = S[k - 1][foot], b = S[k][foot];
+            const pf = clamp(p / 0.78, 0, 1);
+            const e = ease(pf);
+            feet = {};
+            feet[other] = S[k - 1][other];
+            feet[foot] = [lerp(a[0], b[0], e), lerp(a[1], b[1], e) - Math.sin(Math.PI * pf) * 30];
+            const h0 = hipFor(S[k - 1], 1), h1 = hipFor(S[k], 1);
+            const ph = ease(Math.pow(p, 0.75));
+            hip = [lerp(h0[0], h1[0], ph), lerp(h0[1], h1[1], ph) - Math.sin(Math.PI * p) * 4];
+          }
+          const climb = win(t, T0 - 0.25, T0 + 0.2) * (1 - win(t, TEND - 0.1, TEND + 0.35));
+          const phase = ((t - T0) / MD) * Math.PI;
+          const swing = Math.sin(phase) * 24 * climb;
+          const arrive = win(t, TEND + 0.2, TEND + 0.8);
+          const turned = t >= 9.95;
+          const f = turned ? -1 : 1;
+          const lookUp = win(t, 0.1, 0.55) * (1 - win(t, T0, T0 + 0.6));
+          const lookDown = win(t, 10.05, 10.7);
+          // after the turn the near and far legs swap so the pose stays readable
+          const F = turned ? feet.B : feet.A;
+          const B = turned ? feet.A : feet.B;
+          return {
+            hip,
+            f,
+            torso: 13 * climb - 3 * arrive * (1 - lookDown) + 2 * lookDown,
+            head: -20 * lookUp - 6 * climb + 26 * lookDown,
+            feet: [F, B],
+            arms: [
+              { sh: 8 + swing + 10 * arrive, el: 16 + 10 * climb },
+              { sh: 6 - swing - 6 * arrive, el: 14 + 10 * climb },
+            ],
+          };
+        }
+
+        // ---------- waiter: presses the elevator button, gives up, sits ----------
+        const WX = 405;
+        const BTN = [338, 1180];
+        const K = [
+          [0.0, { torso: 3, head: 0, fSh: 6, fEl: 10, w: 0, bSh: -4, bEl: 8, sit: 0 }],
+          [0.3, { torso: 3, head: 0, fSh: 6, fEl: 10, w: 0, bSh: -4, bEl: 8, sit: 0 }],
+          [0.62, { torso: 9, head: -8, fSh: 40, fEl: 20, w: 1, bSh: -4, bEl: 8, sit: 0 }],
+          [0.95, { torso: 9, head: -8, fSh: 40, fEl: 20, w: 1, bSh: -4, bEl: 8, sit: 0 }],
+          [1.4, { torso: 1, head: -24, fSh: 6, fEl: 10, w: 0, bSh: -4, bEl: 8, sit: 0 }],
+          [2.9, { torso: 1, head: -24, fSh: 6, fEl: 10, w: 0, bSh: -4, bEl: 8, sit: 0 }],
+          [3.1, { torso: 9, head: -10, fSh: 40, fEl: 20, w: 1, bSh: -4, bEl: 8, sit: 0 }],
+          [3.28, { torso: 9, head: -10, fSh: 34, fEl: 20, w: 0.55, bSh: -4, bEl: 8, sit: 0 }],
+          [3.46, { torso: 9, head: -10, fSh: 40, fEl: 20, w: 1, bSh: -4, bEl: 8, sit: 0 }],
+          [3.64, { torso: 9, head: -10, fSh: 34, fEl: 20, w: 0.55, bSh: -4, bEl: 8, sit: 0 }],
+          [3.82, { torso: 10, head: -10, fSh: 40, fEl: 20, w: 1, bSh: -4, bEl: 8, sit: 0 }],
+          [4.15, { torso: 3, head: -18, fSh: 6, fEl: 10, w: 0, bSh: -4, bEl: 8, sit: 0 }],
+          [4.55, { torso: 8, head: 30, fSh: 55, fEl: 88, w: 0, bSh: -4, bEl: 8, sit: 0 }],
+          [5.2, { torso: 8, head: 30, fSh: 55, fEl: 88, w: 0, bSh: -4, bEl: 8, sit: 0 }],
+          [5.6, { torso: -2, head: -14, fSh: 24, fEl: 112, w: 0, bSh: 22, bEl: 112, sit: 0 }],
+          [6.3, { torso: -2, head: -14, fSh: 24, fEl: 112, w: 0, bSh: 22, bEl: 112, sit: 0 }],
+          [6.95, { torso: 22, head: 40, fSh: 8, fEl: 6, w: 0, bSh: 4, bEl: 6, sit: 0 }],
+          [7.5, { torso: 22, head: 40, fSh: 8, fEl: 6, w: 0, bSh: 4, bEl: 6, sit: 0 }],
+          [8.35, { torso: 30, head: 32, fSh: 40, fEl: 42, w: 0, bSh: 32, bEl: 42, sit: 1 }],
+          [13, { torso: 30, head: 32, fSh: 40, fEl: 42, w: 0, bSh: 32, bEl: 42, sit: 1 }],
+        ];
+        function keyAt(t) {
+          let i = 0;
+          while (i < K.length - 2 && t >= K[i + 1][0]) i++;
+          const [ta, a] = K[i], [tb, b] = K[i + 1];
+          const p = ease((t - ta) / (tb - ta));
+          const o = {};
+          for (const k in a) o[k] = lerp(a[k], b[k], p);
+          return o;
+        }
+        function waiterPose(t) {
+          const q = keyAt(t);
+          const f = -1;
+          const sit = q.sit;
+          const tap = t > 1.45 && t < 2.85 ? Math.max(0, Math.sin((t - 1.45) * Math.PI * 4.4)) * 11 : 0;
+          const fF = [lerp(WX - 14, WX - 76, sit), FLOOR - tap];
+          const fB = [lerp(WX + 16, WX - 56, sit), FLOOR];
+          const hx = lerp(WX, WX + 22, sit);
+          const stand = FLOOR - Math.sqrt(LEG * LEG - 15 * 15);
+          const breathe = sit > 0.99 ? Math.sin((t - 8.35) * 2.2) * 2 : 0;
+          const hy = lerp(stand, FLOOR - 36, sit) + breathe;
+          return {
+            hip: [hx, hy],
+            f,
+            torso: q.torso,
+            head: q.head,
+            feet: [fF, fB],
+            arms: [
+              { sh: q.fSh, el: q.fEl, t: BTN, w: q.w },
+              { sh: q.bSh, el: q.bEl },
+            ],
+            press: q.w,
+          };
+        }
+
+        // ---------- text ----------
+        const L1 = "THE ELEVATOR NEVER CAME.";
+        const L2 = "THE STAIRS WERE THERE ALL ALONG.";
+        const l1 = document.getElementById("l1");
+        const l2 = document.getElementById("l2");
+        function typeLine(node, text, t, t0, cps) {
+          const n = clamp(Math.floor((t - t0) * cps), 0, text.length);
+          node.innerHTML = "<span>" + text.slice(0, n) + '</span><span class="ghost">' + text.slice(n) + "</span>";
+          node.style.opacity = n > 0 ? 1 : 0;
+        }
+
+        // ---------- per-frame render ----------
+        const E = (id) => document.getElementById(id);
+        const stage = E("stage"), beamW = E("beamW"), beamH = E("beamH"), poolW = E("poolW"), poolH = E("poolH");
+        const heroGlow = E("heroGlow"), btn = E("btn"), btnGlow = E("btnGlow"), floorNum = E("floorNum");
+        const labMot = E("lab-mot");
+        function render(t) {
+          drawFig(heroParts, heroPose(t));
+          const wp = waiterPose(t);
+          drawFig(waitParts, wp);
+
+          const prog = clamp((t - T0) / (TEND - T0), 0, 1);
+          const top = win(t, TEND - 0.2, TEND + 0.6);
+          heroGlow.setAttribute("opacity", (0.35 + 0.35 * prog + 0.3 * top).toFixed(3));
+          beamH.setAttribute("opacity", (0.25 + 0.45 * prog + 0.3 * top).toFixed(3));
+          poolH.setAttribute("opacity", (0.2 + 0.8 * top).toFixed(3));
+          const dim = win(t, 5.0, 8.6);
+          beamW.setAttribute("opacity", (0.85 - 0.6 * dim).toFixed(3));
+          poolW.setAttribute("opacity", (0.9 - 0.65 * dim).toFixed(3));
+          labMot.style.opacity = (1 - 0.45 * dim).toFixed(3);
+
+          const lit = clamp((wp.press - 0.7) / 0.3, 0, 1);
+          btn.setAttribute("fill", lit > 0.5 ? "#ff2a2a" : "#5c1414");
+          btnGlow.setAttribute("opacity", lit.toFixed(3));
+          floorNum.textContent = String(12 + Math.floor(Math.max(0, t - 0.9) / 1.05));
+
+          const beamA = 0.25 + 0.75 * prog;
+          for (const m of motes) {
+            const y = (((m.y - t * m.s) % 1300) + 1300) % 1300;
+            m.el.setAttribute("cx", r1(m.x + Math.sin(t * 0.6 + m.ph) * 10 + (y / 1350) * 120 - 60));
+            m.el.setAttribute("cy", r1(y));
+            m.el.setAttribute("opacity", (beamA * (0.25 + 0.35 * Math.sin(m.ph + t))).toFixed(3));
+          }
+
+          typeLine(l1, L1, t, 8.95, 30);
+          typeLine(l2, L2, t, 10.3, 30);
+          stage.style.transform = "scale(" + (1 + 0.035 * ease(t / DUR)).toFixed(4) + ")";
+        }
+
+        window.__timelines = window.__timelines || {};
+        const tl = gsap.timeline({ paused: true });
+        const clock = { t: 0 };
+        tl.to(clock, { t: DUR, duration: DUR, ease: "none", onUpdate: () => render(clock.t) }, 0);
+        window.__timelines["main"] = tl;
+        render(0);
+        tl.seek(0);
+      })();
+    </script>
+  </body>
+</html>

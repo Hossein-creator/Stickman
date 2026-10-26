@@ -1,7 +1,10 @@
 node_modules/
-.hyperframes/
 renders/
-**/assets/engine.js
-**/assets/fonts/
-.DS_Store
-**/assets/audio.wav
+snaps/
+**/work/
+*.log
+renders-log.txt
+.env*
+# other creators' reels, frames and sounds: not ours to publish
+reference/
+.hyperframes/

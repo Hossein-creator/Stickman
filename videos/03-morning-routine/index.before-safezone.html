@@ -1,0 +1,633 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+    <style>
+      @font-face {
+        font-family: "HFMono";
+        src: url("assets/fonts/consolab.ttf") format("truetype");
+        font-weight: 700;
+      }
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      html,
+      body {
+        width: 1080px;
+        height: 1920px;
+        overflow: hidden;
+        background: #000;
+      }
+      #root {
+        position: relative;
+        width: 1080px;
+        height: 1920px;
+        overflow: hidden;
+        background: #000;
+      }
+      #stage {
+        position: absolute;
+        inset: 0;
+        width: 1080px;
+        height: 1920px;
+      }
+      #stage svg {
+        position: absolute;
+        inset: 0;
+      }
+      .mono {
+        position: absolute;
+        font-family: "HFMono", monospace;
+        font-weight: 700;
+        white-space: nowrap;
+      }
+      .main {
+        font-size: 34px;
+        letter-spacing: 0.2em;
+        color: #fff;
+        text-shadow: 0 0 12px rgba(0, 0, 0, 0.8);
+      }
+      .sub {
+        font-size: 24px;
+        letter-spacing: 0.16em;
+        color: #d2d2d2;
+        text-shadow: 0 0 10px rgba(0, 0, 0, 0.9);
+      }
+      #lab-w {
+        left: 40px;
+        top: 240px;
+      }
+      #sub-w {
+        left: 40px;
+        top: 286px;
+      }
+      #lab-l {
+        left: 40px;
+        top: 952px;
+        color: #b9b9b9;
+      }
+      #sub-l {
+        left: 40px;
+        top: 998px;
+      }
+      #head {
+        position: absolute;
+        left: 0;
+        right: 0;
+        top: 66px;
+        text-align: center;
+        font-family: "HFMono", monospace;
+        font-weight: 700;
+        font-size: 40px;
+        letter-spacing: 0.14em;
+        line-height: 1.5;
+        color: #fff;
+        text-shadow: 0 0 16px rgba(255, 255, 255, 0.3);
+      }
+      #head .ghost {
+        visibility: hidden;
+      }
+    </style>
+  </head>
+  <body>
+    <div
+      id="root"
+      data-composition-id="main"
+      data-start="0"
+      data-duration="14"
+      data-width="1080"
+      data-height="1920"
+    >
+      <div id="stage" class="clip" data-start="0" data-duration="14" data-track-index="0">
+        <svg id="svg" width="1080" height="1920" viewBox="0 0 1080 1920" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <clipPath id="clipP" clipPathUnits="userSpaceOnUse">
+              <rect x="0" y="0" width="1421" height="805" />
+            </clipPath>
+            <linearGradient id="skyDawn" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0" stop-color="#1b1d3d" />
+              <stop offset="0.6" stop-color="#5a3f6e" />
+              <stop offset="1" stop-color="#e08a62" />
+            </linearGradient>
+            <linearGradient id="skyDay" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0" stop-color="#6fa3d8" />
+              <stop offset="0.65" stop-color="#f3c79a" />
+              <stop offset="1" stop-color="#ffe3b0" />
+            </linearGradient>
+            <linearGradient id="sunDoor" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0" stop-color="#fff7e2" />
+              <stop offset="1" stop-color="#ffd98f" />
+            </linearGradient>
+            <linearGradient id="beamGrad" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0" stop-color="#ffd9a0" stop-opacity="0.75" />
+              <stop offset="1" stop-color="#ffd9a0" stop-opacity="0.15" />
+            </linearGradient>
+            <radialGradient id="phoneGlow">
+              <stop offset="0" stop-color="#8ab8ff" stop-opacity="0.75" />
+              <stop offset="1" stop-color="#8ab8ff" stop-opacity="0" />
+            </radialGradient>
+            <radialGradient id="redGlow">
+              <stop offset="0" stop-color="#ff2a2a" stop-opacity="0.8" />
+              <stop offset="1" stop-color="#ff2a2a" stop-opacity="0" />
+            </radialGradient>
+            <radialGradient id="doorSpill">
+              <stop offset="0" stop-color="#ffe2a8" stop-opacity="0.6" />
+              <stop offset="1" stop-color="#ffe2a8" stop-opacity="0" />
+            </radialGradient>
+            <filter id="blur" x="-50%" y="-50%" width="200%" height="200%">
+              <feGaussianBlur stdDeviation="14" />
+            </filter>
+            <filter id="soft" x="-50%" y="-50%" width="200%" height="200%">
+              <feGaussianBlur stdDeviation="20" />
+            </filter>
+          </defs>
+          <g id="panelW" transform="translate(0 220) scale(0.76)"><g clip-path="url(#clipP)" id="roomW"></g></g>
+          <g id="panelL" transform="translate(0 932) scale(0.76)"><g clip-path="url(#clipP)" id="roomL"></g></g>
+          <rect x="0" y="219" width="1080" height="2" fill="#3a3a3a" />
+          <rect x="0" y="831" width="1080" height="2" fill="#3a3a3a" />
+          <rect x="0" y="931" width="1080" height="2" fill="#3a3a3a" />
+          <rect x="0" y="1543" width="1080" height="2" fill="#3a3a3a" />
+          <g id="badge" transform="translate(540 882)">
+            <circle r="54" fill="#000" stroke="#3b3b3b" stroke-width="6" />
+            <circle id="badgeArc" r="54" fill="none" stroke="#ffffff" stroke-width="6" stroke-dasharray="339.3" stroke-dashoffset="339.3" transform="rotate(-90)" />
+            <text id="badgeTxt" y="11" text-anchor="middle" font-family="HFMono" font-weight="700" font-size="30" fill="#fff">6:00</text>
+          </g>
+        </svg>
+        <div id="lab-w" class="mono main">WINNER</div>
+        <div id="sub-w" class="mono sub"></div>
+        <div id="lab-l" class="mono main">LOSER</div>
+        <div id="sub-l" class="mono sub"></div>
+        <div id="head">
+          <div id="h1">SAME ALARM.</div>
+          <div id="h2"></div>
+        </div>
+      </div>
+      <audio id="mix" src="assets/audio/mix.wav" data-start="0" data-duration="14" data-track-index="1"></audio>
+    </div>
+
+    <script>
+      (function () {
+        const DUR = 14;
+        const FL = 730;
+        const THIGH = 80, SHIN = 78, LEG = 154;
+        const UARM = 64, FARM = 60, TORSO = 116, NECK = 12, HEADR = 31;
+        const NS = "http://www.w3.org/2000/svg";
+        const svgEl = (tag, attrs, parent) => {
+          const e = document.createElementNS(NS, tag);
+          for (const k in attrs || {}) e.setAttribute(k, attrs[k]);
+          if (parent) parent.appendChild(e);
+          return e;
+        };
+        const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
+        const lerp = (a, b, p) => a + (b - a) * p;
+        const lerp2 = (a, b, p) => [lerp(a[0], b[0], p), lerp(a[1], b[1], p)];
+        const ease = (p) => 0.5 - 0.5 * Math.cos(Math.PI * clamp(p, 0, 1));
+        const easeOut = (p) => 1 - Math.pow(1 - clamp(p, 0, 1), 3);
+        const win = (t, a, b) => ease((t - a) / (b - a));
+        const rad = (d) => (d * Math.PI) / 180;
+        const down = (a, f) => [Math.sin(rad(a)) * f, Math.cos(rad(a))];
+        const up = (a, f) => [Math.sin(rad(a)) * f, -Math.cos(rad(a))];
+        const r1 = (v) => Math.round(v * 10) / 10;
+        const E = (id) => document.getElementById(id);
+        const hexLerp = (a, b, p) => {
+          const pa = [1, 3, 5].map((i) => parseInt(a.slice(i, i + 2), 16));
+          const pb = [1, 3, 5].map((i) => parseInt(b.slice(i, i + 2), 16));
+          return "rgb(" + pa.map((v, i) => Math.round(lerp(v, pb[i], p))).join(",") + ")";
+        };
+
+        // ---------- rooms ----------
+        function buildRoom(g, winner) {
+          const R = {};
+          R.wall = svgEl("rect", { x: 0, y: 0, width: 1500, height: 730, fill: winner ? "#2a2740" : "#1b1e2c" }, g);
+          svgEl("rect", { x: 0, y: 730, width: 1500, height: 75, fill: "#2b231f" }, g);
+          svgEl("rect", { x: 0, y: 722, width: 1500, height: 8, fill: "#15131a" }, g);
+          // window
+          svgEl("rect", { x: 760, y: 150, width: 340, height: 300, fill: "#15141f" }, g);
+          svgEl("rect", { x: 772, y: 162, width: 316, height: 276, fill: "url(#skyDawn)" }, g);
+          R.skyDay = svgEl("rect", { x: 772, y: 162, width: 316, height: 276, fill: "url(#skyDay)", opacity: 0 }, g);
+          svgEl("rect", { x: 926, y: 162, width: 8, height: 276, fill: "#15141f" }, g);
+          svgEl("rect", { x: 772, y: 296, width: 316, height: 8, fill: "#15141f" }, g);
+          if (!winner) {
+            svgEl("rect", { x: 744, y: 128, width: 182, height: 348, fill: "#272b47" }, g);
+            svgEl("rect", { x: 936, y: 128, width: 182, height: 348, fill: "#272b47" }, g);
+            for (const x of [790, 840, 890, 980, 1030, 1080]) svgEl("rect", { x, y: 128, width: 4, height: 348, fill: "#1d2038" }, g);
+            svgEl("rect", { x: 730, y: 118, width: 400, height: 12, fill: "#121420" }, g);
+          }
+          R.beam = svgEl("polygon", { points: "772,438 1088,438 940,730 520,730", fill: "url(#beamGrad)", filter: "url(#soft)", opacity: 0 }, g);
+          // poster
+          svgEl("rect", { x: 330, y: 210, width: 130, height: 170, fill: "#15141f" }, g);
+          svgEl("rect", { x: 342, y: 222, width: 106, height: 146, fill: winner ? "#3e3a57" : "#262a3c" }, g);
+          // nightstand + alarm clock
+          svgEl("rect", { x: 38, y: 640, width: 72, height: 90, fill: "#3e3129" }, g);
+          R.clockGlow = svgEl("circle", { cx: 78, cy: 623, r: 60, fill: "url(#redGlow)", opacity: 0 }, g);
+          svgEl("rect", { x: 48, y: 604, width: 60, height: 36, rx: 5, fill: "#101010", stroke: "#2c2c2c", "stroke-width": 2 }, g);
+          R.clock = svgEl("text", { x: 78, y: 630, "text-anchor": "middle", "font-family": "HFMono", "font-weight": 700, "font-size": 21, fill: "#ff3b30" }, g);
+          // bed
+          svgEl("rect", { x: 112, y: 500, width: 24, height: 230, rx: 4, fill: "#4c382c" }, g);
+          svgEl("rect", { x: 130, y: 650, width: 526, height: 80, fill: "#3f2f25" }, g);
+          svgEl("rect", { x: 134, y: 606, width: 518, height: 46, rx: 8, fill: winner ? "#d6dae4" : "#8d93a6" }, g);
+          svgEl("rect", { x: 146, y: 578, width: 112, height: 34, rx: 15, fill: winner ? "#f1f3f7" : "#a9aec0" }, g);
+          // table + glass
+          svgEl("rect", { x: 664, y: 556, width: 112, height: 12, fill: "#4c382c" }, g);
+          svgEl("rect", { x: 672, y: 568, width: 10, height: 162, fill: "#3f2f25" }, g);
+          svgEl("rect", { x: 758, y: 568, width: 10, height: 162, fill: "#3f2f25" }, g);
+          // door
+          svgEl("rect", { x: 1170, y: 290, width: 170, height: 440, fill: "#17141c" }, g);
+          R.doorway = svgEl("rect", { x: 1180, y: 300, width: 150, height: 430, fill: winner ? "url(#sunDoor)" : "#3c414d" }, g);
+          if (winner) R.spill = svgEl("ellipse", { cx: 1180, cy: 735, rx: 360, ry: 60, fill: "url(#doorSpill)", opacity: 0 }, g);
+          R.door = svgEl("g", {}, g);
+          svgEl("rect", { x: 1180, y: 300, width: 150, height: 430, fill: "#6b4b3a" }, R.door);
+          svgEl("rect", { x: 1198, y: 322, width: 114, height: 160, fill: "none", stroke: "#5a3e30", "stroke-width": 5 }, R.door);
+          svgEl("rect", { x: 1198, y: 512, width: 114, height: 190, fill: "none", stroke: "#5a3e30", "stroke-width": 5 }, R.door);
+          svgEl("circle", { cx: 1200, cy: 520, r: 7, fill: "#c8a35a" }, R.door);
+          // figure layers
+          R.figGlow = svgEl("use", { href: winner ? "#figW" : "#figL", filter: "url(#blur)", opacity: winner ? 0.45 : 0 }, g);
+          R.fig = svgEl("g", { id: winner ? "figW" : "figL" }, g);
+          R.blanket = svgEl("path", { fill: winner ? "#7f8fc4" : "#4b5373", stroke: "#000", "stroke-width": 4, "stroke-linejoin": "round" }, g);
+          R.glass = svgEl("g", {}, g);
+          svgEl("rect", { x: -10, y: -16, width: 20, height: 32, rx: 3, fill: "rgba(220,235,255,0.35)", stroke: "#e8f1ff", "stroke-width": 2 }, R.glass);
+          svgEl("rect", { x: -8, y: -4, width: 16, height: 18, fill: "#8cc3ff", opacity: 0.8 }, R.glass);
+          R.phoneGlow = svgEl("circle", { r: 120, fill: "url(#phoneGlow)", opacity: 0 }, g);
+          R.phone = svgEl("g", {}, g);
+          svgEl("rect", { x: -11, y: -19, width: 22, height: 38, rx: 4, fill: "#111", stroke: "#000", "stroke-width": 2 }, R.phone);
+          R.screen = svgEl("rect", { x: -8, y: -15, width: 16, height: 30, rx: 2, fill: "#1b2233" }, R.phone);
+          R.icons = svgEl("g", {}, g);
+          return R;
+        }
+        const RW = buildRoom(E("roomW"), true);
+        const RL = buildRoom(E("roomL"), false);
+        if (RW.glass) {}
+        RL.glass.setAttribute("opacity", 0);
+        RW.phone.setAttribute("opacity", 0);
+        RW.phoneGlow.setAttribute("opacity", 0);
+
+        // ---------- rig ----------
+        function makeFig(parent, front, back) {
+          const parts = {};
+          const order = [["armB", back], ["legB", back], ["torso", front], ["legF", front], ["armF", front]];
+          for (const [n, col] of order) {
+            const o = svgEl("path", { fill: "none", stroke: "#000", "stroke-width": 34, "stroke-linecap": "round", "stroke-linejoin": "round" }, parent);
+            const w = svgEl("path", { fill: "none", stroke: col, "stroke-width": 22, "stroke-linecap": "round", "stroke-linejoin": "round" }, parent);
+            parts[n] = [o, w];
+          }
+          parts.head = svgEl("circle", { r: HEADR, fill: front, stroke: "#000", "stroke-width": 6 }, parent);
+          return parts;
+        }
+        function ik(a, b, l1, l2, pick) {
+          let dx = b[0] - a[0], dy = b[1] - a[1];
+          let d = Math.hypot(dx, dy);
+          const maxd = l1 + l2 - 0.5;
+          if (d > maxd) {
+            b = [a[0] + (dx / d) * maxd, a[1] + (dy / d) * maxd];
+            dx = b[0] - a[0];
+            dy = b[1] - a[1];
+            d = maxd;
+          }
+          d = Math.max(d, Math.abs(l1 - l2) + 1);
+          const al = Math.acos(clamp((l1 * l1 + d * d - l2 * l2) / (2 * l1 * d), -1, 1));
+          const base = Math.atan2(dy, dx);
+          const c1 = [a[0] + Math.cos(base + al) * l1, a[1] + Math.sin(base + al) * l1];
+          const c2 = [a[0] + Math.cos(base - al) * l1, a[1] + Math.sin(base - al) * l1];
+          return [pick(c1, c2), b];
+        }
+        const P = (pts) => "M" + pts.map((p) => r1(p[0]) + " " + r1(p[1])).join("L");
+        const setD = (pair, d) => {
+          pair[0].setAttribute("d", d);
+          pair[1].setAttribute("d", d);
+        };
+        // pose: {hip, f, rot, torso, head, feet (rig space), arms:[{sh,el,w,t|tf}]}; rot turns the whole body around the hip
+        function drawFig(parts, s) {
+          const f = s.f, hip = s.hip;
+          const c = Math.cos(rad(s.rot)), sn = Math.sin(rad(s.rot));
+          const toW = (p) => [hip[0] + (p[0] - hip[0]) * c - (p[1] - hip[1]) * sn, hip[1] + (p[0] - hip[0]) * sn + (p[1] - hip[1]) * c];
+          const toR = (p) => [hip[0] + (p[0] - hip[0]) * c + (p[1] - hip[1]) * sn, hip[1] - (p[0] - hip[0]) * sn + (p[1] - hip[1]) * c];
+          const tu = up(s.torso, f);
+          const sh = [hip[0] + tu[0] * TORSO, hip[1] + tu[1] * TORSO];
+          const nk = [hip[0] + tu[0] * (TORSO + NECK), hip[1] + tu[1] * (TORSO + NECK)];
+          const hu = up(s.torso + s.head, f);
+          const hc = [nk[0] + hu[0] * HEADR, nk[1] + hu[1] * HEADR];
+          const W = (pts) => P(pts.map(toW));
+          setD(parts.torso, W([hip, sh, nk]));
+          const hw = toW(hc);
+          parts.head.setAttribute("cx", r1(hw[0]));
+          parts.head.setAttribute("cy", r1(hw[1]));
+          const legPick = (c1, c2) => (c1[0] * f > c2[0] * f ? c1 : c2);
+          ["legF", "legB"].forEach((n, i) => {
+            const [kn, ft] = ik(hip, s.feet[i], THIGH, SHIN, legPick);
+            setD(parts[n], W([hip, kn, ft]));
+          });
+          const hands = [];
+          ["armF", "armB"].forEach((n, i) => {
+            const a = s.arms[i];
+            const u = down(a.sh, f);
+            const el = [sh[0] + u[0] * UARM, sh[1] + u[1] * UARM];
+            const v = down(a.sh + a.el, f);
+            let hand = [el[0] + v[0] * FARM, el[1] + v[1] * FARM];
+            if (a.w > 0) {
+              const tw = a.tf ? a.tf(toW(sh)) : a.t;
+              if (tw) hand = lerp2(hand, toR(tw), a.w);
+            }
+            const pick = (c1, c2) =>
+              Math.hypot(c1[0] - el[0], c1[1] - el[1]) < Math.hypot(c2[0] - el[0], c2[1] - el[1]) ? c1 : c2;
+            const [e2, h2] = ik(sh, hand, UARM, FARM, pick);
+            setD(parts[n], W([sh, e2, h2]));
+            hands.push(toW(h2));
+          });
+          return { head: hw, hands };
+        }
+
+        // ---------- walking ----------
+        function makeTrack(f, A, B, t0, md, stride, n) {
+          const S = [{ A, B }];
+          for (let k = 1; k <= n; k++) {
+            const pv = S[k - 1];
+            const back = pv.A[0] * f < pv.B[0] * f ? "A" : "B";
+            const front = back === "A" ? "B" : "A";
+            const nx = { A: pv.A, B: pv.B, mv: back };
+            nx[back] = [pv[front][0] + (k === n ? 14 : stride) * f, FL];
+            S.push(nx);
+          }
+          return { f, S, t0, md, n, end: t0 + n * md };
+        }
+        const hipFor = (st) => {
+          const hx = (st.A[0] + st.B[0]) / 2;
+          let hy = -1e9;
+          for (const ft of [st.A, st.B]) {
+            const dx = ft[0] - hx;
+            hy = Math.max(hy, ft[1] - Math.sqrt(Math.max(0, LEG * LEG - dx * dx)));
+          }
+          return [hx, hy];
+        };
+        function trackAt(tr, t, lift = 24) {
+          const k = clamp(Math.floor((t - tr.t0) / tr.md) + 1, 1, tr.n);
+          const p = clamp((t - tr.t0 - (k - 1) * tr.md) / tr.md, 0, 1);
+          const st0 = tr.S[k - 1], st1 = tr.S[k];
+          const foot = st1.mv, other = foot === "A" ? "B" : "A";
+          const pf = clamp(p / 0.8, 0, 1);
+          const o = { phase: ((t - tr.t0) / tr.md) * Math.PI };
+          o[other] = st0[other];
+          o[foot] = [lerp(st0[foot][0], st1[foot][0], ease(pf)), FL - Math.sin(Math.PI * pf) * lift];
+          const h0 = hipFor(st0), h1 = hipFor(st1);
+          o.hip = [lerp(h0[0], h1[0], ease(p)), lerp(h0[1], h1[1], ease(p)) - Math.sin(Math.PI * p) * 4];
+          return o;
+        }
+        function keyAt(K, t) {
+          let i = 0;
+          while (i < K.length - 2 && t >= K[i + 1][0]) i++;
+          const [ta, a] = K[i], [tb, b] = K[i + 1];
+          const p = ease((t - ta) / (tb - ta));
+          const o = {};
+          for (const k in a) o[k] = lerp(a[k], b[k] === undefined ? a[k] : b[k], p);
+          return o;
+        }
+        const stand = (x1, x2, extra) => ({
+          hx: (x1 + x2) / 2, hy: FL - Math.sqrt(LEG * LEG - ((x2 - x1) / 2) ** 2), rot: 0, torso: 2, head: 0,
+          ax: x1, ay: FL, bx: x2, by: FL, fSh: 6, fEl: 10, fW: 0, bSh: -4, bEl: 8, bW: 0, ...extra,
+        });
+        const LY = { hx: 330, hy: 597, rot: -90, torso: 0, head: 0, ax: 330, ay: 751, bx: 333, by: 751, fSh: 4, fEl: 6, fW: 0, bSh: 4, bEl: 6, bW: 0 };
+        const SIT = { hx: 330, hy: 605, rot: 0, torso: 6, head: 4, ax: 382, ay: FL, bx: 402, by: FL, fSh: 20, fEl: 40, fW: 0, bSh: 16, bEl: 40, bW: 0 };
+        const CLOCK = [96, 622];
+
+        // ---------- WINNER ----------
+        const W1 = makeTrack(1, [360, FL], [385, FL], 2.95, 0.34, 62, 5);
+        const w1e = W1.S[W1.n];
+        const E1 = stand(Math.min(w1e.A[0], w1e.B[0]), Math.max(w1e.A[0], w1e.B[0]));
+        const TX = 640;
+        const PU = (rot) => ({ ...stand(632, 648), rot, torso: 0, head: -8, fSh: 80, fEl: 0, fW: 0, bSh: 80, bEl: 0, bW: 0 });
+        const W3 = makeTrack(1, [628, FL], [652, FL], 8.0, 0.27, 92, 7);
+        const w3e = W3.S[W3.n];
+        const E3 = stand(Math.min(w3e.A[0], w3e.B[0]), Math.max(w3e.A[0], w3e.B[0]));
+        const KW = [
+          [0, LY], [0.3, LY], [0.5, { ...LY, fW: 1 }], [0.62, { ...LY, fW: 1 }], [0.82, LY],
+          [1.4, SIT], [1.8, stand(360, 385)],
+          [1.98, stand(360, 385, { torso: 30, head: 14, fSh: 62, fEl: 10, bSh: 56, bEl: 12 })],
+          [2.65, stand(360, 385, { torso: 30, head: 14, fSh: 62, fEl: 10, bSh: 56, bEl: 12 })],
+          [2.92, stand(360, 385)],
+          [4.65, E1], [4.85, { ...E1, fW: 1, fSh: 40, fEl: 40 }], [5.25, { ...E1, fW: 1, fSh: 40, fEl: 40, head: -22, torso: -4 }],
+          [5.45, { ...E1, fW: 1, fSh: 40, fEl: 40, head: -22, torso: -4 }], [5.7, { ...E1, fW: 1, fSh: 40, fEl: 40 }], [5.85, E1],
+          [5.9, PU(0)], [6.25, PU(80)], [6.65, PU(70)], [7.05, PU(80)], [7.45, PU(70)], [7.95, PU(0)],
+          [8.0, stand(628, 652)], [W3.end, E3], [DUR, E3],
+        ];
+        const GLASS = [700, 541];
+        const MOUTH = [664, 440];
+        function winTarget(t) {
+          if (t < 2) return CLOCK;
+          if (t < 4.95) return GLASS;
+          if (t < 5.45) return lerp2(GLASS, MOUTH, ease((t - 4.95) / 0.3));
+          return lerp2(MOUTH, GLASS, ease((t - 5.45) / 0.25));
+        }
+        function winPose(t) {
+          const q = keyAt(KW, t);
+          let hip = [q.hx, q.hy], feet = [[q.ax, q.ay], [q.bx, q.by]], swing = 0, op = 1;
+          for (const tr of [W1, W3]) {
+            if (t > tr.t0 && t < tr.end) {
+              const o = trackAt(tr, t);
+              hip = o.hip;
+              feet = [o.A, o.B];
+              swing = Math.sin(o.phase) * 20;
+            }
+          }
+          const push = t >= 5.9 && t < 8.0;
+          let arms = [
+            { sh: q.fSh + swing, el: q.fEl, w: q.fW, t: winTarget(t) },
+            { sh: q.bSh - swing, el: q.bEl, w: q.bW },
+          ];
+          if (push) {
+            const th = rad(q.rot);
+            hip = [TX + LEG * Math.sin(th), FL - LEG * Math.cos(th)];
+            feet = [[hip[0], hip[1] + LEG], [hip[0] + 3, hip[1] + LEG]];
+            const w = clamp((q.rot - 25) / 35, 0, 1);
+            arms = [
+              { sh: 80, el: 0, w, tf: (s) => [s[0] + 12, FL] },
+              { sh: 80, el: 0, w, tf: (s) => [s[0] + 2, FL] },
+            ];
+          }
+          if (t > 9.9) {
+            hip = [lerp(hip[0], 1268, ease((t - 9.9) / 0.5)), hip[1]];
+            op = 1 - ease((t - 10.0) / 0.4);
+          }
+          return { hip, f: 1, rot: q.rot, torso: q.torso, head: q.head, feet, arms, op };
+        }
+
+        // ---------- LOSER ----------
+        const L1 = makeTrack(1, [360, FL], [385, FL], 9.25, 0.2, 110, 8);
+        const l1e = L1.S[L1.n];
+        const EL = stand(Math.min(l1e.A[0], l1e.B[0]), Math.max(l1e.A[0], l1e.B[0]));
+        const HOLD = [206, 478], CHEST = [262, 572], PSPOT = [86, 634];
+        const KL = [
+          [0, LY], [0.3, LY], [0.5, { ...LY, fW: 1 }], [0.62, { ...LY, fW: 1 }], [0.85, LY],
+          [1.05, { ...LY, fW: 1 }], [3.05, { ...LY, fW: 1 }], [3.25, { ...LY, fW: 1, bW: 1 }], [3.4, { ...LY, fW: 1, bW: 1 }], [3.6, { ...LY, fW: 1 }],
+          [6.05, { ...LY, fW: 1 }], [6.22, { ...LY, fW: 1, bW: 1 }], [6.38, { ...LY, fW: 1, bW: 1 }], [6.55, { ...LY, fW: 1 }],
+          [8.62, { ...LY, fW: 1 }], [8.75, LY], [9.0, { ...SIT, head: -10 }], [9.22, stand(360, 385, { torso: 10, head: -6 })],
+          [L1.end, EL], [DUR, EL],
+        ];
+        function loseTarget(t) {
+          if (t < 0.9) return CLOCK;
+          if (t < 1.3) return PSPOT;
+          if (t < 6.5) return lerp2(PSPOT, HOLD, ease((t - 1.3) / 0.3));
+          return lerp2(HOLD, CHEST, ease((t - 6.5) / 0.3));
+        }
+        function losePose(t) {
+          const q = keyAt(KL, t);
+          let hip = [q.hx, q.hy], feet = [[q.ax, q.ay], [q.bx, q.by]], swing = 0, op = 1, run = 0;
+          if (t > L1.t0 && t < L1.end) {
+            const o = trackAt(L1, t, 34);
+            hip = o.hip;
+            feet = [o.A, o.B];
+            swing = Math.sin(o.phase) * 38;
+            run = 1;
+          }
+          if (t > 10.85) {
+            hip = [lerp(hip[0], 1262, ease((t - 10.85) / 0.3)), hip[1]];
+            op = 1 - ease((t - 10.9) / 0.25);
+          }
+          return {
+            hip,
+            f: 1,
+            rot: q.rot,
+            torso: q.torso + run * 16,
+            head: q.head,
+            feet,
+            arms: [
+              { sh: q.fSh + swing, el: q.fEl + run * 60, w: q.fW, t: loseTarget(t) },
+              { sh: q.bSh - swing, el: q.bEl + run * 60, w: q.bW, t: CLOCK },
+            ],
+            op,
+          };
+        }
+
+        const partsW = makeFig(RW.fig, "#ffffff", "#e2e2e2");
+        const partsL = makeFig(RL.fig, "#9a9a9a", "#7c7c7c");
+
+        // ---------- blanket ----------
+        const BL = {
+          lying: { x0: 246, x1: 646, top: 604, l1: 30, c1: 300, l2: 18, c2: 470, wr: 3 },
+          thrown: { x0: 430, x1: 650, top: 600, l1: 44, c1: 560, l2: 22, c2: 470, wr: 9 },
+          neat: { x0: 262, x1: 650, top: 606, l1: 0, c1: 400, l2: 0, c2: 470, wr: 0 },
+        };
+        const mixB = (a, b, p) => {
+          const o = {};
+          for (const k in a) o[k] = lerp(a[k], b[k], p);
+          return o;
+        };
+        function blanketD(b) {
+          const pts = [];
+          for (let x = b.x0; x <= b.x1 + 0.1; x += 8) {
+            const y = b.top - b.l1 * Math.exp(-(((x - b.c1) / 90) ** 2)) - b.l2 * Math.exp(-(((x - b.c2) / 110) ** 2)) - b.wr * Math.abs(Math.sin(x * 0.06));
+            pts.push([x, y]);
+          }
+          pts.push([b.x1 + 6, 690], [b.x0 - 2, 690]);
+          return "M" + pts.map((p) => r1(p[0]) + " " + r1(p[1])).join("L") + "Z";
+        }
+
+        // ---------- labels ----------
+        const SUBW = [[0.3, "ALARM OFF"], [0.9, "UP"], [1.9, "MAKE BED"], [3.0, "WATER"], [5.9, "PUSH-UPS"], [8.0, "OUT THE DOOR"]];
+        const SUBL = [[0.3, "SNOOZE"], [1.3, "SCROLL"], [3.15, "SNOOZE x2"], [3.7, "SCROLL"], [6.15, "SNOOZE x3"], [6.8, "ZZZ"], [8.6, "LATE!"]];
+        const subAt = (L, t) => {
+          let s = "";
+          let t0 = 0;
+          for (const [tt, txt] of L) if (t >= tt) { s = txt; t0 = tt; }
+          return { s, n: clamp(Math.floor((t - t0) * 40), 0, s.length) };
+        };
+        const clockStr = (t) => {
+          const m = Math.floor(t * 6);
+          const h = 6 + Math.floor(m / 60), mm = m % 60;
+          return h + ":" + String(mm).padStart(2, "0");
+        };
+        const ringing = (t, w) => {
+          const R = w ? [[0, 0.5]] : [[0, 0.5], [3.0, 3.3], [6.0, 6.3], [8.6, 9.05]];
+          return R.some(([a, b]) => t >= a && t < b);
+        };
+
+        // ---------- per-frame render ----------
+        const zz = [0, 1, 2, 3].map(() => svgEl("text", { "font-family": "HFMono", "font-weight": 700, "font-size": 44, fill: "#cfd6ff" }, RL.icons));
+        zz.forEach((z) => (z.textContent = "Z"));
+        const bang = svgEl("text", { "font-family": "HFMono", "font-weight": 700, "font-size": 80, fill: "#ff3b30", "text-anchor": "middle" }, RL.icons);
+        bang.textContent = "!";
+        const H2 = "DIFFERENT LIFE.";
+        function render(t) {
+          // winner room
+          const day = win(t, 1.5, 10);
+          RW.wall.setAttribute("fill", hexLerp("#2a2740", "#5c516f", day));
+          RW.skyDay.setAttribute("opacity", day.toFixed(3));
+          RL.skyDay.setAttribute("opacity", day.toFixed(3));
+          RW.beam.setAttribute("opacity", (0.65 * win(t, 3, 9)).toFixed(3));
+          const pw = winPose(t);
+          const jw = drawFig(partsW, pw);
+          RW.fig.setAttribute("opacity", pw.op.toFixed(3));
+          RW.figGlow.setAttribute("opacity", (0.45 * pw.op).toFixed(3));
+          let bw = BL.lying;
+          if (t > 0.85) bw = mixB(BL.lying, BL.thrown, win(t, 0.85, 1.3));
+          if (t > 2.0) bw = mixB(BL.thrown, BL.neat, win(t, 2.0, 2.7));
+          RW.blanket.setAttribute("d", blanketD(bw));
+          const gpos = t > 4.88 && t < 5.72 ? [jw.hands[0][0] + 4, jw.hands[0][1] - 6] : GLASS;
+          RW.glass.setAttribute("transform", "translate(" + r1(gpos[0]) + " " + r1(gpos[1]) + ")");
+          const dw = easeOut((t - 9.55) / 0.45);
+          RW.door.setAttribute("transform", "translate(1330 0) scale(" + Math.max(0.12, 1 - dw).toFixed(3) + " 1) translate(-1330 0)");
+          RW.spill.setAttribute("opacity", dw.toFixed(3));
+
+          // loser room
+          const pl = losePose(t);
+          const jl = drawFig(partsL, pl);
+          RL.fig.setAttribute("opacity", pl.op.toFixed(3));
+          const bl = t > 8.75 ? mixB(BL.lying, BL.thrown, win(t, 8.75, 9.1)) : BL.lying;
+          RL.blanket.setAttribute("d", blanketD(bl));
+          const ph = t < 1.25 ? PSPOT : jl.hands[0];
+          RL.phone.setAttribute("transform", "translate(" + r1(ph[0]) + " " + r1(ph[1]) + ") rotate(" + (t < 1.25 ? 90 : 0) + ")");
+          RL.phone.setAttribute("opacity", t < 8.9 ? 1 : 0);
+          const on = t > 1.45 && t < 6.6;
+          RL.screen.setAttribute("fill", on ? "#9cc4ff" : "#1b2233");
+          RL.phoneGlow.setAttribute("cx", r1(ph[0]));
+          RL.phoneGlow.setAttribute("cy", r1(ph[1] + 20));
+          RL.phoneGlow.setAttribute("opacity", on ? (0.8 + 0.15 * Math.sin(t * 9)).toFixed(3) : 0);
+          const dl = t < 11.05 ? easeOut((t - 10.45) / 0.3) : 1 - ease((t - 11.05) / 0.2);
+          RL.door.setAttribute("transform", "translate(1330 0) scale(" + Math.max(0.12, 1 - dl).toFixed(3) + " 1) translate(-1330 0)");
+          zz.forEach((z, k) => {
+            const a = t - (6.9 + k * 0.45);
+            const vis = a > 0 && a < 1.3 && t < 8.6;
+            z.setAttribute("x", r1(jl.head[0] + 40 + a * 40));
+            z.setAttribute("y", r1(jl.head[1] - 40 - a * 70));
+            z.setAttribute("opacity", vis ? (Math.sin((Math.PI * a) / 1.3) * 0.9).toFixed(3) : 0);
+          });
+          const ba = t - 8.62;
+          bang.setAttribute("x", r1(jl.head[0] + 10));
+          bang.setAttribute("y", r1(jl.head[1] - 52));
+          bang.setAttribute("opacity", ba > 0 && ba < 1.2 && pl.op > 0.5 ? 1 : 0);
+          bang.setAttribute("font-size", ba > 0 ? r1(80 * (1 + 0.3 * Math.exp(-ba * 10))) : 80);
+
+          // clocks
+          const cs = clockStr(Math.min(t, 11.2));
+          for (const [Rm, w] of [[RW, true], [RL, false]]) {
+            const ring = ringing(t, w);
+            const blink = ring && Math.floor(t * 8) % 2 === 0;
+            Rm.clock.textContent = cs;
+            Rm.clock.setAttribute("opacity", blink ? 0.25 : 1);
+            Rm.clockGlow.setAttribute("opacity", ring ? 0.9 : 0);
+          }
+          E("badgeTxt").textContent = cs;
+          E("badgeArc").setAttribute("stroke-dashoffset", (339.3 * (1 - clamp(t / 11.2, 0, 1))).toFixed(1));
+
+          // labels
+          const sw = subAt(SUBW, t), sl = subAt(SUBL, t);
+          E("sub-w").textContent = sw.s.slice(0, sw.n);
+          E("sub-l").textContent = sl.s.slice(0, sl.n);
+          E("sub-l").style.color = sl.s === "LATE!" ? "#ff4a3d" : "#d2d2d2";
+          const n2 = clamp(Math.floor((t - 11.4) * 26), 0, H2.length);
+          E("h2").innerHTML = "<span>" + H2.slice(0, n2) + '</span><span class="ghost">' + H2.slice(n2) + "</span>";
+        }
+
+        window.__timelines = window.__timelines || {};
+        const tl = gsap.timeline({ paused: true });
+        const clock = { t: 0 };
+        tl.to(clock, { t: DUR, duration: DUR, ease: "none", onUpdate: () => render(clock.t) }, 0);
+        window.__timelines["main"] = tl;
+        render(0);
+        tl.seek(0);
+      })();
+    </script>
+  </body>
+</html>

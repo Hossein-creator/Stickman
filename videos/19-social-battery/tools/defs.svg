@@ -1,0 +1,12 @@
+            <radialGradient id="warmPool" cx="0.5" cy="0.5" r="0.5">
+              <stop offset="0" stop-color="#ffd58a" stop-opacity="0.6" />
+              <stop offset="1" stop-color="#ffd58a" stop-opacity="0" />
+            </radialGradient>
+            <radialGradient id="coldPool" cx="0.5" cy="0.5" r="0.5">
+              <stop offset="0" stop-color="#8fa8ff" stop-opacity="0.45" />
+              <stop offset="1" stop-color="#8fa8ff" stop-opacity="0" />
+            </radialGradient>
+            <linearGradient id="coldBeam" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0" stop-color="#9fb4ff" stop-opacity="0.45" />
+              <stop offset="1" stop-color="#9fb4ff" stop-opacity="0.04" />
+            </linearGradient>

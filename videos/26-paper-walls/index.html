@@ -1,0 +1,591 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+    <style>
+      @font-face {
+        font-family: "HFMono";
+        src: url("assets/fonts/consolab.ttf") format("truetype");
+        font-weight: 700;
+      }
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      html,
+      body {
+        width: 1080px;
+        height: 1920px;
+        overflow: hidden;
+        background: #000;
+      }
+      #root {
+        position: relative;
+        width: 1080px;
+        height: 1920px;
+        overflow: hidden;
+        background: #000;
+      }
+      #stage {
+        position: absolute;
+        inset: 0;
+        width: 1080px;
+        height: 1920px;
+      }
+      #stage svg {
+        position: absolute;
+        inset: 0;
+      }
+      .mono {
+        position: absolute;
+        font-family: "HFMono", monospace;
+        font-weight: 700;
+        white-space: nowrap;
+      }
+      /* everything readable stays inside the Instagram safe area: x 120-960, y 220-1500 */
+      #head {
+        position: absolute;
+        left: 0;
+        right: 0;
+        top: 222px;
+        text-align: center;
+        font-family: "HFMono", monospace;
+        font-weight: 700;
+        font-size: 38px;
+        letter-spacing: 0.12em;
+        line-height: 1.45;
+        color: #fff;
+        text-shadow: 0 0 16px rgba(255, 255, 255, 0.3);
+      }
+      #head .ghost {
+        visibility: hidden;
+      }
+      #ctr {
+        position: absolute;
+        left: 0;
+        right: 0;
+        top: 430px;
+        text-align: center;
+        font-family: "HFMono", monospace;
+        font-weight: 700;
+        white-space: nowrap;
+      }
+      #ctr .lbl {
+        font-size: 26px;
+        letter-spacing: 0.24em;
+        color: #9a9a9a;
+        vertical-align: middle;
+      }
+      #num {
+        display: inline-block;
+        min-width: 2.4ch;
+        font-size: 58px;
+        letter-spacing: 0.08em;
+        color: #fff;
+        vertical-align: middle;
+        text-shadow: 0 0 14px rgba(255, 255, 255, 0.35);
+      }
+      #tag {
+        display: inline-block;
+        min-width: 5.2ch;
+        padding: 6px 12px 4px;
+        font-size: 26px;
+        letter-spacing: 0.18em;
+        vertical-align: middle;
+        visibility: hidden;
+      }
+      #tag.fail {
+        visibility: visible;
+        background: #d62a2a;
+        color: #fff;
+      }
+      #tag.pass {
+        visibility: visible;
+        background: #fff;
+        color: #000;
+        box-shadow: 0 0 22px rgba(255, 255, 255, 0.6);
+      }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="14" data-width="1080" data-height="1920">
+      <div id="stage" class="clip" data-start="0" data-duration="14" data-track-index="0">
+        <svg id="svg" width="1080" height="1920" viewBox="0 0 1080 1920" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <linearGradient id="beam" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0" stop-color="#ffffff" stop-opacity="0.55" />
+              <stop offset="0.7" stop-color="#ffffff" stop-opacity="0.12" />
+              <stop offset="1" stop-color="#ffffff" stop-opacity="0.04" />
+            </linearGradient>
+            <radialGradient id="pool" cx="0.5" cy="0.5" r="0.5">
+              <stop offset="0" stop-color="#ffffff" stop-opacity="0.32" />
+              <stop offset="1" stop-color="#ffffff" stop-opacity="0" />
+            </radialGradient>
+            <radialGradient id="dustG" cx="0.5" cy="0.5" r="0.5">
+              <stop offset="0" stop-color="#b5b5b5" stop-opacity="0.8" />
+              <stop offset="1" stop-color="#b5b5b5" stop-opacity="0" />
+            </radialGradient>
+            <linearGradient id="ply" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0" stop-color="#d9c29b" />
+              <stop offset="1" stop-color="#8f7858" />
+            </linearGradient>
+            <linearGradient id="floorFade" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0" stop-color="#000" stop-opacity="0.45" />
+              <stop offset="1" stop-color="#000" stop-opacity="1" />
+            </linearGradient>
+            <filter id="blur" x="-50%" y="-50%" width="200%" height="200%">
+              <feGaussianBlur stdDeviation="12" />
+            </filter>
+            <filter id="soft" x="-50%" y="-50%" width="200%" height="200%">
+              <feGaussianBlur stdDeviation="16" />
+            </filter>
+                      <linearGradient id="brick" x1="0" y1="0" x2="1" y2="0">
+              <stop offset="0" stop-color="#6a6a6a" />
+              <stop offset="1" stop-color="#3a3a3a" />
+            </linearGradient>
+            <radialGradient id="lightBeyond" cx="0.5" cy="0.5" r="0.5">
+              <stop offset="0" stop-color="#ffffff" stop-opacity="0.7" />
+              <stop offset="1" stop-color="#ffffff" stop-opacity="0" />
+            </radialGradient>
+            <linearGradient id="streak" x1="0" y1="0" x2="1" y2="0">
+              <stop offset="0" stop-color="#ffffff" stop-opacity="0" />
+              <stop offset="1" stop-color="#ffffff" stop-opacity="0.9" />
+            </linearGradient>
+            <filter id="chromaF" x="-30%" y="-30%" width="160%" height="160%" color-interpolation-filters="sRGB">
+              <feOffset id="chR" in="SourceGraphic" dx="0" dy="0" result="r" />
+              <feColorMatrix in="r" type="matrix" values="1 0 0 0 0  0 0.15 0 0 0  0 0 0.2 0 0  0 0 0 0.85 0" result="rr" />
+              <feOffset id="chB" in="SourceGraphic" dx="0" dy="0" result="b" />
+              <feColorMatrix in="b" type="matrix" values="0.1 0 0 0 0  0 0.9 0 0 0  0 0 1 0 0  0 0 0 0.85 0" result="bb" />
+              <feMerge><feMergeNode in="rr" /><feMergeNode in="bb" /><feMergeNode in="SourceGraphic" /></feMerge>
+            </filter>
+          </defs>
+          <!-- world: floor at world y 600 -> screen y 1400, world x 400 -> screen x 540 -->
+          <g transform="translate(540 1400) scale(1.45) translate(-400 -600)">
+            <g id="beams"></g>
+            <g id="back"></g>
+            
+            <use href="#world" transform="translate(0 1200) scale(1 -1)" opacity="0.16" />
+            <rect x="-200" y="600" width="1200" height="260" fill="url(#floorFade)" />
+            <rect x="-600" y="858" width="2000" height="1400" fill="#000" />
+            <rect x="-200" y="599" width="1200" height="2" fill="#2a2a2a" />
+            <g id="world"></g>
+          </g>
+        </svg>
+        <style>
+  #hud { position: absolute; left: 0; right: 0; top: 420px; text-align: center; font-family: "HFMono", monospace; font-weight: 700; }
+  #hud .l { font-size: 26px; letter-spacing: 0.3em; color: #9a9a9a; }
+  #hud .n { display: inline-block; margin-top: 6px; font-size: 76px; letter-spacing: 0.04em; color: #fff; text-shadow: 0 0 22px rgba(255,255,255,0.45); }
+  #head span.w { display: inline-block; margin: 0 0.18em; }
+  #head { font-size: 46px !important; }
+  #fx { position: absolute; inset: 0; pointer-events: none; }
+  #flash { position: absolute; inset: 0; background: #fff; opacity: 0; }
+  #vig { position: absolute; inset: 0; background: radial-gradient(ellipse at center, rgba(0,0,0,0) 55%, rgba(0,0,0,0.75) 100%); }
+</style>
+<div id="hud"><div class="l">WALLS</div><div class="n" id="wn">0/5</div></div>
+<svg id="fx" width="1080" height="1920" viewBox="0 0 1080 1920"></svg>
+<div id="vig"></div>
+<div id="flash"></div>
+        <div id="head">
+          <div id="h1"></div>
+          <div id="h2"></div>
+        </div>
+      </div>
+      <audio id="mix" src="assets/audio/mix.wav" data-start="0" data-duration="14" data-track-index="1"></audio>
+    </div>
+
+    <script>
+      (function () {
+        const DUR = 14;
+        const FL = 600, BX0 = 380, BX1 = 520, BTOP = 410, TOPF = 404, SX = 250;
+        const THIGH = 80, SHIN = 78, LEG = 154;
+        const UARM = 64, FARM = 60, TORSO = 116, NECK = 12, HEADR = 31;
+        const NS = "http://www.w3.org/2000/svg";
+        const svgEl = (tag, attrs, parent) => {
+          const e = document.createElementNS(NS, tag);
+          for (const k in attrs || {}) e.setAttribute(k, attrs[k]);
+          if (parent) parent.appendChild(e);
+          return e;
+        };
+        const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
+        const lerp = (a, b, p) => a + (b - a) * p;
+        const ease = (p) => 0.5 - 0.5 * Math.cos(Math.PI * clamp(p, 0, 1));
+        const backOut = (p) => { p = clamp(p, 0, 1); const s = 2.2; return 1 + (s + 1) * Math.pow(p - 1, 3) + s * Math.pow(p - 1, 2); };
+        const win = (t, a, b) => ease((t - a) / (b - a));
+        const rad = (x) => (x * Math.PI) / 180;
+        const down = (a, f) => [Math.sin(rad(a)) * f, Math.cos(rad(a))];
+        const up = (a, f) => [Math.sin(rad(a)) * f, -Math.cos(rad(a))];
+        const r1 = (v) => Math.round(v * 10) / 10;
+        const E = (id) => document.getElementById(id);
+        let seed = 31;
+        const rnd = () => ((seed = (seed * 16807) % 2147483647) / 2147483647);
+
+        // ---------- rig v2 (from reel 05): blended poses, head/arm follow-through, breathing ----------
+        function makeFig(parent, front, back, glow, id) {
+          const g = svgEl("g", { id }, parent);
+          if (glow) parent.insertBefore(svgEl("use", { href: "#" + id, filter: "url(#blur)", opacity: 0.45 }), g);
+          const parts = { g };
+          for (const [n, col] of [["armB", back], ["legB", back], ["torso", front], ["legF", front], ["armF", front]]) {
+            const o = svgEl("path", { fill: "none", stroke: "#000", "stroke-width": 34, "stroke-linecap": "round", "stroke-linejoin": "round" }, g);
+            const w = svgEl("path", { fill: "none", stroke: col, "stroke-width": 22, "stroke-linecap": "round", "stroke-linejoin": "round" }, g);
+            parts[n] = [o, w];
+          }
+          parts.head = svgEl("circle", { r: HEADR, fill: front, stroke: "#000", "stroke-width": 6 }, g);
+          return parts;
+        }
+        function ik(a, b, l1, l2, pick) {
+          let dx = b[0] - a[0], dy = b[1] - a[1];
+          let d = Math.hypot(dx, dy);
+          const maxd = l1 + l2 - 0.5;
+          if (d > maxd) {
+            b = [a[0] + (dx / d) * maxd, a[1] + (dy / d) * maxd];
+            dx = b[0] - a[0];
+            dy = b[1] - a[1];
+            d = maxd;
+          }
+          d = Math.max(d, Math.abs(l1 - l2) + 1);
+          const al = Math.acos(clamp((l1 * l1 + d * d - l2 * l2) / (2 * l1 * d), -1, 1));
+          const base = Math.atan2(dy, dx);
+          const c1 = [a[0] + Math.cos(base + al) * l1, a[1] + Math.sin(base + al) * l1];
+          const c2 = [a[0] + Math.cos(base - al) * l1, a[1] + Math.sin(base - al) * l1];
+          return [pick(c1, c2), b];
+        }
+        const P = (pts) => "M" + pts.map((p) => r1(p[0]) + " " + r1(p[1])).join("L");
+        const setD = (pair, d) => {
+          pair[0].setAttribute("d", d);
+          pair[1].setAttribute("d", d);
+        };
+        // flat pose: hx hy torso head ax ay bx by | per arm a*/b*: sh el w tx ty
+        function drawFig(parts, s, f) {
+          const hip = [s.hx, s.hy];
+          const tu = up(s.torso, f);
+          const sh = [hip[0] + tu[0] * TORSO, hip[1] + tu[1] * TORSO];
+          const nk = [hip[0] + tu[0] * (TORSO + NECK), hip[1] + tu[1] * (TORSO + NECK)];
+          const hu = up(s.torso + s.head, f);
+          const hc = [nk[0] + hu[0] * HEADR, nk[1] + hu[1] * HEADR];
+          setD(parts.torso, P([hip, sh, nk]));
+          parts.head.setAttribute("cx", r1(hc[0]));
+          parts.head.setAttribute("cy", r1(hc[1]));
+          const knee = (c1, c2) => (c1[0] * f > c2[0] * f ? c1 : c2);
+          const elbow = (c1, c2) => (c1[1] - 0.5 * f * c1[0] > c2[1] - 0.5 * f * c2[0] ? c1 : c2);
+          [["legF", [s.ax, s.ay]], ["legB", [s.bx, s.by]]].forEach(([n, ft]) => {
+            const [kn, fo] = ik(hip, ft, THIGH, SHIN, knee);
+            setD(parts[n], P([hip, kn, fo]));
+          });
+          const hands = [];
+          [["armF", "a"], ["armB", "b"]].forEach(([n, k]) => {
+            const u = down(s[k + "sh"], f);
+            const el = [sh[0] + u[0] * UARM, sh[1] + u[1] * UARM];
+            const v = down(s[k + "sh"] + s[k + "el"], f);
+            const fk = [el[0] + v[0] * FARM, el[1] + v[1] * FARM];
+            const w = clamp(s[k + "w"], 0, 1);
+            const hand = [lerp(fk[0], s[k + "tx"], w), lerp(fk[1], s[k + "ty"], w)];
+            const [e2, h2] = ik(sh, hand, UARM, FARM, elbow);
+            setD(parts[n], P([sh, e2, h2]));
+            hands.push(h2);
+          });
+          return { head: hc, hands, hip };
+        }
+        const KER = [-4, -3, -2, -1, 0, 1, 2, 3, 4].map((k) => [k * 0.03, Math.exp(-((k / 2.3) ** 2))]);
+        function blend(raw, t) {
+          const out = {};
+          let ws = 0;
+          for (const [dt, w] of KER) {
+            const p = raw(clamp(t + dt, 0, DUR));
+            for (const k in p) out[k] = (out[k] || 0) + p[k] * w;
+            ws += w;
+          }
+          for (const k in out) out[k] /= ws;
+          return out;
+        }
+        const LAGGED = ["head", "ash", "ael", "aw", "atx", "aty", "bsh", "bel", "bw", "btx", "bty"];
+        function livePose(raw, t, phase) {
+          const s = blend(raw, t);
+          const lag = blend(raw, t - 0.05);
+          for (const k of LAGGED) s[k] = lag[k];
+          const br = Math.sin(t * 1.9 + phase);
+          s.hy += br * 1.3;
+          s.torso += br * 0.8;
+          s.head += Math.sin(t * 1.2 + phase * 2) * 1.6;
+          return s;
+        }
+        const ARMS = { ash: 8, ael: 12, aw: 0, atx: 0, aty: 0, bsh: -4, bel: 10, bw: 0, btx: 0, bty: 0 };
+        const base = (o) => ({ hx: 0, hy: 0, torso: 3, head: 0, ax: 0, ay: FL, bx: 0, by: FL, ...ARMS, ...o });
+        function standOn(x, f, fy) {
+          return base({ hx: x, hy: fy - Math.sqrt(LEG * LEG - 15 * 15), ax: x + f * 15, ay: fy, bx: x - f * 15, by: fy });
+        }
+        const mixPose = (a, b, p) => {
+          const o = {};
+          for (const k in a) o[k] = lerp(a[k], b[k], p);
+          return o;
+        };
+
+        // ---------- TEST: modern action cut. He sprints and smashes 4 walls, freezes at a giant one, then breaks it in slow motion ----------
+        const cam = E("svg").children[1];
+        const W = E("world");
+        const backG = E("back");
+        const beams = E("beams");
+        const pillarG = svgEl("g", {}, backG);
+        const tickG = svgEl("g", {}, W);
+        const wallG = svgEl("g", {}, W);
+        const trailG = svgEl("g", {}, W);
+        const figG = svgEl("g", {}, W);
+        const shardG = svgEl("g", {}, W);
+        const labelG = svgEl("g", {}, cam);           // labels + rings sit on top and are not mirrored
+        const FXS = E("fx");
+        const frac = (v) => v - Math.floor(v);
+        const mod = (a, n) => ((a % n) + n) % n;
+
+        // ---------- time warp: slow motion around the last impact ----------
+        const SLOW0 = 9.78, SLOW1 = 10.75;
+        const speedAt = (t) => 1 - 0.76 * win(t, SLOW0, SLOW0 + 0.1) * (1 - win(t, SLOW1 - 0.3, SLOW1));
+        const TSTEP = 1 / 400, TS = [0];
+        for (let i = 1; i <= DUR / TSTEP; i++) TS.push(TS[i - 1] + speedAt((i - 0.5) * TSTEP) * TSTEP);
+        const story = (t) => { const f = clamp(t / TSTEP, 0, TS.length - 1), i = Math.floor(f); return TS[i] + (TS[Math.min(i + 1, TS.length - 1)] - TS[i]) * (f - i); };
+        const realOf = (s) => { let lo = 0, hi = TS.length - 1; while (hi - lo > 1) { const m = (lo + hi) >> 1; if (TS[m] < s) lo = m; else hi = m; } return lo * TSTEP; };
+
+        // ---------- runner path (story time) ----------
+        const V = 800, STRIDE = 230;
+        const D_STOP = 0.7625, X_STOP = 3720 + V * D_STOP - 0.5 * (V / D_STOP) * D_STOP * D_STOP; // 4025
+        const X_BACK = X_STOP - STRIDE / 2, A2 = (2 * (4130 - X_BACK)) / (0.95 * 0.95);
+        function xOf(s) {
+          if (s < 0.95) return 0;
+          if (s < 1.35) return (V * (s - 0.95) ** 2) / 0.8;
+          if (s < 5.8) return 160 + V * (s - 1.35);
+          if (s < 5.8 + D_STOP) { const u = s - 5.8; return 3720 + V * u - 0.5 * (V / D_STOP) * u * u; }
+          if (s < 8.0) return X_STOP;
+          if (s < 8.6) return lerp(X_STOP, X_BACK, ease((s - 8.0) / 0.6));
+          if (s < 9.55) return X_BACK + 0.5 * A2 * (s - 8.6) ** 2;
+          if (s < 10.35) return 4130 + 330 * (s - 9.55);
+          if (s < 10.7) return 4394 + 66 * ease((s - 10.35) / 0.35);
+          return 4460;
+        }
+        const WALLS = [
+          { x: 900, w: 50, h: 230, label: "EXCUSES" },
+          { x: 1900, w: 56, h: 280, label: "FEAR" },
+          { x: 2800, w: 62, h: 330, label: "DOUBT" },
+          { x: 3600, w: 68, h: 380, label: "THEIR OPINION" },
+          { x: 4300, w: 100, h: 700, label: "COMFORT ZONE", paper: true },
+        ];
+        WALLS.forEach((w, i) => (w.ts = i < 4 ? 1.35 + (w.x - 40 - 160) / V : 9.9));
+        WALLS.forEach((w) => (w.tr = realOf(w.ts)));
+
+        // ---------- background: parallax pillars, floor ticks, light beyond the last wall ----------
+        const pillars = [];
+        for (let i = 0; i < 10; i++) {
+          const g = svgEl("g", {}, pillarG);
+          svgEl("rect", { x: -14, y: -900, width: 28, height: 1500, fill: "#141414" }, g);
+          svgEl("rect", { x: -40, y: -900, width: 80, height: 1500, fill: "#ffffff", opacity: 0.025, filter: "url(#soft)" }, g);
+          pillars.push(g);
+        }
+        const ticks = [];
+        for (let i = 0; i < 26; i++) ticks.push(svgEl("rect", { y: FL + 3, width: 3, height: 12, fill: "#3a3a3a" }, tickG));
+        const beyond = svgEl("ellipse", { cx: 4560, cy: FL - 220, rx: 420, ry: 420, fill: "url(#lightBeyond)", opacity: 0 }, backG);
+        const beyondBeam = svgEl("polygon", { points: "4420,-900 4640,-900 4760,600 4300,600", fill: "url(#beam)", filter: "url(#soft)", opacity: 0 }, beams);
+        const runBeam = svgEl("polygon", { fill: "url(#beam)", filter: "url(#soft)", opacity: 0.3 }, beams);
+
+        // ---------- walls, labels, shards ----------
+        WALLS.forEach((w, k) => {
+          w.g = svgEl("g", {}, wallG);
+          const x0 = w.x - w.w / 2, y0 = FL - w.h;
+          svgEl("rect", { x: x0, y: y0, width: w.w, height: w.h, fill: w.paper ? "#bdbdbd" : "url(#brick)", stroke: "#000", "stroke-width": 6 }, w.g);
+          for (let y = y0 + 34; y < FL; y += 34) svgEl("line", { x1: x0 + 3, x2: x0 + w.w - 3, y1: y, y2: y, stroke: "#000", "stroke-width": 3, opacity: 0.45 }, w.g);
+          if (w.paper) svgEl("rect", { x: x0 - 3, y: y0 - 3, width: w.w + 6, height: w.h + 3, fill: "none", stroke: "#d62a2a", "stroke-width": 5 }, w.g);
+          w.lab = svgEl("text", { x: w.x, y: FL - w.h * 0.55, "text-anchor": "middle", "font-family": "HFMono", "font-weight": 700, "font-size": w.paper ? 30 : 24, "letter-spacing": 3, fill: w.paper ? "#ff4a3d" : "#ffffff", stroke: "#000", "stroke-width": 7, "paint-order": "stroke" }, labelG);
+          w.lab.textContent = w.label;
+          // shards: a jittered 2 x 7 grid of the wall
+          w.shards = [];
+          const cols = 2, rows = w.paper ? 9 : 7, cw = w.w / cols, rh = w.h / rows;
+          for (let r = 0; r < rows; r++) for (let c = 0; c < cols; c++) {
+            const cx = x0 + cw * (c + 0.5), cy = y0 + rh * (r + 0.5);
+            const pts = [[-cw / 2, -rh / 2], [cw / 2, -rh / 2], [cw / 2, rh / 2], [-cw / 2, rh / 2]].map(([a, b]) => [a + (rnd() - 0.5) * 10, b + (rnd() - 0.5) * 10]);
+            const el = svgEl("polygon", { points: pts.map((p) => p.map(r1).join(",")).join(" "), fill: w.paper ? "#f4f4f0" : "#5a5a5a", stroke: w.paper ? "#9a9a9a" : "#000", "stroke-width": w.paper ? 2 : 4, opacity: 0 }, shardG);
+            const hit = 1 - Math.abs(cy - (FL - 150)) / w.h;
+            w.shards.push({ el, cx, cy, vx: (w.paper ? 120 : 380) + rnd() * (w.paper ? 260 : 520) * (0.5 + hit), vy: -(w.paper ? 260 : 300) - rnd() * (w.paper ? 260 : 420) * (0.4 + hit), spin: (rnd() - 0.5) * (w.paper ? 260 : 900), ph: rnd() * 6 });
+          }
+          w.ring = svgEl("circle", { cx: w.x - w.w / 2, cy: FL - 160, r: 0, fill: "none", stroke: "#fff", "stroke-width": 12, opacity: 0 }, labelG);
+        });
+
+        // ---------- the runner + motion trails ----------
+        const runner = makeFig(figG, "#ffffff", "#e2e2e2", true, "runner");
+        const trails = [0, 1, 2].map((i) => svgEl("use", { href: "#runner", opacity: 0 }, trailG));
+        const legRun = Math.sqrt(LEG * LEG - (STRIDE * 0.25) ** 2);
+        function strideFeet(hx, lift) {
+          const p = hx / STRIDE;
+          return [0, 0.5].map((o) => {
+            const q = frac(p + o + 1e-6);
+            if (q < 0.5) return [hx + STRIDE * (0.25 - q), FL];
+            const s = (q - 0.5) / 0.5;
+            return [hx + STRIDE * (-0.25 + 0.5 * ease(s)), FL - Math.sin(Math.PI * s) * lift - Math.max(0, Math.sin(Math.PI * s * 2)) * lift * 0.5];
+          });
+        }
+        function runnerRaw(s) {
+          const hx = xOf(s), v = (xOf(s + 0.01) - xOf(s - 0.01)) / 0.02, vn = clamp(Math.abs(v) / V, 0, 1);
+          const p = hx / STRIDE, sw = Math.sin(Math.PI * 2 * p);
+          // sprint start: crouched, rocking
+          if (s < 0.95) {
+            const k = win(s, 0.6, 0.95);
+            return base({ hx: -10 + 20 * k, hy: FL - 70 + 30 * k, torso: 55 - 15 * k, head: -30, ax: 50, ay: FL, bx: -70, by: FL, ash: 20, ael: 20, aw: 1 - k, atx: 40, aty: FL - 2, bsh: -40, bel: 20 });
+          }
+          if (s >= 9.55 && s < 10.35) {
+            // the leap: shoulder first through the wall
+            const k = (s - 9.55) / 0.8, y = FL - 140 - 4 * 110 * k * (1 - k);
+            return base({ hx, hy: y, torso: 42, head: -26, ax: hx - 50, ay: y + 120, bx: hx - 110, by: y + 70, ash: 60, ael: 70, aw: 1, atx: hx + 40, aty: y - 70, bsh: -70, bel: 30 });
+          }
+          if (s >= 10.35 && s < 10.75) {
+            // landing: three-point crouch
+            return base({ hx, hy: FL - 70, torso: 52, head: -34, ax: hx + 40, ay: FL, bx: hx - 80, by: FL, ash: 30, ael: 10, aw: 1, atx: hx + 70, aty: FL - 2, bsh: -50, bel: 40 });
+          }
+          if (s >= 10.75) {
+            const k = win(s, 10.75, 11.3);
+            const crouch = base({ hx, hy: FL - 70, torso: 52, head: -34, ax: hx + 40, ay: FL, bx: hx - 80, by: FL, ash: 30, ael: 10, bsh: -50, bel: 40 });
+            const st = standOn(hx, 1, FL);
+            st.head = -8; st.ash = 14; st.bsh = -10;
+            return mixPose(crouch, st, k);
+          }
+          const feet = strideFeet(hx, 34 + 20 * vn);
+          const still = 1 - vn;
+          const look = win(s, 6.6, 7.0) * (1 - win(s, 7.8, 8.1));
+          return base({
+            hx, hy: lerp(FL - legRun, FL - legRun + 4, still) + 6 * Math.abs(sw) * vn, torso: 4 + 16 * vn - 6 * look, head: -10 * vn - 34 * look,
+            ax: feet[0][0], ay: feet[0][1], bx: feet[1][0], by: feet[1][1],
+            ash: 8 - 55 * sw * vn, ael: 12 + 78 * vn, bsh: -4 + 55 * sw * vn, bel: 12 + 78 * vn,
+          });
+        }
+
+        // ---------- camera keys (story time): scale, world y at screen 1180, roll, follow weight, fixed x ----------
+        const CK = [
+          [0, 1.85, 520, 0, 1, 0], [0.9, 1.85, 520, 0, 1, 0], [1.45, 1.35, 470, -1.5, 1, 0], [5.8, 1.35, 470, -1.5, 1, 0],
+          [6.9, 0.8, 250, 0, 0, 4170], [8.0, 0.8, 250, 0, 0, 4170], [9.0, 1.15, 420, -1, 0, 4130], [9.78, 1.25, 440, -2, 0, 4190],
+          [9.95, 1.7, 430, 4, 0, 4250], [10.4, 1.55, 450, 3, 0, 4330], [11.4, 1.15, 470, 0, 0, 4440], [99, 1.15, 470, 0, 0, 4440],
+        ];
+        function camAt(s, hx) {
+          let i = 1;
+          while (i < CK.length - 1 && s > CK[i][0]) i++;
+          const a = CK[i - 1], b = CK[i], k = ease((s - a[0]) / (b[0] - a[0]));
+          const v = a.map((x, j) => lerp(x, b[j], k));
+          return { s: v[1], cy: v[2], rot: v[3], cx: v[4] * (hx + 140) + (1 - v[4]) * v[5] };
+        }
+
+        // ---------- screen-space speed lines ----------
+        const streaks = [];
+        for (let i = 0; i < 18; i++) streaks.push({ el: svgEl("rect", { height: 3 + (i % 3), fill: "url(#streak)", opacity: 0 }, FXS), y: 260 + ((i * 397) % 1300), len: 140 + ((i * 131) % 220), sp: 2600 + ((i * 577) % 1600), o: (i * 911) % 1500 });
+
+        // ---------- kinetic type ----------
+        const slam = (words, times, t, redLast) => words.map((w, i) => {
+          const q = clamp((t - times[i]) / 0.2, 0, 1);
+          if (q <= 0) return `<span class="w" style="opacity:0">${w}</span>`;
+          const sc = lerp(2.3, 1, backOut(q)), bl = (1 - q) * 6;
+          return `<span class="w" style="transform:scale(${sc.toFixed(3)});filter:blur(${bl.toFixed(1)}px);${redLast && i === words.length - 1 ? "color:#ff3b30;" : ""}">${w}</span>`;
+        }).join("");
+        const fade = document.createElement("div");
+        fade.style.cssText = "position:absolute;inset:0;background:#000;opacity:0";
+        E("stage").appendChild(fade);
+        const svgRoot = E("svg");
+
+        // ---------- per-frame render ----------
+        function render(t) {
+          const s = story(t), hx = xOf(s);
+          const v = (xOf(s + 0.01) - xOf(s - 0.01)) / 0.02, vn = clamp(Math.abs(v) / V, 0, 1) * speedAt(t);
+
+          // impact kicks (real time)
+          let kick = 0, chroma = 0, flash = 0;
+          WALLS.forEach((w, k) => {
+            const dt = t - w.tr, big = w.paper ? 1 : 0;
+            if (dt >= 0) {
+              kick += Math.exp(-dt / (big ? 0.5 : 0.18)) * (big ? 1.4 : 1);
+              chroma += Math.exp(-dt / (big ? 0.45 : 0.15));
+              flash += (big ? 0.8 : 0.42) * Math.exp(-dt / (big ? 0.2 : 0.05));
+            }
+          });
+          [0.15, 0.4, 0.65].forEach((h) => { if (t >= h) { chroma += 0.6 * Math.exp(-(t - h) / 0.08); kick += 0.3 * Math.exp(-(t - h) / 0.1); } });
+          if (t > realOf(0.95)) kick += 0.5 * Math.exp(-(t - realOf(0.95)) / 0.15);
+
+          const c = camAt(s, hx);
+          const sc = c.s * (1 + 0.07 * Math.min(kick, 1.6));
+          const shx = Math.sin(t * 67) * 14 * Math.min(kick, 1.5), shy = Math.cos(t * 59) * 12 * Math.min(kick, 1.5);
+          const rot = c.rot + Math.sin(t * 31) * 1.2 * Math.min(kick, 1);
+          cam.setAttribute("transform", `translate(${r1(540 + shx)} ${r1(1180 + shy)}) rotate(${rot.toFixed(2)}) scale(${sc.toFixed(4)}) translate(${r1(-c.cx)} ${r1(-c.cy)})`);
+          const ch = Math.min(1, chroma) * 9;
+          if (ch > 0.3) { W.setAttribute("filter", "url(#chromaF)"); labelG.setAttribute("filter", "url(#chromaF)"); E("chR").setAttribute("dx", (ch / sc).toFixed(2)); E("chB").setAttribute("dx", (-ch / sc).toFixed(2)); }
+          else { W.removeAttribute("filter"); labelG.removeAttribute("filter"); }
+          E("flash").style.opacity = Math.min(0.9, flash).toFixed(3);
+
+          // parallax pillars + floor ticks wrap around the camera
+          pillars.forEach((g, i) => g.setAttribute("transform", `translate(${r1(c.cx + mod(i * 260 - c.cx * 0.45, 2600) - 1300)} 0)`));
+          ticks.forEach((tk, i) => tk.setAttribute("x", r1(c.cx + mod(i * 100 - c.cx, 2600) - 1300)));
+
+          // walls / shards / rings / labels
+          WALLS.forEach((w) => {
+            const ds = s - w.ts, broken = ds >= 0;
+            w.g.setAttribute("opacity", broken ? 0 : 1);
+            const near = clamp(1 - Math.abs(w.x - c.cx) / 900, 0, 1);
+            w.lab.setAttribute("opacity", broken ? 0 : near.toFixed(3));
+            w.shards.forEach((sh, i) => {
+              if (!broken) { sh.el.setAttribute("opacity", 0); return; }
+              const g = w.paper ? 140 : 1800;
+              const fl = w.paper ? Math.sin(ds * 3 + sh.ph) * 40 : 0;
+              const x = sh.cx + sh.vx * ds + fl, y = Math.min(FL - 4, sh.cy + sh.vy * ds + 0.5 * g * ds * ds);
+              sh.el.setAttribute("transform", `translate(${r1(x)} ${r1(y)}) rotate(${r1(sh.spin * ds)})`);
+              sh.el.setAttribute("opacity", clamp(1 - (ds - (w.paper ? 2.6 : 0.7)) / 0.6, 0, 1).toFixed(3));
+            });
+            const dr = t - w.tr;
+            w.ring.setAttribute("r", r1(dr > 0 ? 30 + 340 * (1 - Math.exp(-dr / 0.18)) * (w.paper ? 1.5 : 1) : 0));
+            w.ring.setAttribute("stroke-width", r1(dr > 0 ? 14 * Math.exp(-dr / 0.2) : 0));
+            w.ring.setAttribute("opacity", dr > 0 ? Math.exp(-dr / 0.25).toFixed(3) : 0);
+          });
+          const brk = win(s, 9.9, 10.6);
+          beyond.setAttribute("opacity", (0.95 * brk).toFixed(3));
+          beyondBeam.setAttribute("opacity", (0.5 * brk).toFixed(3));
+          runBeam.setAttribute("points", `${r1(hx - 50)},-900 ${r1(hx + 50)},-900 ${r1(hx + 160)},${FL} ${r1(hx - 160)},${FL}`);
+
+          // runner + trails
+          drawFig(runner, livePose(runnerRaw, s, 0.3), 1);
+          trails.forEach((tr, i) => {
+            const dx = v * 0.028 * (i + 1);
+            tr.setAttribute("transform", `translate(${r1(-dx)} 0)`);
+            tr.setAttribute("opacity", (vn > 0.3 ? (0.28 - i * 0.08) * vn : 0).toFixed(3));
+          });
+
+          // speed lines
+          const sl = vn * (1 - win(s, 5.7, 6.4)) + 0.9 * win(s, 9.2, 9.6) * (1 - win(s, 10.1, 10.6));
+          streaks.forEach((st) => {
+            const x = 1300 - mod(st.o + t * st.sp, 1700);
+            st.el.setAttribute("x", r1(x)); st.el.setAttribute("y", st.y); st.el.setAttribute("width", st.len);
+            st.el.setAttribute("opacity", (0.5 * sl).toFixed(3));
+          });
+
+          // HUD: walls broken
+          const n = WALLS.filter((w) => t >= w.tr).length;
+          const lastT = n ? WALLS[n - 1].tr : -9;
+          E("wn").textContent = n + "/5";
+          E("wn").style.transform = `scale(${(1 + 0.6 * Math.exp(-(t - lastT) / 0.12)).toFixed(3)})`;
+          E("wn").style.color = n === 5 ? "#ff3b30" : "#fff";
+          E("hud").style.opacity = (win(t, 1.3, 1.6)).toFixed(3);
+
+          // hook + punchline type
+          if (t < 2.0) {
+            E("h1").innerHTML = slam(["WHAT'S", "STOPPING", "YOU?"], [0.15, 0.4, 0.65], t, false);
+            E("h1").style.opacity = (1 - win(t, 1.4, 1.8)).toFixed(3);
+            E("h2").innerHTML = "";
+          } else {
+            E("h1").innerHTML = slam(["THE", "WALLS", "WERE", "PAPER."], [11.2, 11.38, 11.56, 11.8], t, false);
+            E("h1").style.opacity = (1 - 0.5 * win(t, 12.2, 12.5)).toFixed(3);
+            E("h2").innerHTML = slam(["YOU", "JUST", "HAD", "TO", "RUN."], [12.3, 12.42, 12.54, 12.66, 12.85], t, true);
+          }
+          fade.style.opacity = win(t, 13.45, 13.95).toFixed(3);
+        }
+
+        window.__timelines = window.__timelines || {};
+        const tl = gsap.timeline({ paused: true });
+        const clock = { t: 0 };
+        tl.to(clock, { t: DUR, duration: DUR, ease: "none", onUpdate: () => render(clock.t) }, 0);
+        window.__timelines["main"] = tl;
+        render(0);
+        tl.seek(0);
+      })();
+    </script>
+  </body>
+</html>

@@ -1,0 +1,14 @@
+<style>
+  #hud { position: absolute; left: 0; right: 0; top: 420px; text-align: center; font-family: "HFMono", monospace; font-weight: 700; }
+  #hud .l { font-size: 26px; letter-spacing: 0.3em; color: #9a9a9a; }
+  #hud .n { display: inline-block; margin-top: 6px; font-size: 76px; letter-spacing: 0.04em; color: #fff; text-shadow: 0 0 22px rgba(255,255,255,0.45); }
+  #head span.w { display: inline-block; margin: 0 0.18em; }
+  #head { font-size: 46px !important; }
+  #fx { position: absolute; inset: 0; pointer-events: none; }
+  #flash { position: absolute; inset: 0; background: #fff; opacity: 0; }
+  #vig { position: absolute; inset: 0; background: radial-gradient(ellipse at center, rgba(0,0,0,0) 55%, rgba(0,0,0,0.75) 100%); }
+</style>
+<div id="hud"><div class="l">WALLS</div><div class="n" id="wn">0/5</div></div>
+<svg id="fx" width="1080" height="1920" viewBox="0 0 1080 1920"></svg>
+<div id="vig"></div>
+<div id="flash"></div>
