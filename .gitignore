@@ -1,0 +1,7 @@
+node_modules/
+.hyperframes/
+renders/
+**/assets/engine.js
+**/assets/fonts/
+.DS_Store
+**/assets/audio.wav
