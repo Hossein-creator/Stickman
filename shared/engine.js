@@ -249,6 +249,62 @@
     ctx.restore();
     return o.y + (lines.length - 1) * lh; // baseline of the last line
   }
+  // reference-style line: small white mono caps, typed letter by letter, centered
+  function typeText(ctx, t, o) {
+    const size = o.size || 34, maxW = o.maxW || 920, lh = size * 1.45, cps = o.cps || 38;
+    ctx.save();
+    ctx.font = `700 ${size}px ${MONO}`; ctx.letterSpacing = `${(o.track == null ? 0.12 : o.track) * size}px`;
+    ctx.textBaseline = "alphabetic"; ctx.textAlign = "left";
+    const words = o.text.split(" "), lines = [""];
+    for (const w of words) {
+      const cur = lines[lines.length - 1], next = cur ? cur + " " + w : w;
+      if (cur && ctx.measureText(next).width > maxW) lines.push(w); else lines[lines.length - 1] = next;
+    }
+    let idx = 0;
+    ctx.fillStyle = o.color || "#ffffff";
+    ctx.shadowColor = "rgba(0,0,0,0.9)"; ctx.shadowBlur = 12;
+    lines.forEach((line, li) => {
+      let x = (o.x || W / 2) - ctx.measureText(line).width / 2;
+      const y = o.y + li * lh;
+      for (const ch of line) {
+        const k = seg(t, o.start + idx / cps, o.start + idx / cps + 0.05);
+        if (k > 0) { ctx.globalAlpha = k * (o.alpha == null ? 1 : o.alpha); ctx.fillText(ch, x, y); }
+        x += ctx.measureText(ch).width; idx++;
+      }
+      idx++; // the space at the line break
+    });
+    ctx.restore();
+    return o.y + (lines.length - 1) * lh;
+  }
+  // reference-style counter on one line: "ATTEMPT 47", label dim and small, value white
+  function hud(ctx, t, o) {
+    ctx.save();
+    ctx.textBaseline = "alphabetic"; ctx.globalAlpha = o.alpha == null ? 1 : o.alpha;
+    ctx.font = `700 ${o.labelSize || 20}px ${MONO}`; ctx.letterSpacing = "5px";
+    const lw = ctx.measureText(o.label).width;
+    ctx.font = `700 ${o.size || 34}px ${MONO}`; ctx.letterSpacing = "2px";
+    const vw = ctx.measureText(o.value).width, gap = 14, x0 = o.x - (lw + gap + vw) / 2;
+    ctx.font = `700 ${o.labelSize || 20}px ${MONO}`; ctx.letterSpacing = "5px";
+    ctx.fillStyle = "rgba(200,205,215,0.6)"; ctx.fillText(o.label, x0, o.y);
+    const pop = o.changedAt != null && t >= o.changedAt ? 1 + 0.18 * Math.exp(-(t - o.changedAt) * 14) : 1;
+    ctx.translate(x0 + lw + gap + vw / 2, o.y); ctx.scale(pop, pop);
+    ctx.font = `700 ${o.size || 34}px ${MONO}`; ctx.letterSpacing = "2px"; ctx.textAlign = "center";
+    ctx.shadowColor = o.glow || "rgba(0,0,0,0.8)"; ctx.shadowBlur = o.glow ? 18 : 10;
+    ctx.fillStyle = o.color || "#ffffff"; ctx.fillText(o.value, 0, 0);
+    ctx.restore();
+  }
+  // small boxed stamp under the counter (FAIL / PASS), like the references
+  function stamp(ctx, t, o) {
+    const k = seg(t, o.start, o.start + 0.08), out = o.end != null ? 1 - seg(t, o.end, o.end + 0.1) : 1;
+    if (k <= 0 || out <= 0) return;
+    ctx.save(); ctx.globalAlpha = k * out;
+    ctx.font = `700 ${o.size || 18}px ${MONO}`; ctx.letterSpacing = "4px"; ctx.textAlign = "center"; ctx.textBaseline = "middle";
+    const w = ctx.measureText(o.text).width + 22, h = (o.size || 18) + 14;
+    ctx.strokeStyle = o.color; ctx.lineWidth = 2; ctx.shadowColor = o.color; ctx.shadowBlur = 10;
+    ctx.beginPath(); ctx.roundRect(o.x - w / 2, o.y - h / 2, w, h, 4); ctx.stroke();
+    ctx.fillStyle = o.color; ctx.fillText(o.text, o.x + 2, o.y + 1);
+    ctx.restore();
+  }
   // HUD counter: small tracked label + big mono value that pops when it changes
   function counter(ctx, t, o) {
     ctx.save();
@@ -302,6 +358,6 @@
     W, H, TAU, clamp, lerp, seg, hash, rng, E, ease, keys, mixColor, rgba,
     pose, mixPose, addPose, P, joints, grounded, drawFigure, handF, handB,
     grain, vignette, flash, shake, camera, cone, glowDot, motes, ring,
-    caption, counter, tag, mount, FONT, MONO,
+    caption, counter, tag, typeText, hud, stamp, mount, FONT, MONO,
   };
 })();
