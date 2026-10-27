@@ -1,0 +1,263 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <!-- Highlight covers + story frames. Open with #<scene id>, render with render.mjs. -->
+    <style>
+      @font-face {
+        font-family: "HFMono";
+        src: url("../assets/fonts/consolab.ttf") format("truetype");
+        font-weight: 700;
+      }
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { width: 1080px; height: 1920px; overflow: hidden; background: #000; }
+      #root { position: relative; width: 1080px; height: 1920px; overflow: hidden; background: #000; }
+      svg.stage { position: absolute; inset: 0; width: 1080px; height: 1920px; }
+      .t {
+        position: absolute; left: 120px; right: 120px; text-align: center;
+        font-family: "HFMono", monospace; font-weight: 700; color: #fff; letter-spacing: 0.06em;
+        text-shadow: 0 0 18px rgba(255, 255, 255, 0.35), 0 0 4px #000;
+      }
+      .t b { color: #ff3b30; text-shadow: 0 0 22px rgba(214, 42, 42, 0.8), 0 0 4px #000; }
+      .big { font-size: 96px; line-height: 1.1; }
+      .mid { font-size: 62px; line-height: 1.18; }
+      .sm { font-size: 40px; line-height: 1.35; letter-spacing: 0.1em; color: #bdbdbd; text-shadow: 0 0 4px #000; }
+      .kick { font-size: 36px; letter-spacing: 0.3em; color: #ff3b30; text-shadow: 0 0 14px rgba(214, 42, 42, 0.7); }
+      .frame { position: absolute; left: 270px; width: 540px; height: 960px; border: 4px solid #fff; border-radius: 22px; overflow: hidden; box-shadow: 0 0 40px rgba(255, 255, 255, 0.18); }
+      .frame img { width: 100%; height: 100%; display: block; }
+      .row { position: absolute; left: 140px; right: 120px; height: 200px; display: flex; align-items: center; gap: 40px; }
+      .row svg { width: 170px; height: 170px; flex: none; }
+      .row div { font-family: "HFMono", monospace; font-weight: 700; color: #fff; font-size: 54px; letter-spacing: 0.06em; line-height: 1.15; }
+      .row div span { display: block; font-size: 34px; color: #bdbdbd; letter-spacing: 0.08em; margin-top: 10px; }
+    </style>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script>
+      const NS = "http://www.w3.org/2000/svg";
+      const el = (tag, attrs, parent) => {
+        const n = document.createElementNS(NS, tag);
+        for (const k in attrs) n.setAttribute(k, attrs[k]);
+        if (parent) parent.appendChild(n);
+        return n;
+      };
+      const pl = (...pts) => "M" + pts.map((p) => p.join(" ")).join(" L");
+      const round = { fill: "none", "stroke-linecap": "round", "stroke-linejoin": "round" };
+      const root = document.getElementById("root");
+
+      function stage(vb = "0 0 1080 1920", cls = "stage", parent = root) {
+        const s = el("svg", { viewBox: vb, class: cls }, parent);
+        const d = el("defs", {}, s);
+        d.innerHTML = `
+          <radialGradient id="hb" cx="0.5" cy="0.5" r="0.5"><stop offset="0" stop-color="#2a2a2a"/><stop offset="1" stop-color="#000"/></radialGradient>
+          <radialGradient id="spot" cx="0.5" cy="0" r="1"><stop offset="0" stop-color="#fff" stop-opacity="0.3"/><stop offset="0.55" stop-color="#fff" stop-opacity="0.05"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></radialGradient>
+          <clipPath id="cc"><circle cx="540" cy="960" r="470"/></clipPath>
+          <filter id="glow" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="16"/></filter>`;
+        return s;
+      }
+      function text(cls, top, html) {
+        const d = document.createElement("div");
+        d.className = "t " + cls;
+        d.style.top = top + "px";
+        d.innerHTML = html;
+        root.appendChild(d);
+        return d;
+      }
+      // Stickman: glow copy, black outline, white limbs (same look as the reels). col dims a figure.
+      function fig(g, f, w, col = "#fff", glow = true) {
+        const limbs = [pl(f.neck, f.hip), pl(f.hip, f.lk, f.lf), pl(f.hip, f.rk, f.rf), pl(f.sh, f.le, f.lh), pl(f.sh, f.re, f.rh)];
+        if (glow) {
+          const gl = el("g", { filter: "url(#glow)", opacity: 0.75 }, g);
+          for (const d of limbs) el("path", { d, stroke: col, "stroke-width": w * 1.5, ...round }, gl);
+          el("circle", { cx: f.head[0], cy: f.head[1], r: f.r * 1.15, fill: col }, gl);
+        }
+        for (const d of limbs) el("path", { d, stroke: "#000", "stroke-width": w + 16, ...round }, g);
+        el("circle", { cx: f.head[0], cy: f.head[1], r: f.r + 8, fill: "#000" }, g);
+        for (const d of limbs) el("path", { d, stroke: col, "stroke-width": w, ...round }, g);
+        el("circle", { cx: f.head[0], cy: f.head[1], r: f.r, fill: col }, g);
+      }
+      function stairs(g, x0, y0, sw, sh, n) {
+        for (let k = 0; k < n; k++) {
+          const x = x0 + k * sw, y = y0 - (k + 1) * sh;
+          el("rect", { x, y, width: 2000, height: (k + 1) * sh, fill: k % 2 ? "#c9c2b5" : "#d3ccbf" }, g);
+          el("rect", { x, y, width: 2000, height: 8, fill: k === n - 1 ? "#d62a2a" : "#f2ede4" }, g);
+        }
+      }
+      // Icons drawn in a 1080x1920 space around (540,960), same as the cover crop.
+      const ICON = {
+        love(g) {
+          const heart = "M540 1130 C 360 1010 310 900 375 822 C 430 758 510 772 540 842 C 570 772 650 758 705 822 C 770 900 720 1010 540 1130 Z";
+          el("path", { d: heart, fill: "#d62a2a", filter: "url(#glow)", opacity: 0.9 }, g);
+          el("path", { d: heart, fill: "#d62a2a", stroke: "#000", "stroke-width": 10 }, g);
+          el("path", { d: "M430 860 C 450 835 480 830 500 845", stroke: "#ff8a80", "stroke-width": 14, ...round }, g);
+        },
+        discipline(g) {
+          const c = el("g", {}, g);
+          stairs(c, 330, 1180, 100, 85, 4);
+          el("rect", { x: 0, y: 1180, width: 1080, height: 740, fill: "#000" }, c);
+          el("rect", { x: 0, y: 0, width: 330, height: 1920, fill: "#000", opacity: 0 }, c);
+          fig(c, {
+            head: [683, 618], r: 36, neck: [683, 664], hip: [683, 752], sh: [683, 680],
+            lk: [668, 798], lf: [660, 832], rk: [700, 798], rf: [708, 832],
+            le: [650, 715], lh: [640, 760], re: [722, 640], rh: [736, 584],
+          }, 20);
+        },
+        overthink(g) {
+          fig(g, {
+            head: [540, 880], r: 60, neck: [540, 962], hip: [540, 1130], sh: [540, 985],
+            lk: [515, 1215], lf: [495, 1300], rk: [565, 1215], rf: [585, 1300],
+            le: [438, 905], lh: [486, 852], re: [642, 905], rh: [594, 852],
+          }, 28);
+          [[420, 760, "#fff"], [540, 720, "#ff3b30"], [660, 760, "#fff"]].forEach(([x, y, c]) => {
+            const t = el("text", { x, y, fill: c, "font-family": "HFMono, monospace", "font-weight": 700, "font-size": 110, "text-anchor": "middle" }, g);
+            t.textContent = "?";
+          });
+        },
+        // BREAKDOWNS: magnifying glass over a small stickman, red handle
+        breakdowns(g) {
+          const cx = 505, cy = 900, r = 190;
+          el("circle", { cx, cy, r, fill: "#fff", opacity: 0.06 }, g);
+          fig(g, {
+            head: [cx, cy - 92], r: 32, neck: [cx, cy - 52], hip: [cx, cy + 40], sh: [cx, cy - 40],
+            lk: [cx - 22, cy + 92], lf: [cx - 34, cy + 140], rk: [cx + 22, cy + 92], rf: [cx + 34, cy + 140],
+            le: [cx - 52, cy], lh: [cx - 62, cy + 46], re: [cx + 52, cy], rh: [cx + 62, cy + 46],
+          }, 18);
+          const hx = cx + r * 0.72, hy = cy + r * 0.72;
+          el("path", { d: pl([hx + 10, hy + 10], [hx + 170, hy + 170]), stroke: "#d62a2a", "stroke-width": 70, filter: "url(#glow)", opacity: 0.8, ...round }, g);
+          el("path", { d: pl([hx + 10, hy + 10], [hx + 170, hy + 170]), stroke: "#000", "stroke-width": 66, ...round }, g);
+          el("path", { d: pl([hx + 10, hy + 10], [hx + 170, hy + 170]), stroke: "#d62a2a", "stroke-width": 50, ...round }, g);
+          el("circle", { cx, cy, r, stroke: "#fff", "stroke-width": 44, fill: "none", filter: "url(#glow)", opacity: 0.7 }, g);
+          el("circle", { cx, cy, r, stroke: "#000", "stroke-width": 50, fill: "none" }, g);
+          el("circle", { cx, cy, r, stroke: "#fff", "stroke-width": 34, fill: "none" }, g);
+        },
+        wave(g) {
+          fig(g, {
+            head: [540, 700], r: 58, neck: [540, 778], hip: [540, 965], sh: [540, 800],
+            lk: [505, 1070], lf: [478, 1180], rk: [575, 1070], rf: [602, 1180],
+            le: [472, 880], lh: [452, 970], re: [632, 760], rh: [660, 660],
+          }, 30);
+        },
+      };
+      function coverBg(g) {
+        el("rect", { x: 0, y: 0, width: 1080, height: 1920, fill: "#000" }, g);
+        el("circle", { cx: 540, cy: 960, r: 540, fill: "url(#hb)" }, g);
+      }
+      // Icon scaled into a story: s = scale, (x,y) = where the icon centre lands.
+      function iconAt(name, x, y, s) {
+        const g = el("g", { transform: `translate(${x} ${y}) scale(${s}) translate(-540 -960)` }, stage());
+        el("circle", { cx: 540, cy: 960, r: 470, fill: "url(#hb)" }, g);
+        ICON[name](el("g", { "clip-path": "url(#cc)" }, g));
+      }
+      function rowIcon(name, parent) {
+        const s = stage("140 490 800 940", "", parent);
+        el("circle", { cx: 540, cy: 960, r: 470, fill: "url(#hb)" }, s);
+        ICON[name](el("g", { "clip-path": "url(#cc)" }, s));
+      }
+      function row(top, icon, title, sub) {
+        const r = document.createElement("div");
+        r.className = "row";
+        r.style.top = top + "px";
+        rowIcon(icon, r);
+        const d = document.createElement("div");
+        d.innerHTML = `${title}<span>${sub}</span>`;
+        r.appendChild(d);
+        root.appendChild(r);
+      }
+      function breakdown(n, title, img, lines, lesson) {
+        text("kick", 250, "BREAKDOWN " + n);
+        text("mid", 310, title);
+        const f = document.createElement("div");
+        f.className = "frame";
+        f.style.top = "420px";
+        f.style.height = "640px";
+        f.innerHTML = `<img src="../assets/frames/${img}" style="height:960px;margin-top:-90px" />`;
+        root.appendChild(f);
+        text("sm", 1110, lines.join("<br />"));
+        text("mid", 1290, `<b>${lesson}</b>`);
+        text("sm", 1600, "WATCH THE REEL ↓");
+      }
+
+      const SCENES = {
+        // ---- cover (round crop around 540,960) ----
+        "cover-breakdowns"() { const s = stage(); coverBg(s); ICON.breakdowns(s); },
+
+        // ---- START HERE: 3 stories ----
+        "start-1"() {
+          const s = stage();
+          el("polygon", { points: "380,420 700,420 1000,1500 80,1500", fill: "url(#spot)" }, s);
+          const g = el("g", { transform: "translate(0 120)" }, s);
+          ICON.wave(g);
+          text("kick", 260, "HI. YOU FOUND US.");
+          text("big", 360, "SILENT<br />STICKMAN");
+          text("mid", 1380, "12-SECOND STORIES.<br /><b>NO TALKING.</b>");
+        },
+        "start-2"() {
+          text("kick", 260, "WHAT YOU'LL SEE");
+          text("mid", 330, "3 THINGS.<br />EVERY DAY.");
+          row(620, "love", "LOVE", "HOW IT GROWS.<br />HOW IT SLOWLY DIES.");
+          row(880, "discipline", "DISCIPLINE", "NO MOTIVATION.<br />JUST THE NEXT STEP.");
+          row(1140, "overthink", "OVERTHINKING", "THE NOISE<br />IN YOUR HEAD.");
+          text("sm", 1460, "TAP THE HIGHLIGHTS ↑");
+        },
+        "start-3"() {
+          const s = stage();
+          el("rect", { x: 538, y: 640, width: 4, height: 640, fill: "#333" }, s);
+          fig(s, {
+            head: [300, 760], r: 50, neck: [300, 828], hip: [300, 990], sh: [300, 848],
+            lk: [270, 1090], lf: [250, 1190], rk: [330, 1090], rf: [350, 1190],
+            le: [250, 920], lh: [240, 1000], re: [350, 800], rh: [370, 720],
+          }, 26);
+          fig(s, {
+            head: [800, 930], r: 50, neck: [775, 990], hip: [760, 1110], sh: [772, 1005],
+            lk: [700, 1120], lf: [705, 1190], rk: [820, 1130], rf: [840, 1190],
+            le: [740, 1060], lh: [720, 1110], re: [810, 1060], rh: [830, 1110],
+          }, 26, "#8a8a8a", false);
+          text("kick", 260, "THE FORMAT");
+          text("mid", 330, "SAME MOMENT.<br />TWO CHOICES.");
+          text("mid", 1310, "WHICH ONE<br /><b>ARE YOU?</b>");
+          text("sm", 1540, "FOLLOW. NEW STORY EVERY DAY.");
+        },
+
+        // ---- BREAKDOWNS: 3 stories ----
+        "breakdown-1"() {
+          breakdown("01", "LOVE IS A BRIDGE", "05.jpg",
+            ["THE BRIDGE = YOUR RELATIONSHIP", "EVERY PLANK = ONE SMALL EFFORT"],
+            "ONE PERSON CAN'T BUILD<br />A BRIDGE FOR TWO.");
+        },
+        "breakdown-2"() {
+          breakdown("02", "THE PLANT", "04.jpg",
+            ["THE PLANT = YOUR LOVE", "THE PHONE = WHERE YOUR TIME GOES"],
+            "NOBODY KILLED IT.<br />THEY STOPPED<br />WATERING IT.");
+        },
+        "breakdown-3"() {
+          breakdown("03", "ELEVATOR VS STAIRS", "01.jpg",
+            ["THE ELEVATOR = MOTIVATION", "THE STAIRS = DISCIPLINE"],
+            "THE STAIRS WERE THERE<br />ALL ALONG.");
+        },
+
+        // ---- first story of LOVE / DISCIPLINE / OVERTHINK ----
+        "intro-love"() {
+          iconAt("love", 540, 760, 0.62);
+          text("big", 1150, "LOVE");
+          text("sm", 1290, "STORIES ABOUT HOW LOVE GROWS.<br />AND HOW IT SLOWLY DIES.");
+          text("mid", 1480, "<b>SEND ONE</b> TO YOUR<br />PERSON.");
+        },
+        "intro-discipline"() {
+          iconAt("discipline", 540, 760, 0.62);
+          text("big", 1150, "DISCIPLINE");
+          text("sm", 1290, "NO MOTIVATION.<br />JUST THE NEXT STEP.");
+          text("mid", 1480, "WATCH ONE.<br /><b>THEN GO.</b>");
+        },
+        "intro-overthink"() {
+          iconAt("overthink", 540, 760, 0.62);
+          text("big", 1150, "OVERTHINK");
+          text("sm", 1290, "FOR THE ONES WHO<br />THINK TOO MUCH AT 3 AM.");
+          text("mid", 1480, "YOU'RE NOT<br /><b>THE ONLY ONE.</b>");
+        },
+      };
+      window.SCENES = Object.keys(SCENES);
+      (SCENES[location.hash.slice(1)] || SCENES["start-1"])();
+    </script>
+  </body>
+</html>

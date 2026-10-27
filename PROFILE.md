@@ -30,7 +30,7 @@ Digital creator
 3. 05 The Bridge: the relationship side
 
 ## Highlights (once stories exist)
-START HERE, DISCIPLINE, OVERTHINK, LOVE
+START HERE, BREAKDOWNS, LOVE, DISCIPLINE, OVERTHINK. Covers + story frames + which reels go where: `profile-kit/final/highlights/README.md`.
 Covers: black circle, white glowing stickman icon, one red detail.
 
 ## Link

@@ -3,6 +3,7 @@
 Claude's running notes. Newest on top. Everything Claude wants to remember goes here (or in the matching file), not on the computer.
 
 ## 2026-10-27
+- Highlights made for @silent.stickman (the IG linked in Metricool): START HERE (3 stories), BREAKDOWNS (3 reel breakdowns, new magnifier cover), LOVE, DISCIPLINE, OVERTHINK (intro story each). Files + plan in `profile-kit/final/highlights/`. Sent in chat, not Telegram (user asked "hier").
 - Reels 32-35 sent to Telegram too (hashtags upgraded to 8). Telegram works from the cloud now (api.telegram.org allowed). Bot @Stickmen1_bot, chatId 7190934039. Token is NOT in the repo: put it in ~/.stickman/telegram.json only for the run (from env TELEGRAM_BOT_TOKEN or ask the user to set it in the environment settings). Reel 36 sent.
 - User uploaded a reel ("LOVE IS A BRIDGE", two panels) and asked for the exact same video with the roles swapped (she scrolls, he builds). Done as reel 36, rebuilt in code (two clipped panels, no camera, own layout code in body.js).
 - First "generiere" run done: reels 32-35 (3 relationship + 1 other) in `ready/`, check in `viral/2026-10-27-check.md`.
