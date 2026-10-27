@@ -1,0 +1,26 @@
+            <linearGradient id="panelBg" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0" stop-color="#0c0c0e" />
+              <stop offset="1" stop-color="#111318" />
+            </linearGradient>
+            <linearGradient id="abyss" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0" stop-color="#05070a" />
+              <stop offset="1" stop-color="#1c2433" />
+            </linearGradient>
+            <linearGradient id="cliff" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0" stop-color="#ddd6c6" />
+              <stop offset="1" stop-color="#a39a88" />
+            </linearGradient>
+            <linearGradient id="redBeam" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0" stop-color="#ff4a4a" stop-opacity="0.75" />
+              <stop offset="0.7" stop-color="#ff6a6a" stop-opacity="0.2" />
+              <stop offset="1" stop-color="#ffffff" stop-opacity="0.08" />
+            </linearGradient>
+            <radialGradient id="redGlow" cx="0.5" cy="0.5" r="0.5">
+              <stop offset="0" stop-color="#ff3b30" stop-opacity="0.7" />
+              <stop offset="1" stop-color="#ff3b30" stop-opacity="0" />
+            </radialGradient>
+            <radialGradient id="phoneGlow" cx="0.5" cy="0.5" r="0.5">
+              <stop offset="0" stop-color="#6aa8ff" stop-opacity="0.75" />
+              <stop offset="0.5" stop-color="#4f8cff" stop-opacity="0.28" />
+              <stop offset="1" stop-color="#4f8cff" stop-opacity="0" />
+            </radialGradient>
