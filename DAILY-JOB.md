@@ -82,3 +82,7 @@ Lines up to 17 were scheduled in Metricool. 2026-10-25 ~10:42: all still-pending
 - 2026-10-28 18:00: 23 Carved Steps (self-reliance), sent to Telegram
 - 2026-10-29 10:00: 24 The Launch (hidden failures), sent to Telegram
 - 2026-10-29 12:00: 25 The Stairs (perfectionism), sent to Telegram
+- 2026-10-29 16:00: 32 Wait For It (relationship), NOT sent yet (cloud session has no Telegram config)
+- 2026-10-29 18:00: 35 Not A Monster (people can change), NOT sent yet
+- 2026-10-30 10:00: 33 Let Her Go (relationship), NOT sent yet
+- 2026-10-30 12:00: 34 3 AM Question (relationship), NOT sent yet
