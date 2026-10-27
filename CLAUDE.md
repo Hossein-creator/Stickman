@@ -10,5 +10,8 @@ User, 2026-10-27: "diese repo ist deine ordner du speicherst und notierst nichts
 - Running notes go in `NOTES.md`. Posting log stays in `DAILY-JOB.md`. Style and niche notes stay in `REFERENCE-ANALYSIS.md`.
 - Never commit secrets (tokens, passwords). They stay out of the repo (see `.gitignore`).
 
+## "generiere"
+When the user writes "generiere": run `GENERATE.md` (find viral videos with `ig-viral`, check virality first, remake them one to one in our style, mostly relationship).
+
 ## Start of every session
 Read `CLAUDE.md`, `NOTES.md`, `README.md` and, for reel work, `DAILY-JOB.md` + `REFERENCE-ANALYSIS.md`.

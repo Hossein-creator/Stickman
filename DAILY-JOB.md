@@ -4,6 +4,8 @@ Runs every day. Makes **4 new reels** for @silent.stickman: **2 relationship + 2
 (discipline, overthinking, doer vs overthinker, hidden effort, comfort zone, habits, self-reliance...).
 Sends them to the user's Telegram bot **the day before**, each with its caption and the time to post it tomorrow. The user posts them by hand. **No Metricool** (user, 2026-10-25: "dont push my videos to metricool, send them to me in telegramm with caption and waht time should i post them").
 
+When the user writes **"generiere"**, follow `GENERATE.md` instead (viral remakes, virality check first).
+
 ## Hard rules
 - Never touch the money account @moneypsych.explained, its skills, scheduled tasks, Metricool posts or memory files.
   - Never create, edit or delete Metricool posts.

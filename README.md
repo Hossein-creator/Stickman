@@ -20,6 +20,8 @@ Silent stickman reels. Story told by action, few words, action camera. Made with
 | `REFERENCE-ANALYSIS.md` | Niche notes, style rules, ACTION STYLE |
 | `CLAUDE.md` | Rules for Claude (repo = Claude's folder) |
 | `NOTES.md` | Claude's running notes |
+| `GENERATE.md` | "generiere" job: viral remakes + virality check |
+| `viral/` | Virality checks / swipe files |
 
 ## Build one reel
 
