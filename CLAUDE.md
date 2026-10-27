@@ -14,5 +14,12 @@ User, 2026-10-27: "diese repo ist deine ordner du speicherst und notierst nichts
 ## "generiere"
 When the user writes "generiere": run `GENERATE.md` (find viral videos with `ig-viral`, check virality first, remake them one to one in our style, mostly relationship).
 
+## When a video is finished
+User, 2026-10-27: "wenn du mit dem video fertig bist schickst du mir nur das video mit passende und virale hashtags und caption auf telegram hier sagst du nur das video wurde erstellt."
+- Send ONLY the video to Telegram, with the caption and fitting, viral hashtags (6-8 tags: niche + broad reach, e.g. #relationship #love #relationshipgoals #couplegoals + topic tags + #stickman #animation).
+- In the chat, only say: "Das Video wurde erstellt." Nothing else.
+- Telegram send: `node tools/telegram-send.mjs ready/NN-slug.mp4 ready/NN-slug-caption.txt "<post time>"`.
+- In the cloud session this needs `api.telegram.org` allowed in the environment's network settings and the bot token as env var `TELEGRAM_BOT_TOKEN` (+ `TELEGRAM_CHAT_ID`); write them into `~/.stickman/telegram.json` only for the run, never into the repo.
+
 ## Start of every session
 Read `CLAUDE.md`, `NOTES.md`, `README.md` and, for reel work, `DAILY-JOB.md` + `REFERENCE-ANALYSIS.md`.
