@@ -1,0 +1,666 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+    <style>
+      @font-face {
+        font-family: "HFMono";
+        src: url("assets/fonts/consolab.ttf") format("truetype");
+        font-weight: 700;
+      }
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      html,
+      body {
+        width: 1080px;
+        height: 1920px;
+        overflow: hidden;
+        background: #000;
+      }
+      #root {
+        position: relative;
+        width: 1080px;
+        height: 1920px;
+        overflow: hidden;
+        background: #000;
+      }
+      #stage {
+        position: absolute;
+        inset: 0;
+        width: 1080px;
+        height: 1920px;
+      }
+      #stage svg {
+        position: absolute;
+        inset: 0;
+      }
+      .mono {
+        position: absolute;
+        font-family: "HFMono", monospace;
+        font-weight: 700;
+        white-space: nowrap;
+      }
+      /* everything readable stays inside the Instagram safe area: x 120-960, y 220-1500 */
+      #head {
+        position: absolute;
+        left: 0;
+        right: 0;
+        top: 222px;
+        text-align: center;
+        font-family: "HFMono", monospace;
+        font-weight: 700;
+        font-size: 38px;
+        letter-spacing: 0.12em;
+        line-height: 1.45;
+        color: #fff;
+        text-shadow: 0 0 16px rgba(255, 255, 255, 0.3);
+      }
+      #head .ghost {
+        visibility: hidden;
+      }
+      #ctr {
+        position: absolute;
+        left: 0;
+        right: 0;
+        top: 430px;
+        text-align: center;
+        font-family: "HFMono", monospace;
+        font-weight: 700;
+        white-space: nowrap;
+      }
+      #ctr .lbl {
+        font-size: 26px;
+        letter-spacing: 0.24em;
+        color: #9a9a9a;
+        vertical-align: middle;
+      }
+      #num {
+        display: inline-block;
+        min-width: 2.4ch;
+        font-size: 58px;
+        letter-spacing: 0.08em;
+        color: #fff;
+        vertical-align: middle;
+        text-shadow: 0 0 14px rgba(255, 255, 255, 0.35);
+      }
+      #tag {
+        display: inline-block;
+        min-width: 5.2ch;
+        padding: 6px 12px 4px;
+        font-size: 26px;
+        letter-spacing: 0.18em;
+        vertical-align: middle;
+        visibility: hidden;
+      }
+      #tag.fail {
+        visibility: visible;
+        background: #d62a2a;
+        color: #fff;
+      }
+      #tag.pass {
+        visibility: visible;
+        background: #fff;
+        color: #000;
+        box-shadow: 0 0 22px rgba(255, 255, 255, 0.6);
+      }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="16" data-width="1080" data-height="1920">
+      <div id="stage" class="clip" data-start="0" data-duration="16" data-track-index="0">
+        <svg id="svg" width="1080" height="1920" viewBox="0 0 1080 1920" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <linearGradient id="beam" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0" stop-color="#ffffff" stop-opacity="0.55" />
+              <stop offset="0.7" stop-color="#ffffff" stop-opacity="0.12" />
+              <stop offset="1" stop-color="#ffffff" stop-opacity="0.04" />
+            </linearGradient>
+            <radialGradient id="pool" cx="0.5" cy="0.5" r="0.5">
+              <stop offset="0" stop-color="#ffffff" stop-opacity="0.32" />
+              <stop offset="1" stop-color="#ffffff" stop-opacity="0" />
+            </radialGradient>
+            <radialGradient id="dustG" cx="0.5" cy="0.5" r="0.5">
+              <stop offset="0" stop-color="#b5b5b5" stop-opacity="0.8" />
+              <stop offset="1" stop-color="#b5b5b5" stop-opacity="0" />
+            </radialGradient>
+            <linearGradient id="ply" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0" stop-color="#d9c29b" />
+              <stop offset="1" stop-color="#8f7858" />
+            </linearGradient>
+            <linearGradient id="floorFade" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0" stop-color="#000" stop-opacity="0.45" />
+              <stop offset="1" stop-color="#000" stop-opacity="1" />
+            </linearGradient>
+            <filter id="blur" x="-50%" y="-50%" width="200%" height="200%">
+              <feGaussianBlur stdDeviation="12" />
+            </filter>
+            <filter id="soft" x="-50%" y="-50%" width="200%" height="200%">
+              <feGaussianBlur stdDeviation="16" />
+            </filter>
+                      <linearGradient id="panelBg" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0" stop-color="#0c0c0e" />
+              <stop offset="1" stop-color="#111318" />
+            </linearGradient>
+            <linearGradient id="abyss" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0" stop-color="#05070a" />
+              <stop offset="1" stop-color="#1c2433" />
+            </linearGradient>
+            <linearGradient id="cliff" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0" stop-color="#ddd6c6" />
+              <stop offset="1" stop-color="#a39a88" />
+            </linearGradient>
+            <linearGradient id="redBeam" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0" stop-color="#ff4a4a" stop-opacity="0.75" />
+              <stop offset="0.7" stop-color="#ff6a6a" stop-opacity="0.2" />
+              <stop offset="1" stop-color="#ffffff" stop-opacity="0.08" />
+            </linearGradient>
+            <radialGradient id="redGlow" cx="0.5" cy="0.5" r="0.5">
+              <stop offset="0" stop-color="#ff3b30" stop-opacity="0.7" />
+              <stop offset="1" stop-color="#ff3b30" stop-opacity="0" />
+            </radialGradient>
+            <radialGradient id="phoneGlow" cx="0.5" cy="0.5" r="0.5">
+              <stop offset="0" stop-color="#6aa8ff" stop-opacity="0.75" />
+              <stop offset="0.5" stop-color="#4f8cff" stop-opacity="0.28" />
+              <stop offset="1" stop-color="#4f8cff" stop-opacity="0" />
+            </radialGradient>
+            <linearGradient id="water" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0" stop-color="#14263a" />
+              <stop offset="0.35" stop-color="#0b1622" />
+              <stop offset="1" stop-color="#040608" />
+            </linearGradient>
+            <linearGradient id="hull" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0" stop-color="#8f6a44" />
+              <stop offset="1" stop-color="#5a3f26" />
+            </linearGradient>
+            <radialGradient id="shine" cx="0.5" cy="0.5" r="0.5">
+              <stop offset="0" stop-color="#ffffff" stop-opacity="0.22" />
+              <stop offset="1" stop-color="#ffffff" stop-opacity="0" />
+            </radialGradient>
+          </defs>
+          <!-- world: floor at world y 600 -> screen y 1400, world x 400 -> screen x 540 -->
+          <g transform="translate(540 1400) scale(1.45) translate(-400 -600)">
+            <g id="beams"></g>
+            <g id="back"></g>
+            
+            <use href="#world" transform="translate(0 1200) scale(1 -1)" opacity="0.16" />
+            <rect x="-200" y="600" width="1200" height="260" fill="url(#floorFade)" />
+            <rect x="-600" y="858" width="2000" height="1400" fill="#000" />
+            <rect x="-200" y="599" width="1200" height="2" fill="#2a2a2a" />
+            <g id="world"></g>
+          </g>
+        </svg>
+        <style>
+  #fx { position: absolute; inset: 0; pointer-events: none; }
+</style>
+        <div id="head">
+          <div id="h1"></div>
+          <div id="h2"></div>
+        </div>
+      </div>
+      <audio id="mix" src="assets/audio/mix.wav" data-start="0" data-duration="16" data-track-index="1"></audio>
+    </div>
+
+    <script>
+      (function () {
+        const DUR = 16;
+        const FL = 600, BX0 = 380, BX1 = 520, BTOP = 410, TOPF = 404, SX = 250;
+        const THIGH = 80, SHIN = 78, LEG = 154;
+        const UARM = 64, FARM = 60, TORSO = 116, NECK = 12, HEADR = 31;
+        const NS = "http://www.w3.org/2000/svg";
+        const svgEl = (tag, attrs, parent) => {
+          const e = document.createElementNS(NS, tag);
+          for (const k in attrs || {}) e.setAttribute(k, attrs[k]);
+          if (parent) parent.appendChild(e);
+          return e;
+        };
+        const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
+        const lerp = (a, b, p) => a + (b - a) * p;
+        const ease = (p) => 0.5 - 0.5 * Math.cos(Math.PI * clamp(p, 0, 1));
+        const backOut = (p) => { p = clamp(p, 0, 1); const s = 2.2; return 1 + (s + 1) * Math.pow(p - 1, 3) + s * Math.pow(p - 1, 2); };
+        const win = (t, a, b) => ease((t - a) / (b - a));
+        const rad = (x) => (x * Math.PI) / 180;
+        const down = (a, f) => [Math.sin(rad(a)) * f, Math.cos(rad(a))];
+        const up = (a, f) => [Math.sin(rad(a)) * f, -Math.cos(rad(a))];
+        const r1 = (v) => Math.round(v * 10) / 10;
+        const E = (id) => document.getElementById(id);
+        let seed = 31;
+        const rnd = () => ((seed = (seed * 16807) % 2147483647) / 2147483647);
+
+        // ---------- rig v2 (from reel 05): blended poses, head/arm follow-through, breathing ----------
+        function makeFig(parent, front, back, glow, id) {
+          const g = svgEl("g", { id }, parent);
+          if (glow) parent.insertBefore(svgEl("use", { href: "#" + id, filter: "url(#blur)", opacity: 0.45 }), g);
+          const parts = { g };
+          for (const [n, col] of [["armB", back], ["legB", back], ["torso", front], ["legF", front], ["armF", front]]) {
+            const o = svgEl("path", { fill: "none", stroke: "#000", "stroke-width": 34, "stroke-linecap": "round", "stroke-linejoin": "round" }, g);
+            const w = svgEl("path", { fill: "none", stroke: col, "stroke-width": 22, "stroke-linecap": "round", "stroke-linejoin": "round" }, g);
+            parts[n] = [o, w];
+          }
+          parts.head = svgEl("circle", { r: HEADR, fill: front, stroke: "#000", "stroke-width": 6 }, g);
+          return parts;
+        }
+        function ik(a, b, l1, l2, pick) {
+          let dx = b[0] - a[0], dy = b[1] - a[1];
+          let d = Math.hypot(dx, dy);
+          const maxd = l1 + l2 - 0.5;
+          if (d > maxd) {
+            b = [a[0] + (dx / d) * maxd, a[1] + (dy / d) * maxd];
+            dx = b[0] - a[0];
+            dy = b[1] - a[1];
+            d = maxd;
+          }
+          d = Math.max(d, Math.abs(l1 - l2) + 1);
+          const al = Math.acos(clamp((l1 * l1 + d * d - l2 * l2) / (2 * l1 * d), -1, 1));
+          const base = Math.atan2(dy, dx);
+          const c1 = [a[0] + Math.cos(base + al) * l1, a[1] + Math.sin(base + al) * l1];
+          const c2 = [a[0] + Math.cos(base - al) * l1, a[1] + Math.sin(base - al) * l1];
+          return [pick(c1, c2), b];
+        }
+        const P = (pts) => "M" + pts.map((p) => r1(p[0]) + " " + r1(p[1])).join("L");
+        const setD = (pair, d) => {
+          pair[0].setAttribute("d", d);
+          pair[1].setAttribute("d", d);
+        };
+        // flat pose: hx hy torso head ax ay bx by | per arm a*/b*: sh el w tx ty
+        function drawFig(parts, s, f) {
+          const hip = [s.hx, s.hy];
+          const tu = up(s.torso, f);
+          const sh = [hip[0] + tu[0] * TORSO, hip[1] + tu[1] * TORSO];
+          const nk = [hip[0] + tu[0] * (TORSO + NECK), hip[1] + tu[1] * (TORSO + NECK)];
+          const hu = up(s.torso + s.head, f);
+          const hc = [nk[0] + hu[0] * HEADR, nk[1] + hu[1] * HEADR];
+          setD(parts.torso, P([hip, sh, nk]));
+          parts.head.setAttribute("cx", r1(hc[0]));
+          parts.head.setAttribute("cy", r1(hc[1]));
+          const knee = (c1, c2) => (c1[0] * f > c2[0] * f ? c1 : c2);
+          const elbow = (c1, c2) => (c1[1] - 0.5 * f * c1[0] > c2[1] - 0.5 * f * c2[0] ? c1 : c2);
+          [["legF", [s.ax, s.ay]], ["legB", [s.bx, s.by]]].forEach(([n, ft]) => {
+            const [kn, fo] = ik(hip, ft, THIGH, SHIN, knee);
+            setD(parts[n], P([hip, kn, fo]));
+          });
+          const hands = [];
+          [["armF", "a"], ["armB", "b"]].forEach(([n, k]) => {
+            const u = down(s[k + "sh"], f);
+            const el = [sh[0] + u[0] * UARM, sh[1] + u[1] * UARM];
+            const v = down(s[k + "sh"] + s[k + "el"], f);
+            const fk = [el[0] + v[0] * FARM, el[1] + v[1] * FARM];
+            const w = clamp(s[k + "w"], 0, 1);
+            const hand = [lerp(fk[0], s[k + "tx"], w), lerp(fk[1], s[k + "ty"], w)];
+            const [e2, h2] = ik(sh, hand, UARM, FARM, elbow);
+            setD(parts[n], P([sh, e2, h2]));
+            hands.push(h2);
+          });
+          return { head: hc, hands, hip };
+        }
+        const KER = [-4, -3, -2, -1, 0, 1, 2, 3, 4].map((k) => [k * 0.03, Math.exp(-((k / 2.3) ** 2))]);
+        function blend(raw, t) {
+          const out = {};
+          let ws = 0;
+          for (const [dt, w] of KER) {
+            const p = raw(clamp(t + dt, 0, DUR));
+            for (const k in p) out[k] = (out[k] || 0) + p[k] * w;
+            ws += w;
+          }
+          for (const k in out) out[k] /= ws;
+          return out;
+        }
+        const LAGGED = ["head", "ash", "ael", "aw", "atx", "aty", "bsh", "bel", "bw", "btx", "bty"];
+        function livePose(raw, t, phase) {
+          const s = blend(raw, t);
+          const lag = blend(raw, t - 0.05);
+          for (const k of LAGGED) s[k] = lag[k];
+          const br = Math.sin(t * 1.9 + phase);
+          s.hy += br * 1.3;
+          s.torso += br * 0.8;
+          s.head += Math.sin(t * 1.2 + phase * 2) * 1.6;
+          return s;
+        }
+        const ARMS = { ash: 8, ael: 12, aw: 0, atx: 0, aty: 0, bsh: -4, bel: 10, bw: 0, btx: 0, bty: 0 };
+        const base = (o) => ({ hx: 0, hy: 0, torso: 3, head: 0, ax: 0, ay: FL, bx: 0, by: FL, ...ARMS, ...o });
+        function standOn(x, f, fy) {
+          return base({ hx: x, hy: fy - Math.sqrt(LEG * LEG - 15 * 15), ax: x + f * 15, ay: fy, bx: x - f * 15, by: fy });
+        }
+        const mixPose = (a, b, p) => {
+          const o = {};
+          for (const k in a) o[k] = lerp(a[k], b[k], p);
+          return o;
+        };
+
+        // ---------- "love is a boat": winner format of reel 36 (two panels). BOTH ROW: they row in sync, reach the island, step off, hold on (red heart). ONE ROWS: he rows alone with one oar, she scrolls; the boat turns and turns (in circles), he gives up ----------
+        E("svg").children[1].style.display = "none";
+        const SVG = E("svg");
+        const frac = (v) => v - Math.floor(v);
+
+        // ---------- panel geometry: world 0..1233 x 98..815, water line at 600 ----------
+        const PW = 1233, PY0 = 98, PY1 = 815, PK = 535 / 717, PX = 81;
+        const WL = FL, IY = 568, ISL = 945, X0 = 330;
+        function makePanel(y0, id) {
+          const clip = svgEl("clipPath", { id: "clip" + id }, SVG.querySelector("defs"));
+          svgEl("rect", { x: 0, y: PY0, width: PW, height: PY1 - PY0 }, clip);
+          const g = svgEl("g", { transform: `translate(${PX} ${y0}) scale(${PK}) translate(0 ${-PY0})` }, SVG);
+          const inner = svgEl("g", { "clip-path": `url(#clip${id})` }, g);
+          svgEl("rect", { x: 0, y: PY0, width: PW, height: PY1 - PY0, fill: "url(#panelBg)" }, inner);
+          const beams = svgEl("g", {}, inner);
+          for (const bx of [300, 1080]) svgEl("polygon", { points: `${bx - 50},${PY0} ${bx + 50},${PY0} ${bx + 150},${WL} ${bx - 150},${WL}`, fill: "url(#beam)", filter: "url(#soft)", opacity: 0.32 }, beams);
+          svgEl("rect", { x: 0, y: WL, width: PW, height: PY1 - WL, fill: "url(#water)" }, inner);
+          for (const bx of [300, 1080]) svgEl("ellipse", { cx: bx, cy: WL + 26, rx: 190, ry: 30, fill: "url(#shine)" }, inner);
+          // left rock (where they start) and the island (where they want to go)
+          svgEl("path", { d: `M0 ${WL - 16} L118 ${WL - 16} L128 ${WL + 24} L120 ${WL + 90} L136 ${PY1} L0 ${PY1} Z`, fill: "url(#cliff)", stroke: "#000", "stroke-width": 4 }, inner);
+          svgEl("path", { d: `M${ISL - 14} ${WL + 30} Q${ISL - 2} ${IY + 2} ${ISL + 40} ${IY} L${PW + 10} ${IY} L${PW + 10} ${PY1} L${ISL - 20} ${PY1} Z`, fill: "url(#cliff)", stroke: "#000", "stroke-width": 4 }, inner);
+          const wake = svgEl("g", {}, inner);
+          const wave = svgEl("path", { fill: "none", stroke: "#3c556e", "stroke-width": 3, opacity: 0.8 }, inner);
+          const boat = svgEl("g", {}, inner);
+          const figs = svgEl("g", {}, boat);
+          const hull = svgEl("g", {}, boat);
+          svgEl("path", { d: "M-178 -36 L176 -36 L196 -50 Q170 8 116 26 L-122 26 Q-168 12 -178 -36 Z", fill: "url(#hull)", stroke: "#000", "stroke-width": 5 }, hull);
+          svgEl("path", { d: "M-170 -24 L180 -24", stroke: "#a98258", "stroke-width": 4 }, hull);
+          svgEl("path", { d: "M-150 -8 L150 -8", stroke: "#4a321e", "stroke-width": 3, opacity: 0.6 }, hull);
+          const oars = svgEl("g", {}, boat);
+          const drops = svgEl("g", {}, boat);
+          svgEl("rect", { x: 0, y: WL + 3, width: PW, height: PY1 - WL, fill: "#08121c", opacity: 0.55 }, inner);
+          const fx = svgEl("g", {}, inner);
+          svgEl("rect", { x: 0, y: PY0, width: PW, height: PY1 - PY0, fill: "none", stroke: "#2c2c30", "stroke-width": 5 }, g);
+          return { beams, wake, wave, boat, figs, oars, drops, fx };
+        }
+        const top = makePanel(412, "T");
+        const bot = makePanel(1010, "B");
+
+        // ---------- oars, splashes, ripples ----------
+        function makeOar(panel) {
+          const o = svgEl("path", { fill: "none", stroke: "#000", "stroke-width": 15, "stroke-linecap": "round" }, panel.oars);
+          const w = svgEl("path", { fill: "none", stroke: "#c49a68", "stroke-width": 8, "stroke-linecap": "round" }, panel.oars);
+          const bo = svgEl("path", { fill: "none", stroke: "#000", "stroke-width": 26, "stroke-linecap": "round" }, panel.oars);
+          const bw = svgEl("path", { fill: "none", stroke: "#c49a68", "stroke-width": 16, "stroke-linecap": "round" }, panel.oars);
+          const drop = Array.from({ length: 6 }, () => svgEl("circle", { r: 5, fill: "#cfe4ff", opacity: 0 }, panel.drops));
+          return { o, w, bo, bw, drop };
+        }
+        function drawOar(oar, h, b) {
+          const dx = b[0] - h[0], dy = b[1] - h[1], d = Math.hypot(dx, dy) || 1;
+          const s = [b[0] - (dx / d) * 46, b[1] - (dy / d) * 46];
+          const sh = `M${r1(h[0])} ${r1(h[1])} L${r1(b[0])} ${r1(b[1])}`, bl = `M${r1(s[0])} ${r1(s[1])} L${r1(b[0])} ${r1(b[1])}`;
+          oar.o.setAttribute("d", sh); oar.w.setAttribute("d", sh); oar.bo.setAttribute("d", bl); oar.bw.setAttribute("d", bl);
+        }
+        const rings = (panel) => Array.from({ length: 8 }, () => svgEl("ellipse", { fill: "none", stroke: "#9fc0e0", "stroke-width": 3, opacity: 0 }, panel.wake));
+
+        // ---------- rowing: one stroke = drive (lean back, pull, blade in water) + recovery (lean forward, blade out) ----------
+        const SEATY = -26, FLOORY = 12;
+        function stroke(u) {
+          if (u < 0.45) { const p = ease(u / 0.45); return { torso: lerp(26, -16, p), hx: lerp(150, 18, p), hy: lerp(-60, -92, p), wet: ease(u / 0.06) }; }
+          const p = ease((u - 0.45) / 0.55);
+          return { torso: lerp(-16, 26, p), hx: lerp(18, 150, p), hy: lerp(-92, -60, p) + 16 * Math.sin(Math.PI * p), wet: 1 - ease((u - 0.45) / 0.07) };
+        }
+        function seated(sx, f, st) {
+          return base({ hx: sx, hy: SEATY, torso: st.torso, head: -st.torso * 0.4, ax: sx + f * 70, ay: FLOORY, bx: sx + f * 56, by: FLOORY + 2,
+            aw: 1, atx: sx + f * st.hx, aty: st.hy, bw: 1, btx: sx + f * (st.hx - 8), bty: st.hy + 5 });
+        }
+        const lockOf = (sx, f) => [sx + f * 46, -42];
+        const bladeOf = (sx, f, h, wet) => { const L = lockOf(sx, f); return [L[0] - (h[0] - L[0]) * 0.85, lerp(-22, 26, wet)]; };
+        const CATCH = stroke(0);
+        const rowU = (t, t0, per, n) => (t < t0 || t >= t0 + per * n ? null : frac((t - t0) / per));
+
+        // ---------- boat motion: fixed-step integration at init (seek-safe) ----------
+        const DT = 1 / 200, NT = Math.ceil(DUR / DT) + 2;
+        const pulse = (u) => (u === null || u >= 0.45 ? 0 : Math.sin((Math.PI * u) / 0.45));
+        // top: 5 strokes, glide into the island
+        const TR0 = 0.45, TRP = 1.11, TRN = 5, TR1 = TR0 + TRP * TRN;
+        const DOCK = ISL - 190;
+        const topX = new Float32Array(NT);
+        {
+          const sp = (t) => { const u = rowU(t, TR0, TRP, TRN); return t < TR0 ? 0 : u !== null ? 0.3 + pulse(u) : 0.3 * Math.exp(-(t - TR1) * 4); };
+          let c = 0; for (let i = 1; i < NT; i++) { c += sp((i - 0.5) * DT) * DT; topX[i] = c; }
+          for (let i = 0; i < NT; i++) topX[i] = X0 + ((DOCK - X0) * topX[i]) / c;
+        }
+        // bottom: one oar, 10 strokes, the boat keeps turning around
+        const BR0 = 0.5, BRP = 0.99, BRN = 10, BR1 = BR0 + BRP * BRN;
+        const FLIPS = [3.6, 6.55, 9.15], FLD = 0.6;
+        function heading(t) {
+          let k = 0, p = 1;
+          for (const a of FLIPS) { if (t >= a + FLD) k++; else if (t >= a) { p = Math.cos(Math.PI * ease((t - a) / FLD)); } }
+          return (k % 2 ? -1 : 1) * p;
+        }
+        const botX = new Float32Array(NT);
+        {
+          const sp = (t) => { const u = rowU(t, BR0, BRP, BRN); return t < BR0 ? 0 : u !== null ? 0.15 + 0.6 * pulse(u) : 0.15 * Math.exp(-(t - BR1) * 2); };
+          let x = X0; botX[0] = x;
+          for (let i = 1; i < NT; i++) { const t = (i - 0.5) * DT; x += 165 * sp(t) * heading(t) * DT; botX[i] = x; }
+        }
+        const at = (arr, t) => { const f = clamp(t, 0, DUR) / DT, i = Math.floor(f); return lerp(arr[i], arr[Math.min(i + 1, NT - 1)], f - i); };
+        const bobY = (t, ph) => WL + 4 + 3 * Math.sin(t * 2.1 + ph);
+
+        // ---------- people (local boat coords) ----------
+        const tint = (parts, front, back) => {
+          for (const n of ["torso", "legF", "armF"]) parts[n][1].setAttribute("stroke", front);
+          for (const n of ["legB", "armB"]) parts[n][1].setAttribute("stroke", back);
+          parts.head.setAttribute("fill", front);
+        };
+        // top: he sits at the back, she sits in front, both face the stern and row
+        const SX_B = -84, SX_F = 64;
+        const redSpot = svgEl("polygon", { points: `1006,${PY0} 1118,${PY0} 1206,${IY} 916,${IY}`, fill: "url(#redBeam)", filter: "url(#soft)", opacity: 0 }, top.beams);
+        const tHim = makeFig(top.figs, "#ffffff", "#dedede", true, "tHim");
+        const tBun = svgEl("circle", { r: 15, fill: "#fff", stroke: "#000", "stroke-width": 6 }, top.figs);
+        const tHer = makeFig(top.figs, "#ffffff", "#e2e2e2", true, "tHer");
+        top.figs.insertBefore(tBun, tHer.g.previousSibling);
+        const tOarB = makeOar(top), tOarF = makeOar(top);
+        const tRings = rings(top);
+        const heartGlow = svgEl("circle", { r: 70, fill: "url(#redGlow)", opacity: 0 }, top.fx);
+        const heart = svgEl("path", { d: "M0 18 C-40 -8 -30 -40 0 -22 C30 -40 40 -8 0 18 Z", fill: "#ff3b30", stroke: "#000", "stroke-width": 4, opacity: 0 }, top.fx);
+        // bottom: he rows at the back, she sits in front facing the bow, on her phone
+        const bHim = makeFig(bot.figs, "#9a9a9a", "#7e7e7e", false, "bHim");
+        const bBun = svgEl("circle", { r: 15, fill: "#8e8e8e", stroke: "#000", "stroke-width": 6 }, bot.figs);
+        const bHer = makeFig(bot.figs, "#8e8e8e", "#767676", false, "bHer");
+        const phoneGlow = svgEl("circle", { r: 78, fill: "url(#phoneGlow)" }, bot.figs);
+        const phone = svgEl("rect", { x: -9, y: -15, width: 18, height: 30, rx: 4, fill: "#bfe0ff", stroke: "#000", "stroke-width": 4 }, bot.figs);
+        const bOar = makeOar(bot);
+        const bRings = rings(bot);
+
+        // ---------- beats ----------
+        const T_UP_F = 6.55, T_HOP_F = 7.15, T_UP_B = 6.85, T_WALK_B = 7.3, T_HOP_B = 7.85, HOPD = 0.5;
+        const T_MEET = 8.55, T_HOLD = 9.2;
+        const T_CIRC = 6.45, T_LOST = 10.4;
+        const HUGL = 1046, HUGR = 1078, LANDF = 1108, LANDB = 1012;
+        const standY = (fy) => fy - Math.sqrt(LEG * LEG - 15 * 15);
+        const topBoat = (t) => [at(topX, t), bobY(t, 0)];
+        // world -> local for the top boat (scale 1 there)
+        const toL = (pose, t) => { const [bx, by] = topBoat(t); const o = { ...pose }; for (const k of ["hx", "ax", "bx", "atx", "btx"]) o[k] -= bx; for (const k of ["hy", "ay", "by", "aty", "bty"]) o[k] -= by; return o; };
+        function hop(t, t0, fromX, fromY, toX, toY, f) {
+          const p = clamp((t - t0) / HOPD, 0, 1), e = ease(p);
+          const x = lerp(fromX, toX, e), fy = lerp(fromY, toY, e) - Math.sin(Math.PI * p) * 70;
+          const st = standOn(x, f, fy), tuck = Math.sin(Math.PI * p);
+          st.hy -= 0; st.ay -= 34 * tuck; st.by -= 40 * tuck; st.ax += f * 14 * tuck; st.bx -= f * 6 * tuck;
+          st.ash = 8 + 120 * tuck; st.bsh = 8 + 110 * tuck; st.torso = 3 + 8 * tuck;
+          return st;
+        }
+        const restRow = (sx, f) => seated(sx, f, { ...CATCH, wet: 0 });
+        function topHerRaw(t) {          // local coords
+          const u = rowU(t, TR0, TRP, TRN);
+          if (t < T_UP_F) return u === null ? restRow(SX_F, -1) : seated(SX_F, -1, stroke(u));
+          const [bx, by] = topBoat(t);
+          if (t < T_HOP_F) { const st = standOn(SX_F, 1, FLOORY); st.head = -4; return mixPose(restRow(SX_F, -1), st, win(t, T_UP_F, T_UP_F + 0.5)); }
+          if (t < T_HOP_F + HOPD) return toL(hop(t, T_HOP_F, bx + SX_F, by + FLOORY, LANDF, IY, 1), t);
+          if (t < T_MEET) { const st = standOn(lerp(LANDF, HUGR, win(t, T_HOP_F + HOPD + 0.2, T_MEET)), -1, IY); st.head = -6; return toL(st, t); }
+          const hug = standOn(HUGR, -1, IY); hug.torso = 8; hug.head = -4;
+          hug.aw = 1; hug.atx = HUGL - 10; hug.aty = standY(IY) - 150; hug.bw = 1; hug.btx = HUGL + 6; hug.bty = standY(IY) - 120;
+          hug.hy += 2 * Math.sin(t * 2);
+          return toL(mixPose(standOn(HUGR, -1, IY), hug, win(t, T_MEET, T_MEET + 0.5)), t);
+        }
+        const topHerF = (t) => (t < T_UP_F + 0.25 ? -1 : t < T_HOP_F + HOPD + 0.15 ? 1 : -1);
+        function topHimRaw(t) {
+          const u = rowU(t, TR0, TRP, TRN);
+          if (t < T_UP_B) return u === null ? restRow(SX_B, -1) : seated(SX_B, -1, stroke(u));
+          const [bx, by] = topBoat(t);
+          if (t < T_WALK_B) { const st = standOn(SX_B, 1, FLOORY); st.head = -4; return mixPose(restRow(SX_B, -1), st, win(t, T_UP_B, T_UP_B + 0.45)); }
+          if (t < T_HOP_B) { const x = lerp(SX_B, 96, ease((t - T_WALK_B) / (T_HOP_B - T_WALK_B))); const st = standOn(x, 1, FLOORY); const sw = Math.sin(((x - SX_B) / 90) * Math.PI * 2); st.ax += 18 * sw; st.bx -= 18 * sw; st.ay -= Math.max(0, 10 * sw); st.by -= Math.max(0, -10 * sw); st.ash = 8 + 26 * sw; st.bsh = -4 - 26 * sw; return st; }
+          if (t < T_HOP_B + HOPD) return toL(hop(t, T_HOP_B, bx + 96, by + FLOORY, LANDB, IY, 1), t);
+          if (t < T_MEET) { const st = standOn(lerp(LANDB, HUGL, win(t, T_HOP_B + HOPD, T_MEET)), 1, IY); st.head = 4; return toL(st, t); }
+          const hug = standOn(HUGL, 1, IY); hug.torso = 4; hug.head = 6;
+          hug.aw = 1; hug.atx = HUGR + 10; hug.aty = standY(IY) - 130; hug.bw = 1; hug.btx = HUGR - 4; hug.bty = standY(IY) - 100;
+          return toL(mixPose(standOn(HUGL, 1, IY), hug, win(t, T_MEET, T_MEET + 0.5)), t);
+        }
+        const topHimF = (t) => (t < T_UP_B + 0.22 ? -1 : 1);
+        function botHerRaw(t) {
+          const st = seated(SX_F + 6, 1, { torso: 14, hx: 46, hy: SEATY - 72, wet: 0 });
+          st.head = 32 + 2 * Math.sin(t * 1.3);
+          st.atx += 3 * Math.sin(t * 7) * (frac(t * 0.6) < 0.3 ? 1 : 0);   // thumb scrolling
+          return st;
+        }
+        function botHimRaw(t) {
+          const u = rowU(t, BR0, BRP, BRN);
+          const row = u === null ? restRow(SX_B, -1) : seated(SX_B, -1, stroke(u));
+          if (t < T_LOST) return row;
+          // he gives up: lets go of the oar, elbows on knees, head in his hands
+          const slump = base({ hx: SX_B, hy: SEATY + 2, torso: 46, head: 26, ax: SX_B - 70, ay: FLOORY, bx: SX_B - 56, by: FLOORY + 2, aw: 1, atx: SX_B - 112, aty: SEATY - 104, bw: 1, btx: SX_B - 100, bty: SEATY - 96 });
+          slump.torso += 2 * Math.sin(t * 2.2); slump.hy += 1.5 * Math.sin(t * 2.2);
+          return mixPose(row, slump, win(t, T_LOST + 0.1, T_LOST + 0.8));
+        }
+
+        // ---------- labels (typed) ----------
+        const label = (x, y, size, col) => { const d = document.createElement("div"); d.className = "mono"; d.style.cssText = `left:${x}px;top:${y}px;font-size:${size}px;letter-spacing:0.16em;color:${col}`; E("stage").appendChild(d); return d; };
+        const topT = label(PX + 44, 412 + 26, 30, "#ffffff"), topS = label(PX + 44, 412 + 66, 19, "#c8c8c8");
+        const botT = label(PX + 44, 1010 + 26, 30, "#a8a8a8"), botS = label(PX + 44, 1010 + 66, 19, "#a8a8a8");
+        topT.textContent = "BOTH ROW"; botT.textContent = "ONE ROWS";
+        topT.style.textShadow = "0 0 12px rgba(255,255,255,0.35)";
+        const typed = (seq, t, cps = 16) => { let cur = null; for (const s of seq) if (t >= s[0]) cur = s; if (!cur) return ["", "#c8c8c8"]; const n = Math.floor((t - cur[0]) * cps); return [cur[1].slice(0, n), cur[2] || null]; };
+        const TOPSEQ = [[0.45, "PULL TOGETHER"], [6.45, "THEY ARRIVE"], [T_HOLD, "HOLD ON"]];
+        const BOTSEQ = [[0.5, "HE ROWS"], [2.45, "SHE SCROLLS"], [T_CIRC, "IN CIRCLES", "#ff3b30"], [T_LOST, "LOST", "#ff3b30"]];
+        const HEAD = [[0, "LOVE IS A BOAT."], [10.9, "IF ONLY ONE ROWS,"], [11.55, "YOU GO IN CIRCLES."]];
+        E("head").style.top = "236px";
+        E("head").style.fontSize = "30px";
+        E("head").style.letterSpacing = "0.16em";
+        E("head").style.lineHeight = "1.6";
+
+        // ---------- end card: the message big in the middle + a quote ----------
+        const T_CARD = 12.6;
+        const dim = document.createElement("div");
+        dim.style.cssText = "position:absolute;inset:0;background:#000;opacity:0";
+        E("stage").appendChild(dim);
+        const card = document.createElement("div");
+        card.id = "card";
+        card.style.cssText = "position:absolute;left:100px;right:100px;top:620px;text-align:center;font-family:HFMono,monospace;font-weight:700;color:#fff;letter-spacing:0.08em";
+        card.innerHTML = `<div id="cm1" style="font-size:60px;line-height:1.25;text-shadow:0 0 18px rgba(255,255,255,0.35)"></div>
+          <div id="cm2" style="font-size:40px;line-height:1.35;margin-top:26px;text-shadow:0 0 14px rgba(255,255,255,0.25)"></div>
+          <div id="cq" style="opacity:0;margin-top:110px;font-size:29px;line-height:1.5;color:#bdbdbd;letter-spacing:0.05em">"LOVE DOES NOT CONSIST<br/>IN GAZING AT EACH OTHER,<br/>BUT IN LOOKING OUTWARD TOGETHER<br/>IN THE SAME DIRECTION."<div style="margin-top:22px;font-size:24px;color:#8a8a8a;letter-spacing:0.2em">ANTOINE DE SAINT-EXUP&Eacute;RY</div></div>`;
+        const cardCss = document.createElement("style");
+        cardCss.textContent = "#card span.w { display: inline-block; margin: 0 0.16em; }";
+        document.head.appendChild(cardCss);
+        E("stage").appendChild(card);
+        const slam = (words, times, t, red) => words.map((w, i) => {
+          const q = clamp((t - times[i]) / 0.2, 0, 1);
+          if (q <= 0) return `<span class="w" style="opacity:0">${w}</span>`;
+          const sc = lerp(2.3, 1, backOut(q)), bl = (1 - q) * 6;
+          return `<span class="w" style="transform:scale(${sc.toFixed(3)});filter:blur(${bl.toFixed(1)}px);${red.includes(i) ? "color:#ff3b30;" : ""}">${w}</span>`;
+        }).join("");
+        const fade = document.createElement("div");
+        fade.style.cssText = "position:absolute;inset:0;background:#000;opacity:0";
+        E("stage").appendChild(fade);
+
+        // ---------- splashes + ripples from the strokes ----------
+        function splash(oar, t, t0, per, n, sx, f) {
+          // droplets thrown up when the blade goes in (local coords)
+          const k = Math.floor((t - t0) / per), dt = t - (t0 + k * per);
+          oar.drop.forEach((d, j) => {
+            const ok = t >= t0 && k < n && dt < 0.55;
+            if (!ok) { d.setAttribute("opacity", 0); return; }
+            const b = bladeOf(sx, f, [sx + f * CATCH.hx, CATCH.hy], 1);
+            const vx = (j - 2.5) * 38, vy = -150 - ((j * 37) % 70);
+            d.setAttribute("cx", r1(b[0] + vx * dt)); d.setAttribute("cy", r1(WL - WL + 2 + vy * dt + 600 * dt * dt));
+            d.setAttribute("r", (5 - j * 0.4).toFixed(1));
+            d.setAttribute("opacity", (0.85 * (1 - dt / 0.55)).toFixed(3));
+          });
+        }
+        function ripples(pool, t, t0, per, n, xs, sk, sx, f) {
+          pool.forEach((e, j) => {
+            let k = Math.floor((t - t0) / per); k -= ((k - j) % pool.length + pool.length) % pool.length;
+            const tc = t0 + k * per, age = t - tc;
+            if (k < 0 || k >= n || age < 0 || age > 2.2) { e.setAttribute("opacity", 0); return; }
+            const b = bladeOf(sx, f, [sx + f * CATCH.hx, CATCH.hy], 1);
+            const cx = at(xs, tc) + (typeof sk === "function" ? sk(tc) : sk) * b[0];
+            e.setAttribute("cx", r1(cx)); e.setAttribute("cy", WL + 6);
+            e.setAttribute("rx", r1(14 + 80 * Math.sqrt(age / 2.2))); e.setAttribute("ry", r1(3 + 8 * Math.sqrt(age / 2.2)));
+            e.setAttribute("opacity", (0.4 * (1 - age / 2.2)).toFixed(3));
+          });
+        }
+        const waveD = (t, ph) => { let d = ""; for (let x = 120; x <= PW; x += 24) d += (x === 120 ? "M" : "L") + x + " " + r1(WL + 3 * Math.sin(x * 0.02 + t * 1.6 + ph) + 2 * Math.sin(x * 0.047 - t * 2.3)); return d; };
+
+        // ---------- per-frame render ----------
+        function render(t) {
+          // top panel
+          const [tbx, tby] = topBoat(t);
+          top.boat.setAttribute("transform", `translate(${r1(tbx)} ${r1(tby)}) rotate(${(0.8 * Math.sin(t * 1.7)).toFixed(2)})`);
+          top.wave.setAttribute("d", waveD(t, 0));
+          const mp = drawFig(tHim, livePose(topHimRaw, t, 1.3), topHimF(t));
+          const hp = drawFig(tHer, livePose(topHerRaw, t, 0.4), topHerF(t));
+          const hf = topHerF(t);
+          tBun.setAttribute("cx", r1(hp.head[0] - hf * 25)); tBun.setAttribute("cy", r1(hp.head[1] - 16));
+          for (const [oar, sx, fp, tUp] of [[tOarB, SX_B, mp, T_UP_B], [tOarF, SX_F, hp, T_UP_F]]) {
+            const u = rowU(t, TR0, TRP, TRN), wet = u === null ? 0 : stroke(u).wet;
+            const rest = [sx - 150, -50];
+            const h = t < tUp + 0.15 ? fp.hands[0] : rest;
+            const hh = t < tUp ? h : [lerp(fp.hands[0][0], rest[0], win(t, tUp, tUp + 0.3)), lerp(fp.hands[0][1], rest[1], win(t, tUp, tUp + 0.3))];
+            drawOar(oar, hh, bladeOf(sx, -1, hh, t < tUp ? wet : lerp(wet, 0.2, win(t, tUp, tUp + 0.3))));
+            splash(oar, t, TR0, TRP, TRN, sx, -1);
+          }
+          ripples(tRings.slice(0, 4), t, TR0, TRP, TRN, topX, 1, SX_B, -1);
+          ripples(tRings.slice(4), t, TR0, TRP, TRN, topX, 1, SX_F, -1);
+          const hq = clamp((t - T_HOLD) / 0.35, 0, 1), beat = 1 + 0.08 * Math.max(0, Math.sin(t * 7)) * (t > T_HOLD + 0.4 ? 1 : 0);
+          const hc = [tbx + (hp.head[0] + mp.head[0]) / 2, tby + Math.min(hp.head[1], mp.head[1]) - 90];
+          heart.setAttribute("opacity", t > T_HOLD ? 1 : 0);
+          heart.setAttribute("transform", `translate(${r1(hc[0])} ${r1(hc[1])}) scale(${(backOut(hq) * 0.9 * beat).toFixed(3)})`);
+          heartGlow.setAttribute("cx", r1(hc[0])); heartGlow.setAttribute("cy", r1(hc[1] - 4));
+          heartGlow.setAttribute("opacity", (0.9 * hq).toFixed(3));
+          redSpot.setAttribute("opacity", (0.55 * win(t, T_HOLD, T_HOLD + 0.5)).toFixed(3));
+
+          // bottom panel
+          const bbx = at(botX, t), bby = bobY(t, 1.1), sk = heading(t);
+          bot.boat.setAttribute("transform", `translate(${r1(bbx)} ${r1(bby)}) scale(${sk.toFixed(3)} 1) rotate(${(1.2 * Math.sin(t * 1.5)).toFixed(2)})`);
+          bot.wave.setAttribute("d", waveD(t, 1.7));
+          const sp = drawFig(bHer, livePose(botHerRaw, t, 0.9), 1);
+          const bp = drawFig(bHim, livePose(botHimRaw, t, 2.0), -1);
+          bBun.setAttribute("cx", r1(sp.head[0] - 25)); bBun.setAttribute("cy", r1(sp.head[1] - 16));
+          const ph = [(sp.hands[0][0] + sp.hands[1][0]) / 2, (sp.hands[0][1] + sp.hands[1][1]) / 2];
+          phone.setAttribute("transform", `translate(${r1(ph[0] + 6)} ${r1(ph[1] - 6)})`);
+          phoneGlow.setAttribute("cx", r1(ph[0] + 6)); phoneGlow.setAttribute("cy", r1(ph[1] - 10));
+          phoneGlow.setAttribute("opacity", (t < 0.45 ? 0 : 0.85 + 0.15 * Math.sin(t * 5)).toFixed(3));
+          phone.setAttribute("opacity", t < 0.45 ? 0 : 1);
+          {
+            const u = rowU(t, BR0, BRP, BRN), wet = u === null ? 0 : stroke(u).wet;
+            if (t < T_LOST + 0.1) drawOar(bOar, bp.hands[0], bladeOf(SX_B, -1, bp.hands[0], wet));
+            else {
+              // the oar slips out of his hands and floats away behind the boat
+              const q = win(t, T_LOST + 0.1, T_LOST + 1.1), drift = (t - T_LOST) * 14;
+              const h0 = [SX_B - 150, -60], b0 = bladeOf(SX_B, -1, h0, 0);
+              drawOar(bOar, [lerp(h0[0], -230 - drift, q), lerp(h0[1], 4, q)], [lerp(b0[0], -440 - drift, q), lerp(b0[1], 8, q)]);
+            }
+            splash(bOar, t, BR0, BRP, BRN, SX_B, -1);
+          }
+          ripples(bRings, t, BR0, BRP, BRN, botX, heading, SX_B, -1);
+
+          // labels and headline
+          topS.textContent = typed(TOPSEQ, t)[0];
+          const [bs, bc] = typed(BOTSEQ, t);
+          botS.textContent = bs; botS.style.color = bc || "#a8a8a8";
+          E("head").innerHTML = HEAD.map(([t0, s], i) => `<div>${i === 0 ? s : s.slice(0, Math.max(0, Math.floor((t - t0) * 30)))}&nbsp;</div>`).join("");
+
+          // end card
+          dim.style.opacity = (0.8 * win(t, T_CARD - 0.4, T_CARD)).toFixed(3);
+          E("cm1").innerHTML = slam(["BOTH", "HAVE", "TO", "ROW."], [T_CARD, T_CARD + 0.13, T_CARD + 0.26, T_CARD + 0.4], t, []);
+          E("cm2").innerHTML = slam(["OR", "YOU", "NEVER", "ARRIVE."], [T_CARD + 0.8, T_CARD + 0.92, T_CARD + 1.04, T_CARD + 1.18], t, [2]);
+          E("cq").style.opacity = win(t, T_CARD + 1.5, T_CARD + 2.0).toFixed(3);
+          fade.style.opacity = win(t, DUR - 0.3, DUR - 0.02).toFixed(3);
+        }
+
+        window.__timelines = window.__timelines || {};
+        const tl = gsap.timeline({ paused: true });
+        const clock = { t: 0 };
+        tl.to(clock, { t: DUR, duration: DUR, ease: "none", onUpdate: () => render(clock.t) }, 0);
+        window.__timelines["main"] = tl;
+        render(0);
+        tl.seek(0);
+      })();
+    </script>
+  </body>
+</html>
