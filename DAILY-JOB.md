@@ -91,3 +91,6 @@ Lines up to 17 were scheduled in Metricool. 2026-10-25 ~10:42: all still-pending
 - 2026-10-30 18:00: 38 Spear Stairs (hate as fuel / success), sent to Telegram
 - 2026-10-31 10:00: 39 Don't Follow Blindly (think for yourself), sent to Telegram
 - 2026-10-31 12:00: 40 Love Is A Boat (relationship, winner format), sent to Telegram
+- 2026-10-31 16:00: 43 Love Is A Fire (relationship, winner format), sent to Telegram
+- 2026-10-31 18:00: 41 The Last Bowl (relationship, old couple), sent to Telegram
+- 2026-11-01 10:00: 42 Two Minutes (relationship humour), sent to Telegram
