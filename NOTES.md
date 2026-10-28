@@ -2,6 +2,9 @@
 
 Claude's running notes. Newest on top. Everything Claude wants to remember goes here (or in the matching file), not on the computer.
 
+## 2026-10-28
+- Reel 37 Monday Morning: remake of the user upload. User: "mache die kamera winkel wie im reference video" -> 3/4 view (SW() maps reference screen spots to world), floor + reflection hidden, static camera. Use this when the user wants the reference camera.
+
 ## 2026-10-27
 - Highlights made for @silent.stickman (the IG linked in Metricool): START HERE (3 stories), BREAKDOWNS (3 reel breakdowns, new magnifier cover), LOVE, DISCIPLINE, OVERTHINK (intro story each). Files + plan in `profile-kit/final/highlights/`. Sent in chat, not Telegram (user asked "hier").
 - Reels 32-35 sent to Telegram too (hashtags upgraded to 8). Telegram works from the cloud now (api.telegram.org allowed). Bot @Stickmen1_bot, chatId 7190934039. Token is NOT in the repo: put it in ~/.stickman/telegram.json only for the run (from env TELEGRAM_BOT_TOKEN or ask the user to set it in the environment settings). Reel 36 sent.
