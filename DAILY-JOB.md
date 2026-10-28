@@ -7,6 +7,7 @@ Sends them to the user's Telegram bot **the day before**, each with its caption 
 When the user writes **"generiere"**, follow `GENERATE.md` instead (viral remakes, virality check first).
 
 ## Hard rules
+- **Winner format (user, 2026-10-28):** reel 36 Bridge For Two ("LOVE IS A BRIDGE" split screen) was by far the best: millions of views, many comments, likes, reposts and shares. At least 1 of every 4 reels uses this format (see `REFERENCE-ANALYSIS.md` → WINNER FORMAT, backlog there).
 - Never touch the money account @moneypsych.explained, its skills, scheduled tasks, Metricool posts or memory files.
   - Never create, edit or delete Metricool posts.
 - Never log in or type passwords.

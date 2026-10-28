@@ -1,5 +1,31 @@
 # New Instagram account — reference style (10 example reels)
 
+## 🏆 WINNER FORMAT: "LOVE IS A ___" split screen (user, 2026-10-28)
+User, 2026-10-28, about reel 36 Bridge For Two and its reference (the "LOVE IS A BRIDGE" reel):
+"diese video waren mit abstand die besten, haben millionen aufrufe bekommen ... nicht nur aufrufe sondern comments, likes und wurde sehr oft repostet und weitergeleitet ... generiere solche content mehr".
+**This is our best format by far. Make more of it, first in line before every other idea.**
+
+Why it works (what to copy every time):
+1. **One metaphor in the first frame:** headline "LOVE IS A ___." typed at the very top from 0 s. Love = a visible object both people make (bridge, boat, house, fire, rope, puzzle...).
+2. **Split screen, two panels, same scene:** top = "BOTH ___" (both do the work), bottom = "ONE ___S" (only one does it, the other scrolls the phone). Same set, same timing, so the eye compares second by second.
+3. **Black stage, two soft spotlights, beige ground, dark abyss.** Top figures white with glow, bottom figures grey. Phone = small blue screen with a blue glow (the villain).
+4. **Small typed labels in each panel corner:** title (BOTH BUILD / ONE BUILDS) + a status line that changes with the beats (PLANK BY PLANK → THEY MEET → HOLD ON; HE BUILDS → SHE SCROLLS → TOO FAR → ALONE). The last two bottom statuses are **red**.
+5. **Payoff top:** they meet, hug, a red heart pops above them + a red spotlight. **Payoff bottom:** he gets as far as one person can, reaches out, nobody there, breaks down (hands on knees).
+6. **The line finishes the headline at the end:** "ONE PERSON CAN'T BUILD / A BRIDGE FOR TWO." typed under the first line ~3 s before the end. Simple words, a truth everybody has felt.
+7. **Shareable target:** caption ends "Send this to the one who builds with you." People send it to their partner (or at their ex). That is why it got reposted and forwarded.
+8. Sound: quiet room tone, a wooden knock for each step of work, warm chord on the hug, a low drop on "ALONE", typing clicks on the last lines. 14 s, no voice.
+
+Code: copy `videos/36-bridge-for-two/tools/` (two clipped panels, makePanel, typed labels, heart, phone glow) and change only the object and the beats. Since 2026-10-28 add the end card (message + real quote) after the headline (dur.txt 16).
+
+Backlog in this format (make these next, one per run at least):
+- LOVE IS A BOAT. BOTH ROW → they reach the island / ONE ROWS → the boat turns in circles. "IF ONLY ONE ROWS, / YOU GO IN CIRCLES." (reel 40)
+- LOVE IS A HOUSE. BOTH BUILD → walls, roof, the light goes on / ONE BUILDS → walls fall when the roof goes up. "NOBODY CAN LIVE / IN A HALF-BUILT HOME."
+- LOVE IS A FIRE. BOTH FEED IT → it burns warm / ONE FEEDS IT → he runs out of wood, it goes out. "A FIRE DIES / WHEN ONLY ONE FEEDS IT."
+- LOVE IS A ROPE. BOTH HOLD → they climb out of the hole together / ONE HOLDS → he holds, she lets go, he falls back in. "YOU CAN'T PULL / SOMEONE WHO LET GO."
+- LOVE IS A SEESAW. BOTH SIT → up and down, laughing / ONE SITS → stuck on the ground. "LOVE NEEDS / SOMEONE ON THE OTHER SIDE."
+- LOVE IS A PUZZLE. BOTH BRING PIECES → the heart picture finishes / ONE BRINGS PIECES → a hole stays in the middle.
+- Friendship / family versions with the same shape (FRIENDSHIP IS A ___, BOTH CALL / ONE CALLS).
+
 Separate from @moneypsych.explained. Nothing here is shared with the money account.
 
 All 10 reels come from one creator: **@neuronvisuals** (TikTok), watermark "NEURONVISUALS".

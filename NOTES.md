@@ -3,6 +3,7 @@
 Claude's running notes. Newest on top. Everything Claude wants to remember goes here (or in the matching file), not on the computer.
 
 ## 2026-10-28
+- **WINNER:** user says reel 36 Bridge For Two + its reference were by far the best (millions of views, comments, likes, reposts, shares) and wants more of this content. Formula written down in `REFERENCE-ANALYSIS.md` (WINNER FORMAT, top of file) with a backlog; GENERATE.md and DAILY-JOB.md now put this format first. Next reel 40 "Love Is A Boat" in the same format.
 - User on reel 39: "du hast vergessen die nachricht und den zitat am ende anzeigen lassen". From now on every reel ends with an end card: the message big in the middle + a fitting real quote (with author), scene dimmed behind.
 - Reel 39: user wants smoother + top quality. Render high quality with `-q delivery -f 60` (scratch rr60.sh = rr.sh with those flags). Walk cycles: phase = x / (4*stride) so feet never slide; crowd push chain = fixed-step simulation at init (seek-safe).
 - Reel 38 Spear Stairs: remake of the 2nd user upload. Kit now takes an optional `tools/dur.txt` (reel length, default 14) for remakes longer than 14 s.
