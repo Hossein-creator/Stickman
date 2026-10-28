@@ -342,37 +342,65 @@
 
         // ---------- story beats ----------
         const T_SLAP1 = 1.2, T_SLAP2 = 1.85, T_WAKE = 2.4;
-        const TRIES = [[3.0, 3.75, 4.05, 40], [5.2, 6.1, 6.45, 22]];   // start, full stretch, snap back, how far he gets (torso angle)
+        const TRIES = [[3.0, 3.75, 4.05, 18], [5.2, 6.1, 6.45, 8]];   // start, full stretch, snap back, how far he gets (torso angle)
         const T_A3 = 7.5, T_GRAB = 8.0, T_MAX3 = 8.6, T_TEAR = 8.8, T_UPR = 9.2;
         const BED0 = 150, BED1 = 660, MT = FL - 70;
-        const HIPM = 330, HY = MT - 14, REST = 55;
+        const HIPM = 330, HY = MT - 14, REST = 35;
         
 
-        // ---------- room: dark blue night, window light, headboard, nightstand with the alarm clock ----------
-        // 3/4 view from the foot of the bed like the reference: helper maps reference screen spots to world (camera at rest)
-        const CAM0 = [264, 558, 3.3];
+        // ---------- room: 3/4 view from the foot of the bed, same angle as the reference ----------
+        // SW maps a spot on the reference frame (1080x1920) to world, with the camera at rest (CAM0)
+        const CAM0 = [281, 460, 3.6];
         const SW = (X, Y) => [CAM0[0] + (X - 540) / CAM0[2], CAM0[1] + (Y - 1180) / CAM0[2]];
-        const CLK = SW(885, 930);
         const poly = (pts) => pts.map(([X, Y]) => SW(X, Y).map(r1).join(",")).join(" ");
         const pathS = (cmds) => cmds.replace(/(-?\d+),(-?\d+)/g, (m, X, Y) => SW(+X, +Y).map(r1).join(" "));
         const defs = E("svg").querySelector("defs");
-        defs.insertAdjacentHTML("beforeend", '<linearGradient id="wallG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#0a0f1e"/><stop offset="0.55" stop-color="#1b2644"/><stop offset="1" stop-color="#0d1220"/></linearGradient><linearGradient id="matG" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#d4def3"/><stop offset="1" stop-color="#8fa3c8"/></linearGradient>');
+        defs.insertAdjacentHTML("beforeend", `
+          <linearGradient id="wallG" x1="0" y1="0" x2="0.3" y2="1"><stop offset="0" stop-color="#0b1122"/><stop offset="0.6" stop-color="#1a2440"/><stop offset="1" stop-color="#121a30"/></linearGradient>
+          <linearGradient id="hbG" x1="0" y1="0" x2="1" y2="0.3"><stop offset="0" stop-color="#1c1d2c"/><stop offset="1" stop-color="#262838"/></linearGradient>
+          <linearGradient id="matG" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#b9c6e2"/><stop offset="1" stop-color="#7d8fb6"/></linearGradient>
+          <linearGradient id="sideG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#8e9fc4"/><stop offset="1" stop-color="#5d6d92"/></linearGradient>
+          <linearGradient id="pilG" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#d6dfef"/><stop offset="0.6" stop-color="#aebcda"/><stop offset="1" stop-color="#8797bb"/></linearGradient>
+          <linearGradient id="blkG" x1="0" y1="0" x2="0.4" y2="1"><stop offset="0" stop-color="#46629a"/><stop offset="1" stop-color="#1f2f55"/></linearGradient>
+          <linearGradient id="nsG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#2a2c3e"/><stop offset="1" stop-color="#191a26"/></linearGradient>
+          <radialGradient id="shadeG" cx="0.5" cy="0.5" r="0.5"><stop offset="0" stop-color="#000" stop-opacity="0.45"/><stop offset="1" stop-color="#000" stop-opacity="0"/></radialGradient>`);
+        // wall with a few faint specks, floor in the corner
         svgEl("rect", { x: -600, y: -400, width: 2000, height: 1600, fill: "url(#wallG)" }, backG);
-        svgEl("polygon", { points: poly([[0, 420], [590, 500], [590, 1150], [0, 905]]), fill: "#1a1b28", stroke: "#000", "stroke-width": 5 }, roomG);
-        svgEl("polygon", { points: poly([[640, 1010], [1010, 990], [1010, 1400], [640, 1420]]), fill: "#1e2030", stroke: "#000", "stroke-width": 5 }, roomG);
-        svgEl("polygon", { points: poly([[620, 1010], [700, 975], [1050, 960], [1010, 990]]), fill: "#2a2c40", stroke: "#000", "stroke-width": 4 }, roomG);
-        svgEl("circle", { cx: SW(825, 1150)[0], cy: SW(825, 1150)[1], r: 4, fill: "#55586a" }, roomG);
-                const clockG = svgEl("g", {}, roomG);
-        svgEl("rect", { x: CLK[0] - 40, y: CLK[1] - 22, width: 80, height: 44, rx: 6, fill: "#15161c", stroke: "#000", "stroke-width": 5 }, clockG);
-        const glowC = svgEl("ellipse", { cx: CLK[0], cy: CLK[1], rx: 70, ry: 40, fill: "#ff3b30", filter: "url(#soft)", opacity: 0.35 }, clockG);
-        const digits = svgEl("text", { x: CLK[0], y: CLK[1] + 10, "font-family": "HFMono, monospace", "font-weight": 700, "font-size": 28, fill: "#ff3b30", "text-anchor": "middle" }, clockG);
-        digits.textContent = "06:00";
-        const clockRest = CLK.slice();
+        for (let i = 0; i < 40; i++) { const [x, y] = SW(rnd() * 1080, rnd() * 900); svgEl("circle", { cx: r1(x), cy: r1(y), r: 0.5 + rnd() * 0.5, fill: "#9fb0d8", opacity: 0.15 + rnd() * 0.3 }, backG); }
+        svgEl("polygon", { points: poly([[-200, 1250], [1300, 1250], [1300, 2200], [-200, 2200]]), fill: "#0b0f1c" }, backG);
+        // headboard
+        svgEl("polygon", { points: poly([[0, 488], [593, 450], [593, 1150], [0, 1180]]), fill: "url(#hbG)", stroke: "#000", "stroke-width": 4 }, roomG);
+        // nightstand: top, front, drawer line, knob (its lower part is hidden behind the bed)
+        svgEl("polygon", { points: poly([[655, 990], [1012, 962], [1012, 1520], [655, 1540]]), fill: "url(#nsG)", stroke: "#000", "stroke-width": 4 }, roomG);
+        svgEl("polygon", { points: poly([[630, 960], [990, 930], [1012, 962], [655, 990]]), fill: "#33364c", stroke: "#000", "stroke-width": 4 }, roomG);
+        svgEl("line", { x1: SW(660, 1180)[0], y1: SW(660, 1180)[1], x2: SW(1010, 1160)[0], y2: SW(1010, 1160)[1], stroke: "#0e0f16", "stroke-width": 2 }, roomG);
+        svgEl("circle", { cx: SW(930, 1060)[0], cy: SW(930, 1060)[1], r: 3.5, fill: "#8a8ea4", stroke: "#000", "stroke-width": 1.5 }, roomG);
+        // alarm clock standing on the nightstand, front face slightly turned
+        const clockG = svgEl("g", {}, roomG);
+        svgEl("polygon", { points: poly([[660, 880], [700, 852], [898, 866], [842, 896]]), fill: "#2a2b33", stroke: "#000", "stroke-width": 3 }, clockG);
+        svgEl("polygon", { points: poly([[842, 896], [898, 866], [898, 968], [842, 1002]]), fill: "#121318", stroke: "#000", "stroke-width": 3 }, clockG);
+        svgEl("polygon", { points: poly([[660, 880], [842, 896], [842, 1002], [660, 986]]), fill: "#1b1c22", stroke: "#000", "stroke-width": 3 }, clockG);
+        const CLK = SW(751, 945);
+        const glowC = svgEl("ellipse", { cx: CLK[0], cy: CLK[1], rx: 40, ry: 24, fill: "#ff3b30", filter: "url(#soft)", opacity: 0.35 }, clockG);
+        const digits = svgEl("text", { x: CLK[0], y: CLK[1] + 7, "font-family": "HFMono, monospace", "font-weight": 700, "font-size": 19, fill: "#ff3b30", "text-anchor": "middle", transform: `rotate(5 ${r1(CLK[0])} ${r1(CLK[1])})` }, clockG);
+        digits.textContent = "6:00";
+        const mon = svgEl("text", { x: CLK[0] - 20, y: CLK[1] - 9, "font-family": "HFMono, monospace", "font-weight": 700, "font-size": 5, fill: "#ff3b30", transform: `rotate(5 ${r1(CLK[0])} ${r1(CLK[1])})` }, clockG);
+        mon.textContent = "MON";
+        const clockRest = SW(751, 994);
+        // bed: frame on the floor, mattress side, mattress top
+        svgEl("polygon", { points: poly([[0, 1335], [700, 1990], [700, 2200], [-100, 2200], [0, 1515]]), fill: "#141622", stroke: "#000", "stroke-width": 4 }, roomG);
+        svgEl("polygon", { points: poly([[0, 1515], [470, 1960], [-100, 1960]]), fill: "#0b0f1c" }, roomG);
+        svgEl("polygon", { points: poly([[0, 1192], [760, 1840], [760, 1990], [0, 1335]]), fill: "url(#sideG)", stroke: "#000", "stroke-width": 4 }, roomG);
+        svgEl("polygon", { points: poly([[0, 1150], [593, 1135], [1200, 1450], [1200, 2000], [760, 1840], [0, 1192]]), fill: "url(#matG)", stroke: "#000", "stroke-width": 4 }, roomG);
+        svgEl("ellipse", { cx: SW(600, 1350)[0], cy: SW(600, 1350)[1], rx: 90, ry: 40, fill: "url(#shadeG)" }, roomG);
+        // pillow, propped against the headboard
+        svgEl("path", { d: pathS("M0,930 C130,850 400,830 505,880 C545,990 530,1230 495,1390 C390,1370 140,1270 0,1210 Z"), fill: "url(#pilG)", stroke: "#000", "stroke-width": 4, "stroke-linejoin": "round" }, roomG);
+        svgEl("path", { d: pathS("M40,1150 C150,1190 300,1240 420,1290"), fill: "none", stroke: "#8a9abd", "stroke-width": 2, "stroke-linecap": "round" }, roomG);
 
         // ---------- him ----------
         const him = makeFig(figG, "#ffffff", "#dedede", true, "him");
-        const blanket = svgEl("path", { d: pathS("M300,1920 C340,1550 520,1180 720,1140 C860,1110 980,1040 1100,1050 L1100,1920 Z"), fill: "#3f5a8a", stroke: "#000", "stroke-width": 6, "stroke-linejoin": "round" }, frontG);
-        svgEl("path", { d: pathS("M560,1500 C640,1380 760,1300 900,1280 M700,1700 C780,1560 900,1480 1060,1460"), fill: "none", stroke: "#2e4470", "stroke-width": 5, "stroke-linecap": "round" }, frontG);
+        const blanket = svgEl("path", { d: pathS("M440,1990 C450,1720 560,1380 760,1250 C860,1185 960,1125 1100,1110 L1100,1990 Z"), fill: "url(#blkG)", stroke: "#000", "stroke-width": 5, "stroke-linejoin": "round" }, frontG);
+        svgEl("path", { d: pathS("M560,1560 C640,1430 760,1370 900,1350 M640,1800 C720,1650 860,1560 1060,1540 M820,1250 C870,1300 960,1300 1040,1240"), fill: "none", stroke: "#2a3f6c", "stroke-width": 3, "stroke-linecap": "round" }, frontG);
         // goo = band + two end circles, black copy underneath for the outline
         const gooOut = svgEl("g", {}, gooG), gooIn = svgEl("g", {}, gooG);
         const mkGoo = (g, fill, extra) => ({ band: svgEl("path", { fill, stroke: fill, "stroke-width": extra, "stroke-linejoin": "round" }, g), ca: svgEl("circle", { fill }, g), ch: svgEl("circle", { fill }, g), extra });
@@ -389,13 +417,10 @@
           const tu = up(p.torso, -1), hu = up(p.torso + p.head, -1);
           return [p.hx + tu[0] * (TORSO + NECK) + hu[0] * HEADR, p.hy + tu[1] * (TORSO + NECK) + hu[1] * HEADR];
         };
+        const RA = SW(555, 1350), RB = SW(860, 1250);   // resting hands: near on the mattress, far on the blanket
         // propped up on the pillow, legs under the blanket
-        const reclined = (torso) => base({ hx: HIPM, hy: HY, torso, head: -6, ax: HIPM + 120, ay: MT + 62, bx: HIPM + 108, by: MT + 70, ash: 10, ael: 20, bsh: 6, bel: 20, aw: 1, atx: HIPM - 30, aty: MT - 40, bw: 1, btx: HIPM - 44, bty: MT - 50 });
+        const reclined = (torso) => base({ hx: HIPM, hy: HY, torso, head: -6, ax: HIPM + 120, ay: MT + 62, bx: HIPM + 108, by: MT + 70, ash: 10, ael: 20, bsh: 6, bel: 20, aw: 1, atx: RA[0], aty: RA[1], bw: 1, btx: RB[0], bty: RB[1] });
         const ANCHOR = headOf(reclined(REST));
-        const PIL = [ANCHOR[0] - 26, ANCHOR[1] + 22];
-        svgEl("polygon", { points: poly([[0, 900], [600, 1140], [1080, 1330], [1080, 1920], [0, 1920]]), fill: "url(#matG)", stroke: "#000", "stroke-width": 5 }, roomG);
-        svgEl("polygon", { points: poly([[0, 1500], [560, 1920], [0, 1920]]), fill: "#2b3654", stroke: "#000", "stroke-width": 5 }, roomG);
-        svgEl("ellipse", { cx: PIL[0], cy: PIL[1], rx: 92, ry: 40, fill: "#dfe6f5", stroke: "#000", "stroke-width": 5, transform: `rotate(28 ${PIL[0]} ${PIL[1]})` }, roomG);
 
         // ---------- his body: asleep, slaps the alarm, three tries to get up ----------
         function himRaw(s) {
@@ -403,7 +428,7 @@
           // slaps: the near arm swings over to the clock and back, twice
           const slap = (a) => Math.sin(Math.PI * clamp((s - a + 0.22) / 0.42, 0, 1));
           const sl = Math.max(slap(T_SLAP1), slap(T_SLAP2));
-          st.atx = lerp(st.atx, CLK[0] + 6, sl); st.aty = lerp(st.aty, CLK[1] - 26, sl);
+          st.atx = lerp(st.atx, CLK[0], sl); st.aty = lerp(st.aty, CLK[1] - 14, sl);
           st.torso -= 12 * sl; st.head += 8 * sl;
           // awake: a tiny lift, staring at the ceiling
           st.head -= 8 * win(s, T_WAKE, T_WAKE + 0.3);
@@ -417,20 +442,20 @@
             else { const d = s - sn; st.torso = REST + (tgt - REST) * Math.exp(-d * 9) * Math.cos(d * 22); }
             st.head = lerp(-6, 10, win(s, a, m)) * (s < sn ? 1 : Math.exp(-(s - sn) * 6));
             const off = win(s, sn + 0.3, sn + 0.8);
-            st.atx = lerp(st.atx, HIPM - 30, off); st.aty = lerp(st.aty, MT - 40, off);
-            st.btx = lerp(st.btx, HIPM - 44, off); st.bty = lerp(st.bty, MT - 50, off);
+            st.atx = lerp(st.atx, RA[0], off); st.aty = lerp(st.aty, RA[1], off);
+            st.btx = lerp(st.btx, RB[0], off); st.bty = lerp(st.bty, RB[1], off);
           }
           if (s < T_A3) return st;
           // try 3: pushes with one hand, reaches back with the other and pulls his own head off the pillow
           const r = clamp((s - T_A3) / (T_MAX3 - T_A3), 0, 1);
-          let torso = lerp(REST, 8, ease(r)) + (s > T_GRAB && s < T_TEAR ? Math.sin(s * 80) * 2 : 0);
-          if (s > T_TEAR) { const d = s - T_TEAR; torso = 4 + 4 * Math.exp(-d * 6) * Math.cos(d * 18) - 10 * Math.exp(-d * 10); }
+          let torso = lerp(REST, -2, ease(r)) + (s > T_GRAB && s < T_TEAR ? Math.sin(s * 80) * 2 : 0);
+          if (s > T_TEAR) { const d = s - T_TEAR; torso = 2 + 4 * Math.exp(-d * 6) * Math.cos(d * 18) - 10 * Math.exp(-d * 10); }
           const p3 = { ...st, torso, head: s < T_TEAR ? lerp(-6, 14, r) : 14 * Math.exp(-(s - T_TEAR) * 5) * Math.cos((s - T_TEAR) * 14) };
           const push = win(s, T_A3, T_A3 + 0.25);
-          p3.atx = lerp(HIPM - 30, HIPM - 66, push); p3.aty = lerp(MT - 40, MT - 4, push);
+          p3.atx = lerp(RA[0], HIPM - 66, push); p3.aty = lerp(RA[1], MT - 4, push);
           const grab = win(s, T_GRAB - 0.25, T_GRAB);
           const hd = headOf(p3), gp = [lerp(ANCHOR[0], hd[0], 0.62), lerp(ANCHOR[1], hd[1], 0.62)];
-          p3.bw = 1; p3.btx = lerp(HIPM - 44, gp[0], grab); p3.bty = lerp(MT - 50, gp[1], grab);
+          p3.bw = 1; p3.btx = lerp(RB[0], gp[0], grab); p3.bty = lerp(RB[1], gp[1], grab);
           if (s < T_TEAR) return p3;
           // free: the arm flies out with the torn bit, then he sits there, wrecked, head nodding
           const sit = { ...p3 };
@@ -439,7 +464,7 @@
           sit.atx = lerp(p3.atx, HIPM - 40, rest); sit.aty = lerp(p3.aty, MT - 26, rest);
           if (s > T_UPR) {
             const k = win(s, T_UPR, T_UPR + 0.8);
-            sit.torso = lerp(torso, 10 + 2 * Math.sin(s * 1.4), k);
+            sit.torso = lerp(torso, 3 + 2 * Math.sin(s * 1.4), k);
             sit.head = lerp(sit.head, 16 + 7 * Math.max(0, Math.sin((s - T_UPR) * 2.2)), k);
           }
           return sit;
@@ -471,7 +496,7 @@
 
         // ---------- camera keys (story): time, scale, world x, world y at screen 1180, roll ----------
         const CK = [
-          [0, 3.3, 264, 558, 0], [8.6, 3.45, 262, 550, 0], [9.6, 3.5, 268, 545, 0], [11.5, 3.9, 285, 520, 0], [99, 3.9, 285, 520, 0],
+          [0, 3.6, 281, 460, 0], [8.6, 3.75, 285, 455, 0], [9.6, 3.8, 295, 452, 0], [11.5, 4.2, 320, 440, 0], [99, 4.2, 320, 440, 0],
         ];
         function camAt(s) {
           let i = 1;

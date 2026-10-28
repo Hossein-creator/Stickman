@@ -3,7 +3,7 @@
 Claude's running notes. Newest on top. Everything Claude wants to remember goes here (or in the matching file), not on the computer.
 
 ## 2026-10-28
-- Reel 37 Monday Morning: remake of the user upload. User: "mache die kamera winkel wie im reference video" -> 3/4 view (SW() maps reference screen spots to world), floor + reflection hidden, static camera. Use this when the user wants the reference camera.
+- Reel 37 Monday Morning: remake of the user upload. 1st version: user said "bett hängt in der luft, kamera winkel scheisse, realistischer". Redone: room drawn on the reference frame itself (SW() maps reference screen spots 1080x1920 to world), bed frame standing on a floor, mattress side, soft gradients, pillow, nightstand with drawer, 3D alarm clock, lumpy blanket in front, static camera at the reference angle + push-in at the end. Use this for "same camera as the reference".
 
 ## 2026-10-27
 - Highlights made for @silent.stickman (the IG linked in Metricool): START HERE (3 stories), BREAKDOWNS (3 reel breakdowns, new magnifier cover), LOVE, DISCIPLINE, OVERTHINK (intro story each). Files + plan in `profile-kit/final/highlights/`. Sent in chat, not Telegram (user asked "hier").
