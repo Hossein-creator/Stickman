@@ -223,6 +223,21 @@
           return a.map((x, j) => lerp(x, b[j], k));
         }
         const h2t = [0, 1, 2, 3, 4].map((i) => realOf(T_FALL) + 0.15 + i * 0.16);
+        // ---------- end card: the message big in the middle + a quote ----------
+        const T_CARD = 11.6;
+        const dim = document.createElement("div");
+        dim.style.cssText = "position:absolute;inset:0;background:#000;opacity:0";
+        E("stage").appendChild(dim);
+        const card = document.createElement("div");
+        card.style.cssText = "position:absolute;left:120px;right:120px;top:640px;text-align:center;font-family:HFMono,monospace;font-weight:700;color:#fff;letter-spacing:0.08em";
+        card.innerHTML = `<div id="cm1" style="font-size:60px;line-height:1.25;text-shadow:0 0 18px rgba(255,255,255,0.35)"></div>
+          <div id="cm2" style="font-size:40px;line-height:1.35;margin-top:26px;text-shadow:0 0 14px rgba(255,255,255,0.25)"></div>
+          <div id="cq" style="opacity:0;margin-top:120px;font-size:30px;line-height:1.5;color:#bdbdbd;letter-spacing:0.05em">"WHENEVER YOU FIND YOURSELF<br/>ON THE SIDE OF THE MAJORITY,<br/>IT IS TIME TO PAUSE AND REFLECT."<div style="margin-top:22px;font-size:24px;color:#8a8a8a;letter-spacing:0.2em">MARK TWAIN</div></div>`;
+        card.id = "card";
+        const cardCss = document.createElement("style");
+        cardCss.textContent = "#card span.w { display: inline-block; margin: 0 0.16em; }";
+        document.head.appendChild(cardCss);
+        E("stage").appendChild(card);
 
         // ---------- per-frame render ----------
         function render(t) {
@@ -280,6 +295,12 @@
           E("h1").innerHTML = slam(["DON'T", "FOLLOW", "BLINDLY."], [2.7, 2.85, 3.0], t, []);
           E("h2").innerHTML = slam(["OR", "YOU'LL", "PAY", "THE", "CONSEQUENCES."], h2t, t, [4]);
           E("h1").style.opacity = (1 - 0.4 * win(t, h2t[0] - 0.1, h2t[0] + 0.2)).toFixed(3);
+          // end card
+          dim.style.opacity = (0.78 * win(t, T_CARD - 0.4, T_CARD)).toFixed(3);
+          E("head").style.opacity = (1 - win(t, T_CARD - 0.4, T_CARD - 0.1)).toFixed(3);
+          E("cm1").innerHTML = slam(["DON'T", "FOLLOW", "BLINDLY."], [T_CARD, T_CARD + 0.15, T_CARD + 0.3], t, []);
+          E("cm2").innerHTML = slam(["OR", "YOU'LL", "PAY", "THE", "CONSEQUENCES."], [T_CARD + 0.7, T_CARD + 0.82, T_CARD + 0.94, T_CARD + 1.06, T_CARD + 1.2], t, [4]);
+          E("cq").style.opacity = win(t, T_CARD + 1.7, T_CARD + 2.3).toFixed(3);
           fade.style.opacity = win(t, DUR - 0.45, DUR - 0.02).toFixed(3);
         }
 

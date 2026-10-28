@@ -3,6 +3,7 @@
 Claude's running notes. Newest on top. Everything Claude wants to remember goes here (or in the matching file), not on the computer.
 
 ## 2026-10-28
+- User on reel 39: "du hast vergessen die nachricht und den zitat am ende anzeigen lassen". From now on every reel ends with an end card: the message big in the middle + a fitting real quote (with author), scene dimmed behind.
 - Reel 39: user wants smoother + top quality. Render high quality with `-q delivery -f 60` (scratch rr60.sh = rr.sh with those flags). Walk cycles: phase = x / (4*stride) so feet never slide; crowd push chain = fixed-step simulation at init (seek-safe).
 - Reel 38 Spear Stairs: remake of the 2nd user upload. Kit now takes an optional `tools/dur.txt` (reel length, default 14) for remakes longer than 14 s.
 - Reel 37 Monday Morning: remake of the user upload. 1st version: user said "bett hängt in der luft, kamera winkel scheisse, realistischer". Redone: room drawn on the reference frame itself (SW() maps reference screen spots 1080x1920 to world), bed frame standing on a floor, mattress side, soft gradients, pillow, nightstand with drawer, 3D alarm clock, lumpy blanket in front, static camera at the reference angle + push-in at the end. Use this for "same camera as the reference".
