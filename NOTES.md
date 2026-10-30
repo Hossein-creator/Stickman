@@ -3,6 +3,7 @@
 Claude's running notes. Newest on top. Everything Claude wants to remember goes here (or in the matching file), not on the computer.
 
 ## 2026-10-30
+- "generiere" run 4 (`viral/2026-10-30b-check.md`), relationship only: RSS feeds of 42 couple channels → 49 The Lunchbox, 50 Who's Shouting, 51 Pastry Peace, 52 Love Is A Seesaw (winner format). New tricks: multi-scene reels by placing each set at its own world x and cutting the camera (two CK keys at the same time); scene label in #ctr (THAT NIGHT / NEXT MORNING); sepia overlay div for a flashback.
 - User: "aber mach trozdem ein mindset video" → made 48 Same Rock (mindset) in the winner split-screen format. The rule stays relationship only; mindset only when the user asks for it. The split-screen winner format also works for mindset (GROWTH vs FIXED).
 - User, 2026-10-30: "weisst du die relationships videos explodieren gerade bleibe in diese nische". The account is now **relationship only**: daily job and "generiere" both make 4 relationship reels, no discipline/other topics. Sources from other niches get turned into relationship stories.
 - "generiere" run 3 (`viral/2026-10-30-check.md`): YouTube's old "this month by views" filter `CAMSAggE` now returns nothing; `CAMSBAgEEAE=` (month) / `CAMSBAgDEAE=` (week) work but list mostly long videos, so the newest uploads of known winner channels (RSS feeds) were the main source. Made 44-47 (3 relationship incl. winner format + 1 discipline).

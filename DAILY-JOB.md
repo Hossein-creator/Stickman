@@ -99,3 +99,7 @@ Lines up to 17 were scheduled in Metricool. 2026-10-25 ~10:42: all still-pending
 - 2026-11-01 18:00: 46 Just A Friend (relationship humour), sent to Telegram
 - 2026-11-02 10:00: 47 Start Today (discipline / procrastination), sent to Telegram
 - 2026-11-02 12:00: 48 Same Rock (mindset, exception asked by the user), sent to Telegram
+- 2026-11-02 16:00: 52 Love Is A Seesaw (relationship, winner format), sent to Telegram
+- 2026-11-02 18:00: 49 The Lunchbox (relationship), sent to Telegram
+- 2026-11-03 10:00: 50 Who's Shouting? (relationship humour), sent to Telegram
+- 2026-11-03 12:00: 51 Pastry Peace (relationship), sent to Telegram
