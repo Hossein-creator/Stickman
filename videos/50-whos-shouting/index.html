@@ -1,0 +1,566 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+    <style>
+      @font-face {
+        font-family: "HFMono";
+        src: url("assets/fonts/consolab.ttf") format("truetype");
+        font-weight: 700;
+      }
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      html,
+      body {
+        width: 1080px;
+        height: 1920px;
+        overflow: hidden;
+        background: #000;
+      }
+      #root {
+        position: relative;
+        width: 1080px;
+        height: 1920px;
+        overflow: hidden;
+        background: #000;
+      }
+      #stage {
+        position: absolute;
+        inset: 0;
+        width: 1080px;
+        height: 1920px;
+      }
+      #stage svg {
+        position: absolute;
+        inset: 0;
+      }
+      .mono {
+        position: absolute;
+        font-family: "HFMono", monospace;
+        font-weight: 700;
+        white-space: nowrap;
+      }
+      /* everything readable stays inside the Instagram safe area: x 120-960, y 220-1500 */
+      #head {
+        position: absolute;
+        left: 0;
+        right: 0;
+        top: 222px;
+        text-align: center;
+        font-family: "HFMono", monospace;
+        font-weight: 700;
+        font-size: 38px;
+        letter-spacing: 0.12em;
+        line-height: 1.45;
+        color: #fff;
+        text-shadow: 0 0 16px rgba(255, 255, 255, 0.3);
+      }
+      #head .ghost {
+        visibility: hidden;
+      }
+      #ctr {
+        position: absolute;
+        left: 0;
+        right: 0;
+        top: 430px;
+        text-align: center;
+        font-family: "HFMono", monospace;
+        font-weight: 700;
+        white-space: nowrap;
+      }
+      #ctr .lbl {
+        font-size: 26px;
+        letter-spacing: 0.24em;
+        color: #9a9a9a;
+        vertical-align: middle;
+      }
+      #num {
+        display: inline-block;
+        min-width: 2.4ch;
+        font-size: 58px;
+        letter-spacing: 0.08em;
+        color: #fff;
+        vertical-align: middle;
+        text-shadow: 0 0 14px rgba(255, 255, 255, 0.35);
+      }
+      #tag {
+        display: inline-block;
+        min-width: 5.2ch;
+        padding: 6px 12px 4px;
+        font-size: 26px;
+        letter-spacing: 0.18em;
+        vertical-align: middle;
+        visibility: hidden;
+      }
+      #tag.fail {
+        visibility: visible;
+        background: #d62a2a;
+        color: #fff;
+      }
+      #tag.pass {
+        visibility: visible;
+        background: #fff;
+        color: #000;
+        box-shadow: 0 0 22px rgba(255, 255, 255, 0.6);
+      }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="16" data-width="1080" data-height="1920">
+      <div id="stage" class="clip" data-start="0" data-duration="16" data-track-index="0">
+        <svg id="svg" width="1080" height="1920" viewBox="0 0 1080 1920" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <linearGradient id="beam" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0" stop-color="#ffffff" stop-opacity="0.55" />
+              <stop offset="0.7" stop-color="#ffffff" stop-opacity="0.12" />
+              <stop offset="1" stop-color="#ffffff" stop-opacity="0.04" />
+            </linearGradient>
+            <radialGradient id="pool" cx="0.5" cy="0.5" r="0.5">
+              <stop offset="0" stop-color="#ffffff" stop-opacity="0.32" />
+              <stop offset="1" stop-color="#ffffff" stop-opacity="0" />
+            </radialGradient>
+            <radialGradient id="dustG" cx="0.5" cy="0.5" r="0.5">
+              <stop offset="0" stop-color="#b5b5b5" stop-opacity="0.8" />
+              <stop offset="1" stop-color="#b5b5b5" stop-opacity="0" />
+            </radialGradient>
+            <linearGradient id="ply" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0" stop-color="#d9c29b" />
+              <stop offset="1" stop-color="#8f7858" />
+            </linearGradient>
+            <linearGradient id="floorFade" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0" stop-color="#000" stop-opacity="0.45" />
+              <stop offset="1" stop-color="#000" stop-opacity="1" />
+            </linearGradient>
+            <filter id="blur" x="-50%" y="-50%" width="200%" height="200%">
+              <feGaussianBlur stdDeviation="12" />
+            </filter>
+            <filter id="soft" x="-50%" y="-50%" width="200%" height="200%">
+              <feGaussianBlur stdDeviation="16" />
+            </filter>
+                      <linearGradient id="streak" x1="0" y1="0" x2="1" y2="0">
+              <stop offset="0" stop-color="#ffffff" stop-opacity="0" />
+              <stop offset="1" stop-color="#ffffff" stop-opacity="0.9" />
+            </linearGradient>
+            <filter id="chromaF" x="-30%" y="-30%" width="160%" height="160%" color-interpolation-filters="sRGB">
+              <feOffset id="chR" in="SourceGraphic" dx="0" dy="0" result="r" />
+              <feColorMatrix in="r" type="matrix" values="1 0 0 0 0  0 0.15 0 0 0  0 0 0.2 0 0  0 0 0 0.85 0" result="rr" />
+              <feOffset id="chB" in="SourceGraphic" dx="0" dy="0" result="b" />
+              <feColorMatrix in="b" type="matrix" values="0.1 0 0 0 0  0 0.9 0 0 0  0 0 1 0 0  0 0 0 0.85 0" result="bb" />
+              <feMerge><feMergeNode in="rr" /><feMergeNode in="bb" /><feMergeNode in="SourceGraphic" /></feMerge>
+            </filter>
+            <radialGradient id="fireGlow" cx="0.5" cy="0.5" r="0.5">
+              <stop offset="0" stop-color="#ffb35c" stop-opacity="0.7" />
+              <stop offset="0.45" stop-color="#ff7a3a" stop-opacity="0.22" />
+              <stop offset="1" stop-color="#ff7a3a" stop-opacity="0" />
+            </radialGradient>
+          </defs>
+          <!-- world: floor at world y 600 -> screen y 1400, world x 400 -> screen x 540 -->
+          <g transform="translate(540 1400) scale(1.45) translate(-400 -600)">
+            <g id="beams"></g>
+            <g id="back"></g>
+            
+            <use href="#world" transform="translate(0 1200) scale(1 -1)" opacity="0.16" />
+            <rect x="-200" y="600" width="1200" height="260" fill="url(#floorFade)" />
+            <rect x="-600" y="858" width="2000" height="1400" fill="#000" />
+            <rect x="-200" y="599" width="1200" height="2" fill="#2a2a2a" />
+            <g id="world"></g>
+          </g>
+        </svg>
+        <style>
+  #head span.w { display: inline-block; margin: 0 0.18em; }
+  #head { font-size: 44px !important; }
+  #fx { position: absolute; inset: 0; pointer-events: none; }
+  #flash { position: absolute; inset: 0; background: #fff; opacity: 0; }
+  #vig { position: absolute; inset: 0; background: radial-gradient(ellipse at center, rgba(0,0,0,0) 55%, rgba(0,0,0,0.75) 100%); }
+  #card span.w { display: inline-block; margin: 0 0.16em; }
+</style>
+<svg id="fx" width="1080" height="1920" viewBox="0 0 1080 1920"></svg>
+<div id="vig"></div>
+<div id="flash"></div>
+<div id="ctr"><span class="lbl">CALLS &nbsp;</span><span id="num" style="color:#ff3b30"></span></div>
+        <div id="head">
+          <div id="h1"></div>
+          <div id="h2"></div>
+        </div>
+      </div>
+      <audio id="mix" src="assets/audio/mix.wav" data-start="0" data-duration="16" data-track-index="1"></audio>
+    </div>
+
+    <script>
+      (function () {
+        const DUR = 16;
+        const FL = 600, BX0 = 380, BX1 = 520, BTOP = 410, TOPF = 404, SX = 250;
+        const THIGH = 80, SHIN = 78, LEG = 154;
+        const UARM = 64, FARM = 60, TORSO = 116, NECK = 12, HEADR = 31;
+        const NS = "http://www.w3.org/2000/svg";
+        const svgEl = (tag, attrs, parent) => {
+          const e = document.createElementNS(NS, tag);
+          for (const k in attrs || {}) e.setAttribute(k, attrs[k]);
+          if (parent) parent.appendChild(e);
+          return e;
+        };
+        const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
+        const lerp = (a, b, p) => a + (b - a) * p;
+        const ease = (p) => 0.5 - 0.5 * Math.cos(Math.PI * clamp(p, 0, 1));
+        const backOut = (p) => { p = clamp(p, 0, 1); const s = 2.2; return 1 + (s + 1) * Math.pow(p - 1, 3) + s * Math.pow(p - 1, 2); };
+        const win = (t, a, b) => ease((t - a) / (b - a));
+        const rad = (x) => (x * Math.PI) / 180;
+        const down = (a, f) => [Math.sin(rad(a)) * f, Math.cos(rad(a))];
+        const up = (a, f) => [Math.sin(rad(a)) * f, -Math.cos(rad(a))];
+        const r1 = (v) => Math.round(v * 10) / 10;
+        const E = (id) => document.getElementById(id);
+        let seed = 31;
+        const rnd = () => ((seed = (seed * 16807) % 2147483647) / 2147483647);
+
+        // ---------- rig v2 (from reel 05): blended poses, head/arm follow-through, breathing ----------
+        function makeFig(parent, front, back, glow, id) {
+          const g = svgEl("g", { id }, parent);
+          if (glow) parent.insertBefore(svgEl("use", { href: "#" + id, filter: "url(#blur)", opacity: 0.45 }), g);
+          const parts = { g };
+          for (const [n, col] of [["armB", back], ["legB", back], ["torso", front], ["legF", front], ["armF", front]]) {
+            const o = svgEl("path", { fill: "none", stroke: "#000", "stroke-width": 34, "stroke-linecap": "round", "stroke-linejoin": "round" }, g);
+            const w = svgEl("path", { fill: "none", stroke: col, "stroke-width": 22, "stroke-linecap": "round", "stroke-linejoin": "round" }, g);
+            parts[n] = [o, w];
+          }
+          parts.head = svgEl("circle", { r: HEADR, fill: front, stroke: "#000", "stroke-width": 6 }, g);
+          return parts;
+        }
+        function ik(a, b, l1, l2, pick) {
+          let dx = b[0] - a[0], dy = b[1] - a[1];
+          let d = Math.hypot(dx, dy);
+          const maxd = l1 + l2 - 0.5;
+          if (d > maxd) {
+            b = [a[0] + (dx / d) * maxd, a[1] + (dy / d) * maxd];
+            dx = b[0] - a[0];
+            dy = b[1] - a[1];
+            d = maxd;
+          }
+          d = Math.max(d, Math.abs(l1 - l2) + 1);
+          const al = Math.acos(clamp((l1 * l1 + d * d - l2 * l2) / (2 * l1 * d), -1, 1));
+          const base = Math.atan2(dy, dx);
+          const c1 = [a[0] + Math.cos(base + al) * l1, a[1] + Math.sin(base + al) * l1];
+          const c2 = [a[0] + Math.cos(base - al) * l1, a[1] + Math.sin(base - al) * l1];
+          return [pick(c1, c2), b];
+        }
+        const P = (pts) => "M" + pts.map((p) => r1(p[0]) + " " + r1(p[1])).join("L");
+        const setD = (pair, d) => {
+          pair[0].setAttribute("d", d);
+          pair[1].setAttribute("d", d);
+        };
+        // flat pose: hx hy torso head ax ay bx by | per arm a*/b*: sh el w tx ty
+        function drawFig(parts, s, f) {
+          const hip = [s.hx, s.hy];
+          const tu = up(s.torso, f);
+          const sh = [hip[0] + tu[0] * TORSO, hip[1] + tu[1] * TORSO];
+          const nk = [hip[0] + tu[0] * (TORSO + NECK), hip[1] + tu[1] * (TORSO + NECK)];
+          const hu = up(s.torso + s.head, f);
+          const hc = [nk[0] + hu[0] * HEADR, nk[1] + hu[1] * HEADR];
+          setD(parts.torso, P([hip, sh, nk]));
+          parts.head.setAttribute("cx", r1(hc[0]));
+          parts.head.setAttribute("cy", r1(hc[1]));
+          const knee = (c1, c2) => (c1[0] * f > c2[0] * f ? c1 : c2);
+          const elbow = (c1, c2) => (c1[1] - 0.5 * f * c1[0] > c2[1] - 0.5 * f * c2[0] ? c1 : c2);
+          [["legF", [s.ax, s.ay]], ["legB", [s.bx, s.by]]].forEach(([n, ft]) => {
+            const [kn, fo] = ik(hip, ft, THIGH, SHIN, knee);
+            setD(parts[n], P([hip, kn, fo]));
+          });
+          const hands = [];
+          [["armF", "a"], ["armB", "b"]].forEach(([n, k]) => {
+            const u = down(s[k + "sh"], f);
+            const el = [sh[0] + u[0] * UARM, sh[1] + u[1] * UARM];
+            const v = down(s[k + "sh"] + s[k + "el"], f);
+            const fk = [el[0] + v[0] * FARM, el[1] + v[1] * FARM];
+            const w = clamp(s[k + "w"], 0, 1);
+            const hand = [lerp(fk[0], s[k + "tx"], w), lerp(fk[1], s[k + "ty"], w)];
+            const [e2, h2] = ik(sh, hand, UARM, FARM, elbow);
+            setD(parts[n], P([sh, e2, h2]));
+            hands.push(h2);
+          });
+          return { head: hc, hands, hip };
+        }
+        const KER = [-4, -3, -2, -1, 0, 1, 2, 3, 4].map((k) => [k * 0.03, Math.exp(-((k / 2.3) ** 2))]);
+        function blend(raw, t) {
+          const out = {};
+          let ws = 0;
+          for (const [dt, w] of KER) {
+            const p = raw(clamp(t + dt, 0, DUR));
+            for (const k in p) out[k] = (out[k] || 0) + p[k] * w;
+            ws += w;
+          }
+          for (const k in out) out[k] /= ws;
+          return out;
+        }
+        const LAGGED = ["head", "ash", "ael", "aw", "atx", "aty", "bsh", "bel", "bw", "btx", "bty"];
+        function livePose(raw, t, phase) {
+          const s = blend(raw, t);
+          const lag = blend(raw, t - 0.05);
+          for (const k of LAGGED) s[k] = lag[k];
+          const br = Math.sin(t * 1.9 + phase);
+          s.hy += br * 1.3;
+          s.torso += br * 0.8;
+          s.head += Math.sin(t * 1.2 + phase * 2) * 1.6;
+          return s;
+        }
+        const ARMS = { ash: 8, ael: 12, aw: 0, atx: 0, aty: 0, bsh: -4, bel: 10, bw: 0, btx: 0, bty: 0 };
+        const base = (o) => ({ hx: 0, hy: 0, torso: 3, head: 0, ax: 0, ay: FL, bx: 0, by: FL, ...ARMS, ...o });
+        function standOn(x, f, fy) {
+          return base({ hx: x, hy: fy - Math.sqrt(LEG * LEG - 15 * 15), ax: x + f * 15, ay: fy, bx: x - f * 15, by: fy });
+        }
+        const mixPose = (a, b, p) => {
+          const o = {};
+          for (const k in a) o[k] = lerp(a[k], b[k], p);
+          return o;
+        };
+
+        // ---------- "who's shouting?": she calls "HONEY!" again and again, he runs every time (water, onions, the jar, her phone that's in her hand), 12 calls. Exhausted, he says "dear?" quietly once. She: "WHY ARE YOU SHOUTING?!" His face. Then she laughs and hugs him ----------
+        // remake of a 521x outlier (90s Memory Dreams, "wife keeps shouting at her husband"), see viral/2026-10-30b-check.md
+        const cam = E("svg").children[1];
+        for (const el of Array.from(cam.children)) {
+          const fill = el.getAttribute("fill") || "";
+          if (fill.includes("floorFade") || fill === "#2a2a2a") { el.setAttribute("x", -1400); el.setAttribute("width", 3400); }
+        }
+        const W = E("world");
+        const backG = E("back");
+        const beams = E("beams");
+        const roomG = svgEl("g", {}, W);
+        const figG = svgEl("g", {}, W);
+        const propG = svgEl("g", {}, W);
+        const fxG = svgEl("g", {}, W);
+        const frac = (v) => v - Math.floor(v);
+        const stand = FL - Math.sqrt(LEG * LEG - 15 * 15);
+
+        // ---------- beats ----------
+        const CALLS = [0.6, 2.0, 3.4, 4.8];            // big calls with a task each
+        const FAST = [6.1, 6.5, 6.9];                  // the montage: three more quick runs (calls 5..12)
+        const RUN = 0.35, ACT = 0.65;
+        const T_SIT = 7.4, T_DEAR = 8.0, T_WHY = 8.6, T_STARE = 9.2, T_LAUGH = 10.4, T_HUG = 10.7;
+        const T_H1 = 11.5, T_H2 = 12.4, T_CARD = 13.4;
+        const CHAIR = 300, AT = 700, HER = 920, CNT = 780, SEAT = FL - 74;
+        const TASK = ["WATER", "ONIONS", "JAR", "PHONE"];
+
+        // ---------- room ----------
+        svgEl("rect", { x: 380, y: FL - 460, width: 190, height: 160, fill: "#7aa8d8", stroke: "#2c2c2c", "stroke-width": 8 }, backG);
+        svgEl("line", { x1: 475, y1: FL - 460, x2: 475, y2: FL - 300, stroke: "#2c2c2c", "stroke-width": 6 }, backG);
+        svgEl("polygon", { points: `380,${FL - 460} 570,${FL - 460} 690,${FL} 260,${FL}`, fill: "url(#beam)", filter: "url(#soft)", opacity: 0.14 }, beams);
+        svgEl("circle", { cx: 860, cy: FL - 260, r: 380, fill: "url(#fireGlow)", opacity: 0.3 }, backG);
+        // kitchen counter
+        svgEl("rect", { x: CNT - 30, y: FL - 140, width: 300, height: 140, fill: "#6b5a44", stroke: "#000", "stroke-width": 5 }, roomG);
+        svgEl("rect", { x: CNT - 40, y: FL - 150, width: 320, height: 14, fill: "#8a7a60", stroke: "#000", "stroke-width": 4 }, roomG);
+        // his chair + newspaper table
+        svgEl("rect", { x: CHAIR - 40, y: SEAT, width: 80, height: 12, rx: 3, fill: "#5a4330", stroke: "#000", "stroke-width": 4 }, roomG);
+        svgEl("rect", { x: CHAIR - 44, y: SEAT - 110, width: 12, height: 120, fill: "#5a4330", stroke: "#000", "stroke-width": 4 }, roomG);
+        for (const lx of [CHAIR - 34, CHAIR + 24]) svgEl("rect", { x: lx, y: SEAT + 10, width: 10, height: FL - SEAT - 10, fill: "#5a4330", stroke: "#000", "stroke-width": 3 }, roomG);
+
+        // ---------- people + props ----------
+        const bun = svgEl("circle", { r: 15, fill: "#ffffff", stroke: "#000", "stroke-width": 6 }, figG);
+        const her = makeFig(figG, "#ffffff", "#e2e2e2", true, "her");
+        figG.insertBefore(bun, her.g.previousSibling);
+        const him = makeFig(figG, "#ffffff", "#dedede", true, "him");
+        const paper = svgEl("g", {}, propG);
+        svgEl("rect", { x: -34, y: -26, width: 68, height: 52, fill: "#e8e4d8", stroke: "#000", "stroke-width": 3 }, paper);
+        for (let i = 0; i < 4; i++) svgEl("line", { x1: -26, y1: -16 + i * 11, x2: 26, y2: -16 + i * 11, stroke: "#999", "stroke-width": 3 }, paper);
+        const bucket = svgEl("g", { opacity: 0 }, propG);
+        svgEl("path", { d: "M-24 -40 L24 -40 L18 0 L-18 0 Z", fill: "#7c8fa8", stroke: "#000", "stroke-width": 4 }, bucket);
+        svgEl("path", { d: "M-22 -40 Q0 -70 22 -40", fill: "none", stroke: "#000", "stroke-width": 4 }, bucket);
+        const onion = svgEl("g", { opacity: 0 }, propG);
+        svgEl("circle", { cx: 0, cy: -16, r: 16, fill: "#c89ad0", stroke: "#000", "stroke-width": 3 }, onion);
+        const knife = svgEl("path", { d: "M0 0 L44 -6 L44 4 Z", fill: "#ddd", stroke: "#000", "stroke-width": 3, opacity: 0 }, propG);
+        const jar = svgEl("g", { opacity: 0 }, propG);
+        svgEl("rect", { x: -16, y: -44, width: 32, height: 44, rx: 6, fill: "#ffd25a", stroke: "#000", "stroke-width": 4 }, jar);
+        const jarLid = svgEl("rect", { x: -18, y: -54, width: 36, height: 12, rx: 3, fill: "#c03a28", stroke: "#000", "stroke-width": 3 }, jar);
+        const phone = svgEl("rect", { x: -9, y: -15, width: 18, height: 30, rx: 4, fill: "#bfe0ff", stroke: "#000", "stroke-width": 4 }, fxG);
+        const tears = Array.from({ length: 2 }, () => svgEl("path", { d: "M0 -8 Q6 2 0 6 Q-6 2 0 -8 Z", fill: "#9fd0ff", stroke: "#000", "stroke-width": 2, opacity: 0 }, fxG));
+        const sweat = Array.from({ length: 3 }, () => svgEl("path", { d: "M0 -8 Q6 2 0 6 Q-6 2 0 -8 Z", fill: "#9fd0ff", stroke: "#000", "stroke-width": 2, opacity: 0 }, fxG));
+        const speed = Array.from({ length: 4 }, () => svgEl("line", { stroke: "#fff", "stroke-width": 4, "stroke-linecap": "round", opacity: 0 }, fxG));
+        const bubble = (txt, w, size = 34, col = "#111") => {
+          const g = svgEl("g", { opacity: 0 }, fxG);
+          svgEl("rect", { x: -w / 2, y: -40, width: w, height: 70, rx: 30, fill: "#fff", stroke: "#000", "stroke-width": 5 }, g);
+          svgEl("path", { d: "M-8 28 L-20 58 L12 28 Z", fill: "#fff", stroke: "#000", "stroke-width": 5, "stroke-linejoin": "round" }, g);
+          svgEl("rect", { x: -12, y: 22, width: 22, height: 10, fill: "#fff" }, g);
+          const tx = svgEl("text", { x: 0, y: 12, "font-family": "HFMono, monospace", "font-weight": 700, "font-size": size, fill: col, "text-anchor": "middle" }, g);
+          tx.textContent = txt;
+          return g;
+        };
+        const bHoney = CALLS.map((_, i) => bubble("HONEY" + "!".repeat(i + 1), 200 + 30 * i));
+        const bFast = FAST.map(() => bubble("HONEY!!!", 260));
+        const bDear = bubble("dear?", 120, 22, "#555");
+        const bWhy = bubble("WHY ARE YOU SHOUTING?!", 470, 34, "#ff3b30");
+        const HEART = "M0 18 C-40 -8 -30 -40 0 -22 C30 -40 40 -8 0 18 Z";
+        const heart = svgEl("path", { d: HEART, fill: "#ff3b30", stroke: "#000", "stroke-width": 4, opacity: 0 }, fxG);
+        const twitch = Array.from({ length: 3 }, () => svgEl("line", { stroke: "#fff", "stroke-width": 4, "stroke-linecap": "round", opacity: 0 }, fxG));
+
+        // ---------- poses ----------
+        function feetOn(x0, hx, STR, lift) {
+          const p = (hx - x0) / STR;
+          return [0, 0.5].map((o) => {
+            const q = frac(Math.abs(p) + o + 1e-6), d = Math.sign(hx - x0) || 1;
+            if (q < 0.5) return [hx + d * STR * (0.25 - q), FL];
+            const ss = (q - 0.5) / 0.5;
+            return [hx + d * STR * (-0.25 + 0.5 * ease(ss)), FL - Math.sin(Math.PI * ss) * lift];
+          });
+        }
+        const running = (x0, x) => { const ft = feetOn(x0, x, 170, 22), sw = Math.sin((Math.PI * 2 * (x - x0)) / 170); return base({ hx: x, hy: stand + 6 + 4 * Math.abs(sw), torso: 16, head: 0, ax: ft[0][0], ay: ft[0][1], bx: ft[1][0], by: ft[1][1], ash: 8 + 50 * sw, ael: 70, bsh: -4 - 50 * sw, bel: 70 }); };
+        const reachTo = (s, k, p, hand = "a") => { s[hand + "w"] = Math.max(s[hand + "w"], k); s[hand + "tx"] = lerp(s[hand + "tx"], p[0], k); s[hand + "ty"] = lerp(s[hand + "ty"], p[1], k); return s; };
+        const hold = (s, a, b, r = 0.2) => win(s, a, a + r) * (1 - win(s, b - r, b));
+        const seated = (k) => { const s = base({ hx: CHAIR, hy: SEAT - 8, torso: -4 + 20 * k, head: 6 * k, ax: CHAIR + 64, ay: FL, bx: CHAIR + 50, by: FL, aw: 1, atx: CHAIR + 60, aty: SEAT - 90, bw: 1, btx: CHAIR + 50, bty: SEAT - 84 }); return s; };
+        // one errand: run to her, do the task, run back to the chair
+        function errand(s, t0, k, fast) {
+          const run = fast ? 0.13 : RUN, act = fast ? 0.12 : ACT, p = s - t0;
+          if (p < run) return { pose: running(CHAIR, lerp(CHAIR, AT, ease(p / run))), f: 1 };
+          if (p < run + act) {
+            const st = standOn(AT, 1, FL), q = (p - run) / act;
+            if (k === 0) { st.torso = 30 * Math.sin(Math.PI * q); reachTo(st, 1, [AT + 50, FL - 40 - 60 * Math.sin(Math.PI * q)]); }
+            if (k === 1) { st.torso = 24; reachTo(st, 1, [AT + 80, FL - 160 - 20 * Math.abs(Math.sin(q * 30))]); reachTo(st, 1, [AT + 60, FL - 156], "b"); st.head = 18; }
+            if (k === 2) { st.torso = 6; reachTo(st, 1, [AT + 50, stand - 110]); reachTo(st, 1, [AT + 50, stand - 70 + 4 * Math.sin(q * 40)], "b"); st.head = 10; }
+            if (k === 3) { st.head = -4; reachTo(st, Math.sin(Math.PI * q), [AT + 100, stand - 150]); }
+            return { pose: st, f: 1 };
+          }
+          if (p < 2 * run + act) return { pose: running(AT, lerp(AT, CHAIR, ease((p - run - act) / run))), f: -1 };
+          return null;
+        }
+        function himState(s) {
+          for (let k = 0; k < CALLS.length; k++) { const r = errand(s, CALLS[k] + 0.25, k, false); if (r) return r; }
+          for (let k = 0; k < FAST.length; k++) { const r = errand(s, FAST[k], k % 4, true); if (r) return r; }
+          // sitting: relaxed at the start, exhausted at the end
+          const tired = win(s, T_SIT, T_SIT + 0.4);
+          const st = seated(tired);
+          if (s < CALLS[0] + 0.25) st.head = 14;   // reading
+          const dear = hold(s, T_DEAR, T_WHY, 0.15); st.head -= 10 * dear;
+          // the stare
+          const stare = hold(s, T_STARE, T_LAUGH + 0.2, 0.2); st.head = lerp(st.head, -6, stare); st.torso = lerp(st.torso, 0, stare);
+          // she hugs him from behind: he melts
+          const hug = win(s, T_HUG, T_HUG + 0.4); st.head = lerp(st.head, -14, hug);
+          return { pose: st, f: 1 };
+        }
+        const himRaw = (s) => himState(s).pose;
+        function herRaw(s) {
+          const hx = s < T_LAUGH ? HER : lerp(HER, CHAIR - 70, ease((s - T_LAUGH) / 0.35));
+          const st = standOn(hx, -1, FL);
+          st.head = 4;
+          // calls: hands cupped at the mouth
+          let call = 0; [...CALLS, ...FAST].forEach((c) => (call = Math.max(call, hold(s, c - 0.05, c + 0.45, 0.1))));
+          reachTo(st, call, [hx - 40, stand - 150]); reachTo(st, call, [hx - 34, stand - 140], "b"); st.torso -= 6 * call;
+          // holding her phone (the one he is looking for)
+          reachTo(st, 1 - call, [hx - 30, stand - 86], "b");
+          // "WHY ARE YOU SHOUTING?!": hands on her hips, leans forward
+          const why = hold(s, T_WHY, T_LAUGH, 0.15); st.torso += 14 * why; st.head -= 6 * why;
+          reachTo(st, why, [hx + 20, stand - 30]);
+          if (s > T_LAUGH) {   // laughs, hugs him from behind
+            const hug = win(s, T_HUG, T_HUG + 0.4);
+            st.torso = lerp(st.torso, 30, hug); reachTo(st, hug, [CHAIR + 30, SEAT - 130]); reachTo(st, hug, [CHAIR + 20, SEAT - 110], "b");
+          }
+          return st;
+        }
+        const herF = (s) => (s > T_HUG ? 1 : -1);
+
+        const slam = (words, times, t, red) => words.map((w, i) => {
+          const q = clamp((t - times[i]) / 0.2, 0, 1);
+          if (q <= 0) return `<span class="w" style="opacity:0">${w}</span>`;
+          const sc = lerp(2.3, 1, backOut(q)), bl = (1 - q) * 6;
+          return `<span class="w" style="transform:scale(${sc.toFixed(3)});filter:blur(${bl.toFixed(1)}px);${red.includes(i) ? "color:#ff3b30;" : ""}">${w}</span>`;
+        }).join("");
+        const dim = document.createElement("div");
+        dim.style.cssText = "position:absolute;inset:0;background:#000;opacity:0";
+        E("stage").appendChild(dim);
+        const card = document.createElement("div");
+        card.id = "card";
+        card.style.cssText = "position:absolute;left:90px;right:90px;top:640px;text-align:center;font-family:HFMono,monospace;font-weight:700;color:#fff;letter-spacing:0.08em";
+        card.innerHTML = `<div id="cm1" style="font-size:58px;line-height:1.25;text-shadow:0 0 18px rgba(255,255,255,0.35)"></div>
+          <div id="cm2" style="font-size:42px;line-height:1.35;margin-top:22px;text-shadow:0 0 14px rgba(255,255,255,0.25)"></div>
+          <div id="cq" style="opacity:0;margin-top:120px;font-size:30px;line-height:1.5;color:#bdbdbd;letter-spacing:0.05em">"A HAPPY MARRIAGE IS THE UNION<br/>OF TWO GOOD FORGIVERS."<div style="margin-top:22px;font-size:24px;color:#8a8a8a;letter-spacing:0.2em">RUTH BELL GRAHAM</div></div>`;
+        E("stage").appendChild(card);
+        const fade = document.createElement("div");
+        fade.style.cssText = "position:absolute;inset:0;background:#000;opacity:0";
+        E("stage").appendChild(fade);
+
+        // ---------- camera ----------
+        const CK = [
+          [0, 1.4, 600, 450, 0], [0.6, 1.5, 640, 440, 0], [1.0, 1.5, 620, 460, 0], [5.9, 1.5, 620, 460, 0], [6.2, 1.45, 610, 460, 0],
+          [7.4, 1.8, 420, 450, 0], [8.0, 2.4, 330, 440, 0], [8.6, 1.45, 620, 440, 0], [9.5, 1.45, 620, 440, 0], [9.9, 3.2, 320, 400, 0], [10.3, 3.4, 320, 395, 0], [10.7, 2.1, 330, 440, 0], [99, 2.0, 340, 450, 0],
+        ];
+        function camAt(s) {
+          let i = 1;
+          while (i < CK.length - 1 && s > CK[i][0]) i++;
+          const a = CK[i - 1], b = CK[i], k = ease((s - a[0]) / (b[0] - a[0]));
+          return a.map((x, j) => lerp(x, b[j], k));
+        }
+
+        // ---------- per-frame render ----------
+        function render(t) {
+          const s = t;
+          let kick = 0;
+          const hit = (tr, k, d) => { if (t >= tr) kick += k * Math.exp(-(t - tr) / d); };
+          CALLS.forEach((c, i) => hit(c, 0.3 + 0.2 * i, 0.15)); FAST.forEach((c) => hit(c, 0.4, 0.1)); hit(T_WHY, 1.4, 0.3);
+          const [, cs, cx, cy, cr] = camAt(s);
+          const sc = cs * (1 + 0.05 * Math.min(kick, 1.5));
+          const shx = Math.sin(t * 67) * 10 * Math.min(kick, 1.3), shy = Math.cos(t * 59) * 8 * Math.min(kick, 1.3);
+          cam.setAttribute("transform", `translate(${r1(540 + shx)} ${r1(1180 + shy)}) rotate(${cr.toFixed(2)}) scale(${sc.toFixed(4)}) translate(${r1(-cx)} ${r1(-cy)})`);
+
+          const hs = himState(s);
+          const mp = drawFig(him, livePose(himRaw, s, 0.3), hs.f);
+          const hp = drawFig(her, livePose(herRaw, s, 1.4), herF(s));
+          bun.setAttribute("cx", r1(hp.head[0] + 25 * (herF(s) < 0 ? 1 : -1))); bun.setAttribute("cy", r1(hp.head[1] - 16));
+          // newspaper while he reads
+          paper.setAttribute("opacity", s < CALLS[0] + 0.25 ? 1 : 0);
+          paper.setAttribute("transform", `translate(${r1(mp.hands[0][0] + 10)} ${r1(mp.hands[0][1] - 20)})`);
+          // props per errand (they stay at the counter afterwards)
+          const after = (k) => s > CALLS[k] + 0.25 + RUN;
+          const during = (k) => s > CALLS[k] + 0.25 + RUN && s < CALLS[k] + 0.25 + RUN + ACT;
+          const inRun0 = s > CALLS[0] + 0.25 && s <= CALLS[0] + 0.25 + RUN;
+          bucket.setAttribute("opacity", inRun0 || after(0) ? 1 : 0);
+          bucket.setAttribute("transform", inRun0 || during(0) ? `translate(${r1(mp.hands[0][0])} ${r1(mp.hands[0][1] + 40)})` : `translate(${AT + 60} ${FL})`);
+          onion.setAttribute("opacity", s > CALLS[1] ? 1 : 0); onion.setAttribute("transform", `translate(${CNT + 50} ${FL - 150})`);
+          knife.setAttribute("opacity", during(1) ? 1 : 0); knife.setAttribute("transform", `translate(${r1(mp.hands[0][0])} ${r1(mp.hands[0][1])})`);
+          tears.forEach((d, i) => { const q = frac(t * 2 + i / 2); d.setAttribute("opacity", during(1) ? Math.sin(Math.PI * q).toFixed(3) : 0); d.setAttribute("transform", `translate(${r1(mp.head[0] + 14 + 8 * i)} ${r1(mp.head[1] + 10 + 30 * q)})`); });
+          jar.setAttribute("opacity", s > CALLS[2] ? 1 : 0);
+          const jq = during(2) ? 1 : 0;
+          jar.setAttribute("transform", jq ? `translate(${r1(mp.hands[1][0] + 4)} ${r1(mp.hands[1][1] + 40)})` : `translate(${CNT + 120} ${FL - 150})`);
+          jarLid.setAttribute("transform", after(2) && !jq ? "translate(30 40) rotate(80)" : `rotate(${jq ? 6 * Math.sin(t * 40) : 0})`);
+          phone.setAttribute("transform", `translate(${r1(hp.hands[1][0] - 4)} ${r1(hp.hands[1][1] - 6)})`);
+          phone.setAttribute("opacity", s < T_LAUGH ? 1 : 0);
+          // speech
+          const bub = (g, a, b, p) => { const k = hold(s, a, b, 0.1); g.setAttribute("opacity", k.toFixed(3)); g.setAttribute("transform", `translate(${r1(p[0])} ${r1(p[1])}) scale(${(0.6 + 0.4 * backOut(k)).toFixed(3)})`); };
+          CALLS.forEach((c, i) => bub(bHoney[i], c, c + 0.75, [hp.head[0] - 60, hp.head[1] - 110 - 10 * i]));
+          FAST.forEach((c, i) => bub(bFast[i], c, c + 0.35, [hp.head[0] - 70, hp.head[1] - 110]));
+          bub(bDear, T_DEAR, T_WHY, [mp.head[0] + 30, mp.head[1] - 100]);
+          bub(bWhy, T_WHY, T_STARE + 0.4, [hp.head[0] - 160, hp.head[1] - 120]);
+          // speed lines during the montage, sweat after it
+          const montage = s > FAST[0] - 0.1 && s < T_SIT;
+          speed.forEach((l, i) => { const y = stand - 160 + i * 50, x = mp.hip[0] - hs.f * (80 + (i % 2) * 40); l.setAttribute("x1", r1(x)); l.setAttribute("x2", r1(x - hs.f * 90)); l.setAttribute("y1", r1(y)); l.setAttribute("y2", r1(y)); l.setAttribute("opacity", montage ? 0.7 : 0); });
+          sweat.forEach((d, i) => { const q = frac(t * 0.9 + i / 3), on = s > T_SIT && s < T_LAUGH; d.setAttribute("transform", `translate(${r1(mp.head[0] + (i - 1) * 22)} ${r1(mp.head[1] - 20 + 50 * q)})`); d.setAttribute("opacity", on ? Math.sin(Math.PI * q).toFixed(3) : 0); });
+          twitch.forEach((l, i) => { const on = s > T_STARE + 0.3 && s < T_LAUGH && frac(t * 3) < 0.5; const a = -0.6 + i * 0.6; l.setAttribute("x1", r1(mp.head[0] + 40 * Math.cos(a))); l.setAttribute("y1", r1(mp.head[1] - 40 + 40 * Math.sin(a))); l.setAttribute("x2", r1(mp.head[0] + 58 * Math.cos(a))); l.setAttribute("y2", r1(mp.head[1] - 40 + 58 * Math.sin(a))); l.setAttribute("opacity", on ? 1 : 0); });
+          const hq = clamp((s - T_HUG - 0.2) / 0.4, 0, 1), beat = 1 + 0.08 * Math.max(0, Math.sin(t * 7)) * (hq >= 1 ? 1 : 0);
+          heart.setAttribute("opacity", hq > 0 ? 1 : 0);
+          heart.setAttribute("transform", `translate(${r1((mp.head[0] + hp.head[0]) / 2)} ${r1(Math.min(mp.head[1], hp.head[1]) - 100)}) scale(${(backOut(hq) * 1.1 * beat).toFixed(3)})`);
+          // call counter
+          const n = CALLS.filter((c) => s > c).length + Math.round(FAST.filter((f) => s > f).length * 8 / 3);
+          E("num").textContent = String(n);
+          E("ctr").style.opacity = (win(s, CALLS[0], CALLS[0] + 0.2) * (1 - win(s, T_SIT + 0.3, T_SIT + 0.6))).toFixed(3);
+
+          E("h1").innerHTML = slam(["SHE", "CALLED", "12", "TIMES."], [T_H1, T_H1 + 0.13, T_H1 + 0.26, T_H1 + 0.4], t, [2]);
+          E("h2").innerHTML = slam(["HE", "WHISPERED", "ONCE."], [T_H2, T_H2 + 0.15, T_H2 + 0.3], t, []);
+          E("h1").style.opacity = (1 - 0.45 * win(t, T_H2 - 0.1, T_H2 + 0.2)).toFixed(3);
+          dim.style.opacity = (0.8 * win(t, T_CARD - 0.4, T_CARD)).toFixed(3);
+          E("head").style.opacity = (1 - win(t, T_CARD - 0.4, T_CARD)).toFixed(3);
+          E("cm1").innerHTML = slam(["LOVE", "IS", "RUNNING"], [T_CARD, T_CARD + 0.15, T_CARD + 0.3], t, []);
+          E("cm2").innerHTML = slam(["EVERY", "TIME", "SHE", "CALLS."], [T_CARD + 0.75, T_CARD + 0.87, T_CARD + 1.0, T_CARD + 1.12], t, [3]);
+          E("cq").style.opacity = win(t, T_CARD + 1.5, T_CARD + 2.0).toFixed(3);
+          fade.style.opacity = win(t, DUR - 0.3, DUR - 0.02).toFixed(3);
+        }
+
+        window.__timelines = window.__timelines || {};
+        const tl = gsap.timeline({ paused: true });
+        const clock = { t: 0 };
+        tl.to(clock, { t: DUR, duration: DUR, ease: "none", onUpdate: () => render(clock.t) }, 0);
+        window.__timelines["main"] = tl;
+        render(0);
+        tl.seek(0);
+      })();
+    </script>
+  </body>
+</html>
