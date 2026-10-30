@@ -4,6 +4,7 @@
 User, 2026-10-28, about reel 36 Bridge For Two and its reference (the "LOVE IS A BRIDGE" reel):
 "diese video waren mit abstand die besten, haben millionen aufrufe bekommen ... nicht nur aufrufe sondern comments, likes und wurde sehr oft repostet und weitergeleitet ... generiere solche content mehr".
 **This is our best format by far. Make more of it, first in line before every other idea.**
+User, 2026-10-30: "die relationship videos funktionieren richtig gut" → relationship is the main niche (3 of every 4 reels).
 
 Why it works (what to copy every time):
 1. **One metaphor in the first frame:** headline "LOVE IS A ___." typed at the very top from 0 s. Love = a visible object both people make (bridge, boat, house, fire, rope, puzzle...).

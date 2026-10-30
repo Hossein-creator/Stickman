@@ -1,6 +1,6 @@
 # Daily job: 4 new stickman reels, sent to Telegram for the user to post
 
-Runs every day. Makes **4 new reels** for @silent.stickman: **2 relationship + 2 other topics**
+Runs every day. Makes **4 new reels** for @silent.stickman: **3 relationship + 1 other topic** (user, 2026-10-30: "die relationship videos funktionieren richtig gut"; was 2 + 2)
 (discipline, overthinking, doer vs overthinker, hidden effort, comfort zone, habits, self-reliance...).
 Sends them to the user's Telegram bot **the day before**, each with its caption and the time to post it tomorrow. The user posts them by hand. **No Metricool** (user, 2026-10-25: "dont push my videos to metricool, send them to me in telegramm with caption and waht time should i post them").
 
@@ -17,7 +17,7 @@ When the user writes **"generiere"**, follow `GENERATE.md` instead (viral remake
 1. **Read first:**
    - `REFERENCE-ANALYSIS.md`, all of it: style, rig v2 smooth motion, the safe area, sound rules, and the "Our reels" list so no topic repeats.
    - `PROFILE.md`.
-2. **Pick 4 new ideas:** 2 relationship, 2 other. **Use the ACTION STYLE** (REFERENCE-ANALYSIS.md, approved 2026-10-25): story told by action, almost no words, action camera. Start each reel from `videos/28-the-gap`.
+2. **Pick 4 new ideas:** 3 relationship, 1 other. **Use the ACTION STYLE** (REFERENCE-ANALYSIS.md, approved 2026-10-25): story told by action, almost no words, action camera. Start each reel from `videos/28-the-gap`.
    - Each idea is one contrast, shown as a visible metaphor object that grows or dies.
    - The punchline is 1–2 short lines that end with a period.
    - Don't reuse a scene or headline from "Our reels".

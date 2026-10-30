@@ -2,6 +2,9 @@
 
 Claude's running notes. Newest on top. Everything Claude wants to remember goes here (or in the matching file), not on the computer.
 
+## 2026-10-30
+- User: "ich muss ehrlich sagen die relationship videos funktionieren richtig gut". Relationship is our main niche now: daily job = 3 relationship + 1 other (was 2 + 2), "generiere" stays 3 + 1. Best performers so far: 36 Bridge For Two (winner format, millions of views) and the relationship remakes. Keep the winner format in every run.
+
 ## 2026-10-28
 - "generiere" run 2 (`viral/2026-10-28-check.md`): single YouTube video pages hit the bot check, so dates + likes came from the channels' public RSS feeds (`youtube.com/feeds/videos.xml?channel_id=...`, last 15 uploads) and the search used the "this month, sorted by views" filter (`sp=CAMSAggE`). 3 relationship winners passed (reels 41, 42, 43); no "other" topic passed, so 3 reels instead of 4. Kit clash bit me again: `SX` is a kit name (blank black render) → check with a playwright `pageerror` listener (scratch err.cjs).
 - **WINNER:** user says reel 36 Bridge For Two + its reference were by far the best (millions of views, comments, likes, reposts, shares) and wants more of this content. Formula written down in `REFERENCE-ANALYSIS.md` (WINNER FORMAT, top of file) with a backlog; GENERATE.md and DAILY-JOB.md now put this format first. Reel 40 "Love Is A Boat" made in the same format (boat turns via scaleX flip of the boat group = going in circles in side view; rowing stroke() drive/recovery; seek-safe boat x integration).
