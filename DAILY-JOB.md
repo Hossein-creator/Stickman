@@ -94,3 +94,7 @@ Lines up to 17 were scheduled in Metricool. 2026-10-25 ~10:42: all still-pending
 - 2026-10-31 16:00: 43 Love Is A Fire (relationship, winner format), sent to Telegram
 - 2026-10-31 18:00: 41 The Last Bowl (relationship, old couple), sent to Telegram
 - 2026-11-01 10:00: 42 Two Minutes (relationship humour), sent to Telegram
+- 2026-11-01 12:00: 44 Share The Load (relationship, winner format), sent to Telegram
+- 2026-11-01 16:00: 45 Her Worst Day (relationship), sent to Telegram
+- 2026-11-01 18:00: 46 Just A Friend (relationship humour), sent to Telegram
+- 2026-11-02 10:00: 47 Start Today (discipline / procrastination), sent to Telegram

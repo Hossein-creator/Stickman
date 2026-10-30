@@ -3,6 +3,7 @@
 Claude's running notes. Newest on top. Everything Claude wants to remember goes here (or in the matching file), not on the computer.
 
 ## 2026-10-30
+- "generiere" run 3 (`viral/2026-10-30-check.md`): YouTube's old "this month by views" filter `CAMSAggE` now returns nothing; `CAMSBAgEEAE=` (month) / `CAMSBAgDEAE=` (week) work but list mostly long videos, so the newest uploads of known winner channels (RSS feeds) were the main source. Made 44-47 (3 relationship incl. winner format + 1 discipline).
 - User: "ich muss ehrlich sagen die relationship videos funktionieren richtig gut". Relationship is our main niche now: daily job = 3 relationship + 1 other (was 2 + 2), "generiere" stays 3 + 1. Best performers so far: 36 Bridge For Two (winner format, millions of views) and the relationship remakes. Keep the winner format in every run.
 
 ## 2026-10-28
