@@ -1,6 +1,6 @@
 # Daily job: 4 new stickman reels, sent to Telegram for the user to post
 
-Runs every day. Makes **4 new reels** for @silent.stickman: **3 relationship + 1 other topic** (user, 2026-10-30: "die relationship videos funktionieren richtig gut"; was 2 + 2)
+Runs every day. Makes **4 new reels** for @silent.stickman: **4 relationship reels, no other topics** (User, 2026-10-30: "weisst du die relationships videos explodieren gerade bleibe in diese nische"; before: 3 + 1, 2 + 2)
 (discipline, overthinking, doer vs overthinker, hidden effort, comfort zone, habits, self-reliance...).
 Sends them to the user's Telegram bot **the day before**, each with its caption and the time to post it tomorrow. The user posts them by hand. **No Metricool** (user, 2026-10-25: "dont push my videos to metricool, send them to me in telegramm with caption and waht time should i post them").
 
@@ -17,7 +17,7 @@ When the user writes **"generiere"**, follow `GENERATE.md` instead (viral remake
 1. **Read first:**
    - `REFERENCE-ANALYSIS.md`, all of it: style, rig v2 smooth motion, the safe area, sound rules, and the "Our reels" list so no topic repeats.
    - `PROFILE.md`.
-2. **Pick 4 new ideas:** 3 relationship, 1 other. **Use the ACTION STYLE** (REFERENCE-ANALYSIS.md, approved 2026-10-25): story told by action, almost no words, action camera. Start each reel from `videos/28-the-gap`.
+2. **Pick 4 new ideas:** all relationship. **Use the ACTION STYLE** (REFERENCE-ANALYSIS.md, approved 2026-10-25): story told by action, almost no words, action camera. Start each reel from `videos/28-the-gap`.
    - Each idea is one contrast, shown as a visible metaphor object that grows or dies.
    - The punchline is 1–2 short lines that end with a period.
    - Don't reuse a scene or headline from "Our reels".
@@ -51,7 +51,7 @@ When the user writes **"generiere"**, follow `GENERATE.md` instead (viral remake
      - No em dashes, no AI slop words.
 6. **Pick the post time** for each reel: TOMORROW (Berlin) at 10:00, 12:00, 16:00, 18:00.
    - Check the posting log below so no two reels share a slot. If a slot is taken, use 14:00 or 20:00.
-   - Alternate topics: relationship, other, relationship, other.
+   - Mix the relationship moods: one warm/emotional, one funny, one winner format (split screen), one sad/lesson.
 7. **Send to Telegram:**
    - Run `node C:/Users/ahmad/OneDrive/Documents/stickman-mindset/tools/telegram-send.mjs ready/NN-slug.mp4 ready/NN-slug-caption.txt "Tue 27 Oct, 10:00 (Berlin)"`.
    - The message shows "POST: <time>" and then the caption.

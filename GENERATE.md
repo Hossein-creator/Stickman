@@ -10,9 +10,9 @@ but in our look and rules (ACTION STYLE, black stage, rig v2, code only).
 ## Rules
 - **Winner format first (user, 2026-10-28):** the "LOVE IS A ___" split screen (reel 36 Bridge For Two and its reference got millions of views, comments, likes, reposts and shares). Every run makes at least one new reel in this format from the backlog in `REFERENCE-ANALYSIS.md` ("WINNER FORMAT"), and viral candidates with the same shape (A/B split, love as an object both build, one partner on the phone) rank first.
 - **Only the most viral videos get remade.** Check virality before building anything (step 2).
-- **Mostly relationship.** Default per run: 4 reels = 3 relationship + 1 other topic.
+- **Only relationship.** User, 2026-10-30: "weisst du die relationships videos explodieren gerade bleibe in diese nische". Every run: 4 relationship reels (couples, love, effort, trust, care, jealousy, breakups, old couples, relationship humour). No other topics.
 - Sources may come from **any niche**. A video from outside the niche gets turned into our niche
-  (fitness video → relationship or discipline story, same structure).
+  (fitness or motivation video → relationship story, same structure).
 - Platforms: YouTube Shorts, Instagram Reels, TikTok.
 - "One to one" = copy the idea and the structure. Never copy their footage, music, voice or exact text.
 - Code only: SVG + GSAP in HyperFrames, sound made in code, no AI images, no voice. 1080×1920, 12–14 s.

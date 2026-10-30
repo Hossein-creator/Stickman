@@ -12,7 +12,7 @@ User, 2026-10-27: "diese repo ist deine ordner du speicherst und notierst nichts
 - Never commit secrets (tokens, passwords). They stay out of the repo (see `.gitignore`).
 
 ## "generiere"
-When the user writes "generiere": run `GENERATE.md` (find viral videos with `ig-viral`, check virality first, remake them one to one in our style, mostly relationship).
+When the user writes "generiere": run `GENERATE.md` (find viral videos with `ig-viral`, check virality first, remake them one to one in our style, **only relationship**: user 2026-10-30 "die relationships videos explodieren gerade bleibe in diese nische").
 
 ## When a video is finished
 User, 2026-10-27: "wenn du mit dem video fertig bist schickst du mir nur das video mit passende und virale hashtags und caption auf telegram hier sagst du nur das video wurde erstellt."
