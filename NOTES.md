@@ -3,6 +3,7 @@
 Claude's running notes. Newest on top. Everything Claude wants to remember goes here (or in the matching file), not on the computer.
 
 ## 2026-10-30
+- User: "aber mach trozdem ein mindset video" → made 48 Same Rock (mindset) in the winner split-screen format. The rule stays relationship only; mindset only when the user asks for it. The split-screen winner format also works for mindset (GROWTH vs FIXED).
 - User, 2026-10-30: "weisst du die relationships videos explodieren gerade bleibe in diese nische". The account is now **relationship only**: daily job and "generiere" both make 4 relationship reels, no discipline/other topics. Sources from other niches get turned into relationship stories.
 - "generiere" run 3 (`viral/2026-10-30-check.md`): YouTube's old "this month by views" filter `CAMSAggE` now returns nothing; `CAMSBAgEEAE=` (month) / `CAMSBAgDEAE=` (week) work but list mostly long videos, so the newest uploads of known winner channels (RSS feeds) were the main source. Made 44-47 (3 relationship incl. winner format + 1 discipline).
 - User: "ich muss ehrlich sagen die relationship videos funktionieren richtig gut". Relationship is our main niche now: daily job = 3 relationship + 1 other (was 2 + 2), "generiere" stays 3 + 1. Best performers so far: 36 Bridge For Two (winner format, millions of views) and the relationship remakes. Keep the winner format in every run.

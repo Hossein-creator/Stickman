@@ -1,0 +1,527 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+    <style>
+      @font-face {
+        font-family: "HFMono";
+        src: url("assets/fonts/consolab.ttf") format("truetype");
+        font-weight: 700;
+      }
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      html,
+      body {
+        width: 1080px;
+        height: 1920px;
+        overflow: hidden;
+        background: #000;
+      }
+      #root {
+        position: relative;
+        width: 1080px;
+        height: 1920px;
+        overflow: hidden;
+        background: #000;
+      }
+      #stage {
+        position: absolute;
+        inset: 0;
+        width: 1080px;
+        height: 1920px;
+      }
+      #stage svg {
+        position: absolute;
+        inset: 0;
+      }
+      .mono {
+        position: absolute;
+        font-family: "HFMono", monospace;
+        font-weight: 700;
+        white-space: nowrap;
+      }
+      /* everything readable stays inside the Instagram safe area: x 120-960, y 220-1500 */
+      #head {
+        position: absolute;
+        left: 0;
+        right: 0;
+        top: 222px;
+        text-align: center;
+        font-family: "HFMono", monospace;
+        font-weight: 700;
+        font-size: 38px;
+        letter-spacing: 0.12em;
+        line-height: 1.45;
+        color: #fff;
+        text-shadow: 0 0 16px rgba(255, 255, 255, 0.3);
+      }
+      #head .ghost {
+        visibility: hidden;
+      }
+      #ctr {
+        position: absolute;
+        left: 0;
+        right: 0;
+        top: 430px;
+        text-align: center;
+        font-family: "HFMono", monospace;
+        font-weight: 700;
+        white-space: nowrap;
+      }
+      #ctr .lbl {
+        font-size: 26px;
+        letter-spacing: 0.24em;
+        color: #9a9a9a;
+        vertical-align: middle;
+      }
+      #num {
+        display: inline-block;
+        min-width: 2.4ch;
+        font-size: 58px;
+        letter-spacing: 0.08em;
+        color: #fff;
+        vertical-align: middle;
+        text-shadow: 0 0 14px rgba(255, 255, 255, 0.35);
+      }
+      #tag {
+        display: inline-block;
+        min-width: 5.2ch;
+        padding: 6px 12px 4px;
+        font-size: 26px;
+        letter-spacing: 0.18em;
+        vertical-align: middle;
+        visibility: hidden;
+      }
+      #tag.fail {
+        visibility: visible;
+        background: #d62a2a;
+        color: #fff;
+      }
+      #tag.pass {
+        visibility: visible;
+        background: #fff;
+        color: #000;
+        box-shadow: 0 0 22px rgba(255, 255, 255, 0.6);
+      }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="15" data-width="1080" data-height="1920">
+      <div id="stage" class="clip" data-start="0" data-duration="15" data-track-index="0">
+        <svg id="svg" width="1080" height="1920" viewBox="0 0 1080 1920" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <linearGradient id="beam" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0" stop-color="#ffffff" stop-opacity="0.55" />
+              <stop offset="0.7" stop-color="#ffffff" stop-opacity="0.12" />
+              <stop offset="1" stop-color="#ffffff" stop-opacity="0.04" />
+            </linearGradient>
+            <radialGradient id="pool" cx="0.5" cy="0.5" r="0.5">
+              <stop offset="0" stop-color="#ffffff" stop-opacity="0.32" />
+              <stop offset="1" stop-color="#ffffff" stop-opacity="0" />
+            </radialGradient>
+            <radialGradient id="dustG" cx="0.5" cy="0.5" r="0.5">
+              <stop offset="0" stop-color="#b5b5b5" stop-opacity="0.8" />
+              <stop offset="1" stop-color="#b5b5b5" stop-opacity="0" />
+            </radialGradient>
+            <linearGradient id="ply" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0" stop-color="#d9c29b" />
+              <stop offset="1" stop-color="#8f7858" />
+            </linearGradient>
+            <linearGradient id="floorFade" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0" stop-color="#000" stop-opacity="0.45" />
+              <stop offset="1" stop-color="#000" stop-opacity="1" />
+            </linearGradient>
+            <filter id="blur" x="-50%" y="-50%" width="200%" height="200%">
+              <feGaussianBlur stdDeviation="12" />
+            </filter>
+            <filter id="soft" x="-50%" y="-50%" width="200%" height="200%">
+              <feGaussianBlur stdDeviation="16" />
+            </filter>
+                      <linearGradient id="panelBg" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0" stop-color="#0c0c0e" />
+              <stop offset="1" stop-color="#111318" />
+            </linearGradient>
+            <linearGradient id="abyss" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0" stop-color="#05070a" />
+              <stop offset="1" stop-color="#1c2433" />
+            </linearGradient>
+            <linearGradient id="cliff" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0" stop-color="#ddd6c6" />
+              <stop offset="1" stop-color="#a39a88" />
+            </linearGradient>
+            <linearGradient id="redBeam" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0" stop-color="#ff4a4a" stop-opacity="0.75" />
+              <stop offset="0.7" stop-color="#ff6a6a" stop-opacity="0.2" />
+              <stop offset="1" stop-color="#ffffff" stop-opacity="0.08" />
+            </linearGradient>
+            <radialGradient id="redGlow" cx="0.5" cy="0.5" r="0.5">
+              <stop offset="0" stop-color="#ff3b30" stop-opacity="0.7" />
+              <stop offset="1" stop-color="#ff3b30" stop-opacity="0" />
+            </radialGradient>
+            <radialGradient id="phoneGlow" cx="0.5" cy="0.5" r="0.5">
+              <stop offset="0" stop-color="#6aa8ff" stop-opacity="0.75" />
+              <stop offset="0.5" stop-color="#4f8cff" stop-opacity="0.28" />
+              <stop offset="1" stop-color="#4f8cff" stop-opacity="0" />
+            </radialGradient>
+            <linearGradient id="ground" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0" stop-color="#6e665a" />
+              <stop offset="0.25" stop-color="#3a352f" />
+              <stop offset="1" stop-color="#0c0b0a" />
+            </linearGradient>
+            <radialGradient id="fireGlow" cx="0.5" cy="0.5" r="0.5">
+              <stop offset="0" stop-color="#ffb347" stop-opacity="0.75" />
+              <stop offset="0.4" stop-color="#ff7a1a" stop-opacity="0.28" />
+              <stop offset="1" stop-color="#ff5a00" stop-opacity="0" />
+            </radialGradient>
+          </defs>
+          <!-- world: floor at world y 600 -> screen y 1400, world x 400 -> screen x 540 -->
+          <g transform="translate(540 1400) scale(1.45) translate(-400 -600)">
+            <g id="beams"></g>
+            <g id="back"></g>
+            
+            <use href="#world" transform="translate(0 1200) scale(1 -1)" opacity="0.16" />
+            <rect x="-200" y="600" width="1200" height="260" fill="url(#floorFade)" />
+            <rect x="-600" y="858" width="2000" height="1400" fill="#000" />
+            <rect x="-200" y="599" width="1200" height="2" fill="#2a2a2a" />
+            <g id="world"></g>
+          </g>
+        </svg>
+        <style>
+  #fx { position: absolute; inset: 0; pointer-events: none; }
+</style>
+        <div id="head">
+          <div id="h1"></div>
+          <div id="h2"></div>
+        </div>
+      </div>
+      <audio id="mix" src="assets/audio/mix.wav" data-start="0" data-duration="15" data-track-index="1"></audio>
+    </div>
+
+    <script>
+      (function () {
+        const DUR = 15;
+        const FL = 600, BX0 = 380, BX1 = 520, BTOP = 410, TOPF = 404, SX = 250;
+        const THIGH = 80, SHIN = 78, LEG = 154;
+        const UARM = 64, FARM = 60, TORSO = 116, NECK = 12, HEADR = 31;
+        const NS = "http://www.w3.org/2000/svg";
+        const svgEl = (tag, attrs, parent) => {
+          const e = document.createElementNS(NS, tag);
+          for (const k in attrs || {}) e.setAttribute(k, attrs[k]);
+          if (parent) parent.appendChild(e);
+          return e;
+        };
+        const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
+        const lerp = (a, b, p) => a + (b - a) * p;
+        const ease = (p) => 0.5 - 0.5 * Math.cos(Math.PI * clamp(p, 0, 1));
+        const backOut = (p) => { p = clamp(p, 0, 1); const s = 2.2; return 1 + (s + 1) * Math.pow(p - 1, 3) + s * Math.pow(p - 1, 2); };
+        const win = (t, a, b) => ease((t - a) / (b - a));
+        const rad = (x) => (x * Math.PI) / 180;
+        const down = (a, f) => [Math.sin(rad(a)) * f, Math.cos(rad(a))];
+        const up = (a, f) => [Math.sin(rad(a)) * f, -Math.cos(rad(a))];
+        const r1 = (v) => Math.round(v * 10) / 10;
+        const E = (id) => document.getElementById(id);
+        let seed = 31;
+        const rnd = () => ((seed = (seed * 16807) % 2147483647) / 2147483647);
+
+        // ---------- rig v2 (from reel 05): blended poses, head/arm follow-through, breathing ----------
+        function makeFig(parent, front, back, glow, id) {
+          const g = svgEl("g", { id }, parent);
+          if (glow) parent.insertBefore(svgEl("use", { href: "#" + id, filter: "url(#blur)", opacity: 0.45 }), g);
+          const parts = { g };
+          for (const [n, col] of [["armB", back], ["legB", back], ["torso", front], ["legF", front], ["armF", front]]) {
+            const o = svgEl("path", { fill: "none", stroke: "#000", "stroke-width": 34, "stroke-linecap": "round", "stroke-linejoin": "round" }, g);
+            const w = svgEl("path", { fill: "none", stroke: col, "stroke-width": 22, "stroke-linecap": "round", "stroke-linejoin": "round" }, g);
+            parts[n] = [o, w];
+          }
+          parts.head = svgEl("circle", { r: HEADR, fill: front, stroke: "#000", "stroke-width": 6 }, g);
+          return parts;
+        }
+        function ik(a, b, l1, l2, pick) {
+          let dx = b[0] - a[0], dy = b[1] - a[1];
+          let d = Math.hypot(dx, dy);
+          const maxd = l1 + l2 - 0.5;
+          if (d > maxd) {
+            b = [a[0] + (dx / d) * maxd, a[1] + (dy / d) * maxd];
+            dx = b[0] - a[0];
+            dy = b[1] - a[1];
+            d = maxd;
+          }
+          d = Math.max(d, Math.abs(l1 - l2) + 1);
+          const al = Math.acos(clamp((l1 * l1 + d * d - l2 * l2) / (2 * l1 * d), -1, 1));
+          const base = Math.atan2(dy, dx);
+          const c1 = [a[0] + Math.cos(base + al) * l1, a[1] + Math.sin(base + al) * l1];
+          const c2 = [a[0] + Math.cos(base - al) * l1, a[1] + Math.sin(base - al) * l1];
+          return [pick(c1, c2), b];
+        }
+        const P = (pts) => "M" + pts.map((p) => r1(p[0]) + " " + r1(p[1])).join("L");
+        const setD = (pair, d) => {
+          pair[0].setAttribute("d", d);
+          pair[1].setAttribute("d", d);
+        };
+        // flat pose: hx hy torso head ax ay bx by | per arm a*/b*: sh el w tx ty
+        function drawFig(parts, s, f) {
+          const hip = [s.hx, s.hy];
+          const tu = up(s.torso, f);
+          const sh = [hip[0] + tu[0] * TORSO, hip[1] + tu[1] * TORSO];
+          const nk = [hip[0] + tu[0] * (TORSO + NECK), hip[1] + tu[1] * (TORSO + NECK)];
+          const hu = up(s.torso + s.head, f);
+          const hc = [nk[0] + hu[0] * HEADR, nk[1] + hu[1] * HEADR];
+          setD(parts.torso, P([hip, sh, nk]));
+          parts.head.setAttribute("cx", r1(hc[0]));
+          parts.head.setAttribute("cy", r1(hc[1]));
+          const knee = (c1, c2) => (c1[0] * f > c2[0] * f ? c1 : c2);
+          const elbow = (c1, c2) => (c1[1] - 0.5 * f * c1[0] > c2[1] - 0.5 * f * c2[0] ? c1 : c2);
+          [["legF", [s.ax, s.ay]], ["legB", [s.bx, s.by]]].forEach(([n, ft]) => {
+            const [kn, fo] = ik(hip, ft, THIGH, SHIN, knee);
+            setD(parts[n], P([hip, kn, fo]));
+          });
+          const hands = [];
+          [["armF", "a"], ["armB", "b"]].forEach(([n, k]) => {
+            const u = down(s[k + "sh"], f);
+            const el = [sh[0] + u[0] * UARM, sh[1] + u[1] * UARM];
+            const v = down(s[k + "sh"] + s[k + "el"], f);
+            const fk = [el[0] + v[0] * FARM, el[1] + v[1] * FARM];
+            const w = clamp(s[k + "w"], 0, 1);
+            const hand = [lerp(fk[0], s[k + "tx"], w), lerp(fk[1], s[k + "ty"], w)];
+            const [e2, h2] = ik(sh, hand, UARM, FARM, elbow);
+            setD(parts[n], P([sh, e2, h2]));
+            hands.push(h2);
+          });
+          return { head: hc, hands, hip };
+        }
+        const KER = [-4, -3, -2, -1, 0, 1, 2, 3, 4].map((k) => [k * 0.03, Math.exp(-((k / 2.3) ** 2))]);
+        function blend(raw, t) {
+          const out = {};
+          let ws = 0;
+          for (const [dt, w] of KER) {
+            const p = raw(clamp(t + dt, 0, DUR));
+            for (const k in p) out[k] = (out[k] || 0) + p[k] * w;
+            ws += w;
+          }
+          for (const k in out) out[k] /= ws;
+          return out;
+        }
+        const LAGGED = ["head", "ash", "ael", "aw", "atx", "aty", "bsh", "bel", "bw", "btx", "bty"];
+        function livePose(raw, t, phase) {
+          const s = blend(raw, t);
+          const lag = blend(raw, t - 0.05);
+          for (const k of LAGGED) s[k] = lag[k];
+          const br = Math.sin(t * 1.9 + phase);
+          s.hy += br * 1.3;
+          s.torso += br * 0.8;
+          s.head += Math.sin(t * 1.2 + phase * 2) * 1.6;
+          return s;
+        }
+        const ARMS = { ash: 8, ael: 12, aw: 0, atx: 0, aty: 0, bsh: -4, bel: 10, bw: 0, btx: 0, bty: 0 };
+        const base = (o) => ({ hx: 0, hy: 0, torso: 3, head: 0, ax: 0, ay: FL, bx: 0, by: FL, ...ARMS, ...o });
+        function standOn(x, f, fy) {
+          return base({ hx: x, hy: fy - Math.sqrt(LEG * LEG - 15 * 15), ax: x + f * 15, ay: fy, bx: x - f * 15, by: fy });
+        }
+        const mixPose = (a, b, p) => {
+          const o = {};
+          for (const k in a) o[k] = lerp(a[k], b[k], p);
+          return o;
+        };
+
+        // ---------- "same rock": winner split-screen format (reel 36), mindset topic. Both walk into the same big rock and push. GROWTH: steps back, sees a step, climbs it, jumps up to the high ground, walks into the gold light. FIXED: kicks it, calls it a wall, sits down against it, stuck ----------
+        E("svg").children[1].style.display = "none";
+        const SVG = E("svg");
+        const frac = (v) => v - Math.floor(v);
+        const stand = FL - Math.sqrt(LEG * LEG - 15 * 15);
+
+        // ---------- panel geometry: world 0..1233 x 98..815, ground at 600, high ground on the right ----------
+        const PW = 1233, PY0 = 98, PY1 = 815, PK = 535 / 717, PX = 81;
+        const RX = 640, RTOP = FL - 95, LEDGE = 800, LTOP = FL - 140;
+        function makePanel(y0, id) {
+          const clip = svgEl("clipPath", { id: "clip" + id }, SVG.querySelector("defs"));
+          svgEl("rect", { x: 0, y: PY0, width: PW, height: PY1 - PY0 }, clip);
+          const g = svgEl("g", { transform: `translate(${PX} ${y0}) scale(${PK}) translate(0 ${-PY0})` }, SVG);
+          const inner = svgEl("g", { "clip-path": `url(#clip${id})` }, g);
+          svgEl("rect", { x: 0, y: PY0, width: PW, height: PY1 - PY0, fill: "url(#panelBg)" }, inner);
+          const beams = svgEl("g", {}, inner);
+          for (const bx of [300, 1050]) svgEl("polygon", { points: `${bx - 50},${PY0} ${bx + 50},${PY0} ${bx + 150},${FL} ${bx - 150},${FL}`, fill: "url(#beam)", filter: "url(#soft)", opacity: 0.28 }, beams);
+          const gold = svgEl("ellipse", { cx: 1060, cy: LTOP - 60, rx: 420, ry: 300, fill: "url(#fireGlow)", opacity: 0 }, inner);
+          svgEl("rect", { x: 0, y: FL, width: PW, height: PY1 - FL, fill: "url(#ground)" }, inner);
+          svgEl("rect", { x: 0, y: FL - 2, width: PW, height: 3, fill: "#8a8172" }, inner);
+          // the high ground
+          svgEl("path", { d: `M${LEDGE} ${PY1} L${LEDGE - 6} ${LTOP + 90} L${LEDGE + 8} ${LTOP + 30} L${LEDGE} ${LTOP} L${PW + 10} ${LTOP} L${PW + 10} ${PY1} Z`, fill: "url(#cliff)", stroke: "#000", "stroke-width": 5 }, inner);
+          // the rock
+          svgEl("path", { d: `M${RX - 120} ${FL + 2} Q${RX - 132} ${RTOP + 40} ${RX - 70} ${RTOP + 6} Q${RX} ${RTOP - 14} ${RX + 74} ${RTOP + 8} Q${RX + 128} ${RTOP + 46} ${RX + 116} ${FL + 2} Z`, fill: "#7a7a80", stroke: "#000", "stroke-width": 6 }, inner);
+          svgEl("path", { d: `M${RX - 40} ${RTOP + 30} l20 34 l-16 30 M${RX + 50} ${RTOP + 50} l-14 26`, fill: "none", stroke: "#4a4a50", "stroke-width": 5, "stroke-linecap": "round" }, inner);
+          svgEl("path", { d: `M${RX - 80} ${RTOP + 22} Q${RX - 10} ${RTOP} ${RX + 60} ${RTOP + 18}`, fill: "none", stroke: "#9a9aa2", "stroke-width": 5, "stroke-linecap": "round" }, inner);
+          const figs = svgEl("g", {}, inner);
+          const fx = svgEl("g", {}, inner);
+          const dark = svgEl("rect", { x: 0, y: PY0, width: PW, height: PY1 - PY0, fill: "#05070c", opacity: 0 }, inner);
+          svgEl("rect", { x: 0, y: PY0, width: PW, height: PY1 - PY0, fill: "none", stroke: "#2c2c30", "stroke-width": 5 }, g);
+          return { beams, gold, figs, fx, dark };
+        }
+        const top = makePanel(412, "T");
+        const bot = makePanel(1010, "B");
+
+        // ---------- poses ----------
+        function feetOn(x0, hx, ST, lift, fy = FL) {
+          const p = (hx - x0) / ST;
+          return [0, 0.5].map((o) => {
+            const q = frac(Math.abs(p) + o + 1e-6), d = Math.sign(hx - x0) || 1;
+            if (q < 0.5) return [hx + d * ST * (0.25 - q), fy];
+            const ss = (q - 0.5) / 0.5;
+            return [hx + d * ST * (-0.25 + 0.5 * ease(ss)), fy - Math.sin(Math.PI * ss) * lift];
+          });
+        }
+        const walking = (x0, x, fy = FL) => {
+          const ft = feetOn(x0, x, 120, 14, fy), sw = Math.sin((Math.PI * 2 * (x - x0)) / 120), sy = fy - Math.sqrt(LEG * LEG - 15 * 15);
+          return base({ hx: x, hy: sy + 3 + 3 * Math.abs(sw), torso: 4, head: 2, ax: ft[0][0], ay: ft[0][1], bx: ft[1][0], by: ft[1][1], ash: 8 + 30 * sw, ael: 20, bsh: -4 - 30 * sw, bel: 20 });
+        };
+        const reachTo = (s, k, p, hand = "a") => { s[hand + "w"] = Math.max(s[hand + "w"], k); s[hand + "tx"] = lerp(s[hand + "tx"], p[0], k); s[hand + "ty"] = lerp(s[hand + "ty"], p[1], k); return s; };
+        const hold = (s, a, b, r = 0.2) => win(s, a, a + r) * (1 - win(s, b - r, b));
+        function hop(t, t0, d, x0, y0, x1, y1, f, h) {
+          const p = clamp((t - t0) / d, 0, 1), e = ease(p), tuck = Math.sin(Math.PI * p);
+          const st = standOn(lerp(x0, x1, e), f, lerp(y0, y1, e) - tuck * h);
+          st.ay -= 40 * tuck; st.by -= 48 * tuck; st.ax += f * 16 * tuck; st.bx -= f * 8 * tuck;
+          st.ash = 8 + 120 * tuck; st.bsh = 8 + 110 * tuck; st.torso = 3 + 10 * tuck;
+          return st;
+        }
+        const PUSHX = RX - 168;
+        const pushPose = (t) => { const st = standOn(PUSHX, 1, FL); st.torso = 30 + 4 * Math.sin(t * 9); st.hx -= 18; st.bx -= 40; st.ax -= 10; reachTo(st, 1, [RX - 118, FL - 80]); reachTo(st, 1, [RX - 116, FL - 60], "b"); st.head = -10; return st; };
+
+        // ---------- beats ----------
+        const T_AT = 1.5, T_PUSH = 1.6, T_PUSH1 = 2.9;
+        const T_LOOK = 3.05, T_CLIMB = 3.6, T_ONROCK = 4.15, T_JUMP = 4.7, T_LAND = 5.25, T_WALKUP = 5.4, T_FIST = 6.4;
+        const T_KICK = 3.05, T_SIT = 3.9, T_STUCK = 6.4;
+        const T_TEXT1 = 9.0, T_TEXT2 = 9.8, T_CARD = 11.6;
+
+        // growth: same start, then steps back, looks up, climbs, jumps up, walks into the light
+        function topRaw(t) {
+          if (t < T_AT) return walking(60, lerp(60, PUSHX, ease(t / T_AT)));
+          if (t < T_PUSH1) return mixPose(standOn(PUSHX, 1, FL), pushPose(t), win(t, T_AT, T_PUSH));
+          if (t < T_CLIMB) {
+            const st = standOn(PUSHX - 30 * win(t, T_PUSH1, T_LOOK), 1, FL);
+            const look = win(t, T_LOOK, T_LOOK + 0.3);
+            st.head = -26 * look; st.torso = -4 * look;
+            reachTo(st, hold(t, T_LOOK + 0.2, T_CLIMB, 0.15), [PUSHX + 40, stand - 190]);   // points up: a step!
+            return mixPose(pushPose(t), st, win(t, T_PUSH1, T_PUSH1 + 0.2));
+          }
+          if (t < T_ONROCK) { const h = hop(t, T_CLIMB, T_ONROCK - T_CLIMB, PUSHX - 30, FL, RX - 10, RTOP + 4, 1, 40); reachTo(h, Math.sin(Math.PI * clamp((t - T_CLIMB) / 0.4, 0, 1)), [RX - 70, RTOP + 10]); return h; }
+          if (t < T_JUMP) { const st = standOn(RX - 10, 1, RTOP + 4); const k = Math.sin(Math.PI * clamp((t - T_JUMP + 0.3) / 0.3, 0, 1)); st.hy += 30 * k; st.torso += 20 * k; return st; }
+          if (t < T_LAND) return hop(t, T_JUMP, T_LAND - T_JUMP, RX - 10, RTOP + 4, LEDGE + 70, LTOP, 1, 22);
+          if (t < T_WALKUP) { const st = standOn(LEDGE + 70, 1, LTOP); st.hy += 26 * (1 - win(t, T_LAND, T_WALKUP)); st.torso = 16 * (1 - win(t, T_LAND, T_WALKUP)); return st; }
+          if (t < T_FIST) return walking(LEDGE + 70, lerp(LEDGE + 70, 1010, ease((t - T_WALKUP) / (T_FIST - T_WALKUP))), LTOP);
+          const st = standOn(1010, 1, LTOP); st.torso = -4; st.head = -12;
+          reachTo(st, win(t, T_FIST, T_FIST + 0.3), [1075, LTOP - 430]);
+          return st;
+        }
+        // fixed: same start, kicks the rock, sits down against it, head down
+        function botRaw(t) {
+          if (t < T_AT) return walking(60, lerp(60, PUSHX, ease(t / T_AT)));
+          if (t < T_PUSH1) return mixPose(standOn(PUSHX, 1, FL), pushPose(t), win(t, T_AT, T_PUSH));
+          if (t < T_SIT) {
+            const st = standOn(PUSHX - 20, 1, FL);
+            const kick = Math.sin(Math.PI * clamp((t - T_KICK) / 0.35, 0, 1));
+            st.ax = lerp(st.ax, RX - 120, kick); st.ay = lerp(st.ay, FL - 40, kick); st.torso = -8 * kick;
+            // throws his arms up: "a wall"
+            const arms = hold(t, T_KICK + 0.35, T_SIT, 0.15);
+            reachTo(st, arms, [PUSHX - 70, stand - 170]); reachTo(st, arms, [PUSHX + 30, stand - 170], "b");
+            return mixPose(pushPose(t), st, win(t, T_PUSH1, T_PUSH1 + 0.2));
+          }
+          const sx = PUSHX - 40;
+          const sit = base({ hx: sx, hy: FL - 30, torso: -16, head: 40, ax: sx - 88, ay: FL, bx: sx - 74, by: FL, aw: 1, atx: sx - 76, aty: FL - 86, bw: 1, btx: sx - 66, bty: FL - 80 });
+          sit.torso += 2 * Math.sin(t * 2.2);
+          return mixPose(standOn(PUSHX - 20, 1, FL), sit, win(t, T_SIT, T_SIT + 0.6));
+        }
+        const botF = (t) => (t >= T_SIT + 0.3 ? -1 : 1);
+
+        const tMan = makeFig(top.figs, "#ffffff", "#dedede", true, "tMan");
+        const bMan = makeFig(bot.figs, "#9a9a9a", "#7e7e7e", false, "bMan");
+        const sparks = Array.from({ length: 10 }, () => svgEl("circle", { r: 5, fill: "#ffd060", opacity: 0 }, top.fx));
+        const cloud = svgEl("g", { opacity: 0 }, bot.fx);
+        for (const [x, y, r] of [[-40, 0, 34], [0, -16, 42], [44, 0, 34], [0, 10, 34]]) svgEl("circle", { cx: x, cy: y, r, fill: "#4a4e58", stroke: "#000", "stroke-width": 4 }, cloud);
+        const drops = Array.from({ length: 10 }, () => svgEl("line", { stroke: "#7d93b5", "stroke-width": 3, opacity: 0 }, bot.fx));
+
+        // ---------- labels (typed) ----------
+        const label = (x, y, size, col) => { const d = document.createElement("div"); d.className = "mono"; d.style.cssText = `left:${x}px;top:${y}px;font-size:${size}px;letter-spacing:0.16em;color:${col}`; E("stage").appendChild(d); return d; };
+        const topT = label(PX + 44, 412 + 26, 30, "#ffffff"), topS = label(PX + 44, 412 + 66, 19, "#c8c8c8");
+        const botT = label(PX + 44, 1010 + 26, 30, "#a8a8a8"), botS = label(PX + 44, 1010 + 66, 19, "#a8a8a8");
+        topT.textContent = "GROWTH MINDSET"; botT.textContent = "FIXED MINDSET";
+        topT.style.textShadow = "0 0 12px rgba(255,255,255,0.35)";
+        const typed = (seq, t, cps = 16) => { let cur = null; for (const s of seq) if (t >= s[0]) cur = s; if (!cur) return ["", "#c8c8c8"]; const n = Math.floor((t - cur[0]) * cps); return [cur[1].slice(0, n), cur[2] || null]; };
+        const TOPSEQ = [[0.45, "A ROCK"], [T_LOOK + 0.2, "A STEP", "#ffd060"], [T_FIST, "HIGHER", "#ffd060"]];
+        const BOTSEQ = [[0.45, "A ROCK"], [T_KICK + 0.3, "A WALL", "#ff3b30"], [T_STUCK, "STUCK", "#ff3b30"]];
+        const HEAD = [[0, "SAME ROCK."], [T_TEXT1, "ONE SAW A WALL."], [T_TEXT2, "ONE SAW A STEP."]];
+        E("head").style.top = "236px";
+        E("head").style.fontSize = "30px";
+        E("head").style.letterSpacing = "0.16em";
+        E("head").style.lineHeight = "1.6";
+
+        // ---------- end card ----------
+        const dim = document.createElement("div");
+        dim.style.cssText = "position:absolute;inset:0;background:#000;opacity:0";
+        E("stage").appendChild(dim);
+        const card = document.createElement("div");
+        card.id = "card";
+        card.style.cssText = "position:absolute;left:100px;right:100px;top:640px;text-align:center;font-family:HFMono,monospace;font-weight:700;color:#fff;letter-spacing:0.08em";
+        card.innerHTML = `<div id="cm1" style="font-size:56px;line-height:1.25;text-shadow:0 0 18px rgba(255,255,255,0.35)"></div>
+          <div id="cm2" style="font-size:44px;line-height:1.35;margin-top:26px;text-shadow:0 0 14px rgba(255,255,255,0.25)"></div>
+          <div id="cq" style="opacity:0;margin-top:120px;font-size:30px;line-height:1.5;color:#bdbdbd;letter-spacing:0.05em">"WHETHER YOU THINK YOU CAN,<br/>OR YOU THINK YOU CAN'T,<br/>YOU'RE RIGHT."<div style="margin-top:22px;font-size:24px;color:#8a8a8a;letter-spacing:0.2em">HENRY FORD</div></div>`;
+        const cardCss = document.createElement("style");
+        cardCss.textContent = "#card span.w { display: inline-block; margin: 0 0.16em; }";
+        document.head.appendChild(cardCss);
+        E("stage").appendChild(card);
+        const slam = (words, times, t, red) => words.map((w, i) => {
+          const q = clamp((t - times[i]) / 0.2, 0, 1);
+          if (q <= 0) return `<span class="w" style="opacity:0">${w}</span>`;
+          const sc = lerp(2.3, 1, backOut(q)), bl = (1 - q) * 6;
+          return `<span class="w" style="transform:scale(${sc.toFixed(3)});filter:blur(${bl.toFixed(1)}px);${red.includes(i) ? "color:#ffd060;" : ""}">${w}</span>`;
+        }).join("");
+        const fade = document.createElement("div");
+        fade.style.cssText = "position:absolute;inset:0;background:#000;opacity:0";
+        E("stage").appendChild(fade);
+
+        // ---------- per-frame render ----------
+        function render(t) {
+          const tp = drawFig(tMan, livePose(topRaw, t, 0.4), 1);
+          drawFig(bMan, livePose(botRaw, t, 1.3), botF(t));
+          // gold light on the high ground once he is up there, sparks around his fist
+          const g = win(t, T_LAND - 0.2, T_FIST + 0.6);
+          top.gold.setAttribute("opacity", (0.95 * g * (0.94 + 0.06 * Math.sin(t * 5))).toFixed(3));
+          sparks.forEach((s, j) => {
+            const p = frac(t * 0.6 + j / 10), on = t > T_FIST + 0.2;
+            s.setAttribute("cx", r1(tp.hands[0][0] + 60 * Math.cos(j * 2.4) * p));
+            s.setAttribute("cy", r1(tp.hands[0][1] + 10 - 120 * p));
+            s.setAttribute("opacity", on ? (Math.sin(Math.PI * p) * 0.9).toFixed(3) : 0);
+          });
+          // bottom: it gets darker, a rain cloud over him
+          bot.dark.setAttribute("opacity", (0.4 * win(t, T_SIT, T_STUCK + 0.6)).toFixed(3));
+          const ck = win(t, T_SIT + 0.4, T_SIT + 1.2);
+          const cx = PUSHX - 40, cy = FL - 300;
+          cloud.setAttribute("opacity", ck.toFixed(3)); cloud.setAttribute("transform", `translate(${r1(cx + 6 * Math.sin(t))} ${r1(cy)})`);
+          drops.forEach((d, j) => { const p = frac(t * 1.4 + j / 10), x = cx - 50 + j * 11; d.setAttribute("x1", r1(x)); d.setAttribute("x2", r1(x - 4)); d.setAttribute("y1", r1(cy + 30 + p * 200)); d.setAttribute("y2", r1(cy + 50 + p * 200)); d.setAttribute("opacity", (ck * 0.7).toFixed(3)); });
+
+          topS.textContent = typed(TOPSEQ, t)[0];
+          const [ts, tc] = typed(TOPSEQ, t); topS.style.color = tc || "#c8c8c8";
+          const [bs, bc] = typed(BOTSEQ, t);
+          botS.textContent = bs; botS.style.color = bc || "#a8a8a8";
+          E("head").innerHTML = HEAD.map(([t0, s], i) => `<div>${i === 0 ? s : s.slice(0, Math.max(0, Math.floor((t - t0) * 30)))}&nbsp;</div>`).join("");
+
+          dim.style.opacity = (0.8 * win(t, T_CARD - 0.4, T_CARD)).toFixed(3);
+          E("cm1").innerHTML = slam(["THE", "ROCK", "IS", "THE", "SAME."], [T_CARD, T_CARD + 0.12, T_CARD + 0.24, T_CARD + 0.36, T_CARD + 0.48], t, []);
+          E("cm2").innerHTML = slam(["YOUR", "MIND", "ISN'T."], [T_CARD + 0.85, T_CARD + 1.0, T_CARD + 1.15], t, [1]);
+          E("cq").style.opacity = win(t, T_CARD + 1.6, T_CARD + 2.1).toFixed(3);
+          fade.style.opacity = win(t, DUR - 0.3, DUR - 0.02).toFixed(3);
+        }
+
+        window.__timelines = window.__timelines || {};
+        const tl = gsap.timeline({ paused: true });
+        const clock = { t: 0 };
+        tl.to(clock, { t: DUR, duration: DUR, ease: "none", onUpdate: () => render(clock.t) }, 0);
+        window.__timelines["main"] = tl;
+        render(0);
+        tl.seek(0);
+      })();
+    </script>
+  </body>
+</html>
