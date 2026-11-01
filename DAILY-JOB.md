@@ -103,3 +103,7 @@ Lines up to 17 were scheduled in Metricool. 2026-10-25 ~10:42: all still-pending
 - 2026-11-02 18:00: 49 The Lunchbox (relationship), sent to Telegram
 - 2026-11-03 10:00: 50 Who's Shouting? (relationship humour), sent to Telegram
 - 2026-11-03 12:00: 51 Pastry Peace (relationship), sent to Telegram
+- 2026-11-03 16:00: 53 Love Is A Dance (relationship, winner format), sent to Telegram
+- 2026-11-03 18:00: 54 You Won (relationship humour), sent to Telegram
+- 2026-11-04 10:00: 55 Lunch Delivery (relationship), sent to Telegram
+- 2026-11-04 12:00: 56 The Gift (relationship humour), sent to Telegram
