@@ -2,6 +2,11 @@
 
 Claude's running notes. Newest on top. Everything Claude wants to remember goes here (or in the matching file), not on the computer.
 
+## 2026-11-02
+- "generiere" run 6 (`viral/2026-11-02-check.md`): the search filter `sp=CAMSBggEEAEYAQ==` (this month + by views + under 4 min) returns Shorts again → 117 new channels; most hits are fandom dubs/trailers, 3 couple stories passed + backlog winner format → 57-60.
+- **Rig bug found and fixed (use in every new reel):** `reachTo` lerped the hand target from (0,0) when the arm had no target yet, so during the 0.2 s ramp the arm shot out sideways (long horizontal "arm"). Fixed version: if `s[hand+'w']` is 0, set tx/ty straight to the target and w = k. Older reels 41-56 still have the old helper (only visible for a few frames).
+- Grow-up trick (reel 57): wrap each figure in a `<g>` and scale it around its feet; convert points with `g.transform.baseVal.consolidate().matrix` when props must follow hands/heads.
+
 ## 2026-11-01
 - "generiere" run 5 (`viral/2026-11-01-check.md`), relationship only, same 42-channel RSS method → 53 Love Is A Dance (winner format), 54 You Won, 55 Lunch Delivery, 56 The Gift. The channels' newest uploads are thinner now (most passing ones are 3-9x); next run should add new channels (search again for couple animation channels) so the pool stays fresh.
 
