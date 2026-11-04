@@ -183,7 +183,7 @@
           } else if (sc === 3) {
             const war = hold(s, T_WAR, T_OPEN + 0.1, 0.15), open = win(s, T_OPEN, T_OPEN + 0.45);
             const sway = Math.sin((s - T_WAR) * 2 * Math.PI * 1.3) * war;
-            const c = 540 + 115 * sway, wdt = 280;
+            const c = 540 + 60 * sway, wdt = 280;
             xL = lerp(lerp(352, c - wdt / 2, win(s, T_WAR - 0.2, T_WAR + 0.1)), 340, open);
             xR = lerp(lerp(552, c + wdt / 2, win(s, T_WAR - 0.2, T_WAR + 0.1)), 740, open);
             burrito = 1 - win(s, T_WAR - 0.2, T_WAR + 0.1);
