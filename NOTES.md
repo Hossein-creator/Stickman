@@ -2,6 +2,12 @@
 
 Claude's running notes. Newest on top. Everything Claude wants to remember goes here (or in the matching file), not on the computer.
 
+## 2026-11-04
+- Generate run 7: reels 61-64 (check: `viral/2026-11-04-check.md`).
+- Research: channel RSS (`/feeds/videos.xml`) now gives 404. Use YouTube search filters instead: `sp=CAMSBggEEAEYAQ%3D%3D` (this month, by views, under 4 min) and `sp=CAMSBggDEAEYAQ%3D%3D` (this week). The old `CAMSAggE` filter no longer works. Get the channel median from the flat list `/channel/<id>/shorts` (last 30). Likes/comments could not be checked this run.
+- Bed scenes: draw the bed from the foot end (headboard, pillows, head circles, blanket path) instead of bending the rig into a lying pose. Fast and reads well (reel 63).
+- `frac`/`stand` are declared at the top of the copied body.js header: don't add them twice (reel 64 blank render).
+
 ## 2026-11-02
 - "generiere" run 6 (`viral/2026-11-02-check.md`): the search filter `sp=CAMSBggEEAEYAQ==` (this month + by views + under 4 min) returns Shorts again → 117 new channels; most hits are fandom dubs/trailers, 3 couple stories passed + backlog winner format → 57-60.
 - **Rig bug found and fixed (use in every new reel):** `reachTo` lerped the hand target from (0,0) when the arm had no target yet, so during the 0.2 s ramp the arm shot out sideways (long horizontal "arm"). Fixed version: if `s[hand+'w']` is 0, set tx/ty straight to the target and w = k. Older reels 41-56 still have the old helper (only visible for a few frames).

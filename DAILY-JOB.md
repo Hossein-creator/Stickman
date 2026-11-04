@@ -111,3 +111,7 @@ Lines up to 17 were scheduled in Metricool. 2026-10-25 ~10:42: all still-pending
 - 2026-11-04 18:00: 57 Friend To Wife (relationship), sent to Telegram
 - 2026-11-05 10:00: 59 Pet Names (relationship humour), sent to Telegram
 - 2026-11-05 12:00: 60 Paragraph (relationship), sent to Telegram
+- 2026-11-05 16:00: 61 Love Is A Puzzle (relationship, winner format), sent to Telegram
+- 2026-11-05 18:00: 62 Red Flags (relationship humour), sent to Telegram
+- 2026-11-06 10:00: 63 Blanket War (relationship humour), sent to Telegram
+- 2026-11-06 12:00: 64 Mixed Signals (relationship), sent to Telegram

@@ -159,7 +159,7 @@
           rain.forEach((l, i) => { const q = frac(t * 2.2 + i / 7), on = s > T_WHAT && storm > 0.5; const x = cxp - 42 + i * 14; l.setAttribute("x1", r1(x)); l.setAttribute("x2", r1(x - 4)); l.setAttribute("y1", r1(cyp + 28 + 70 * q)); l.setAttribute("y2", r1(cyp + 44 + 70 * q)); l.setAttribute("opacity", on ? (storm * (1 - q)).toFixed(3) : 0); });
           const fl = Math.max(hold(s, T_BOLT1, T_BOLT1 + 0.3, 0.03), hold(s, T_BOLT2, T_BOLT2 + 0.3, 0.03));
           bolt.setAttribute("opacity", (fl * storm).toFixed(3)); bolt.setAttribute("transform", `translate(${r1(cxp)} ${r1(cyp)})`);
-          E("flash").style.opacity = (0.35 * Math.max(hold(s, T_BOLT1, T_BOLT1 + 0.12, 0.03), hold(s, T_BOLT2, T_BOLT2 + 0.12, 0.03))).toFixed(3);
+          E("flash").style.opacity = (0.22 * Math.max(hold(s, T_BOLT1, T_BOLT1 + 0.12, 0.03), hold(s, T_BOLT2, T_BOLT2 + 0.12, 0.03))).toFixed(3);
           gloom.setAttribute("opacity", (0.5 * storm).toFixed(3));
           const sq = hold(s, T_CLEAR + 0.2, T_HUG + 0.4, 0.25);
           sun.setAttribute("opacity", sq.toFixed(3)); sun.setAttribute("transform", `translate(${r1(cxp)} ${r1(cyp - 10)}) rotate(${r1(t * 40)}) scale(${(0.6 + 0.4 * backOut(sq)).toFixed(3)})`);
@@ -183,7 +183,7 @@
           bub(bOk, T_OK, T_BOLT1, [mp.head[0] + 20, mp.head[1] - 110]);
           bub(bWhat, T_WHAT, T_WHAT + 1.1, [hp.head[0] + 40, hp.head[1] - 230]);
           bub(bWrong, T_WRONG, T_WRONG + 1.0, [hp.head[0] + 20, hp.head[1] - 230]);
-          bub(bAww, T_CLEAR + 0.1, T_HUG + 0.4, [hp.head[0] - 20, hp.head[1] - 110]);
+          bub(bAww, T_CLEAR + 0.1, T_HUG + 0.4, [hp.head[0] - 60, hp.head[1] - 240]);
           smallH.forEach((h, k) => { const q = clamp((s - T_CLEAR - 0.1 - k * 0.15) / 0.8, 0, 1); h.setAttribute("opacity", q > 0 && q < 1 ? Math.sin(Math.PI * q).toFixed(3) : 0); h.setAttribute("transform", `translate(${r1(hp.head[0] + 30 - k * 20)} ${r1(hp.head[1] - 40 - 60 * q)}) scale(0.45)`); });
           const hq = clamp((s - T_HOLD) / 0.4, 0, 1), beat = 1 + 0.08 * Math.max(0, Math.sin(t * 7)) * (hq >= 1 ? 1 : 0);
           heart.setAttribute("opacity", hq > 0 ? 1 : 0);
