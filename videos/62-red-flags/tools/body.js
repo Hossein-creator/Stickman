@@ -18,7 +18,7 @@
         const T_BOUQ = 6.6, T_GIVE = 7.0, T_GASP = 7.4, T_HUG = 7.9, T_HOLD = 8.3;
         const T_H1 = 9.2, T_H2 = 10.1, T_CARD = 11.2;
         const SHE = 450, HE = 660;
-        const FLAGX = [370, 395, 420, 345];
+        const FLAGX = [545, 565, 585, 530];
 
         svgEl("circle", { cx: 560, cy: FL - 260, r: 460, fill: "url(#fireGlow)", opacity: 0.3 }, backG);
         svgEl("polygon", { points: `460,${FL - 520} 660,${FL - 520} 780,${FL} 340,${FL}`, fill: "url(#beam)", filter: "url(#soft)", opacity: 0.16 }, beams);
@@ -65,7 +65,7 @@
           const a2 = hold(s, ACTS[2], ACTS[2] + 1.2, 0.1); reachTo(st, a2, [SHE - 40, stand - 20]); reachTo(st, a2, [SHE + 40, stand - 20], "b"); st.hy -= 12 * Math.abs(Math.sin(s * 14)) * a2; st.ay -= 20 * Math.max(0, Math.sin(s * 14)) * a2;
           const a3 = hold(s, ACTS[3] - 0.2, ACTS[3] + 1.2, 0.15); reachTo(st, a3, [SHE + 130, stand - 100]); st.torso += 14 * a3 * (s < ACTS[3] + 0.3 ? 1 : 0); reachTo(st, a3 * (s > ACTS[3] + 0.4 ? 1 : 0), [SHE + 40, stand - 150]);
           const gasp = hold(s, T_GASP, T_HUG, 0.15); reachTo(st, gasp, [SHE + 70, stand - 110]); reachTo(st, gasp, [SHE + 60, stand - 104], "b");
-          if (s > T_HUG) { const k = win(s, T_HUG, T_HUG + 0.4); const hug = standOn(lerp(SHE, 540, k), 1, FL); hug.torso = 8 * k; reachTo(hug, k, [585, stand - 150]); reachTo(hug, k, [570, stand - 120], "b"); return hug; }
+          if (s > T_HUG) { const k = win(s, T_HUG, T_HUG + 0.4); const hug = standOn(lerp(SHE, 540, k), 1, FL); hug.torso = 8 * k; reachTo(hug, k, [585, stand - 150]); reachTo(hug, k, [548, stand - 50], "b"); return hug; }
           return st;
         }
         function himRaw(s) {
@@ -73,7 +73,7 @@
           // picks each flag: walks a little to it, bends, smells it, smiles
           for (let k = 0; k < ACTS.length; k++) {
             const t0 = ACTS[k] + PICK, q = hold(s, t0, t0 + 0.6, 0.2);
-            if (q > 0) { st.hx -= 90 * q; st.ax -= 90 * q; st.bx -= 90 * q; st.torso += 30 * q; reachTo(st, q, [FLAGX[k] + 40, FL - 120]); }
+            if (q > 0) { st.hx -= 30 * q; st.ax -= 30 * q; st.bx -= 30 * q; st.torso += 30 * q; reachTo(st, q, [FLAGX[k] + 40, FL - 120]); }
           }
           // holds the growing bouquet against his chest
           const nb = ACTS.filter((a) => s > a + PICK + 0.5).length;
