@@ -20,7 +20,7 @@
         const A = [0, 2400];
         const scene = (s) => (s < S2 ? 0 : 1);
         const AGE = [0.62, 1.0];
-        const BOYX = A[0] + 680, GIRLX = A[0] + 560, MANX = A[1] + 700, WOMX = A[1] + 560;
+        const BOYX = A[0] + 680, GIRLX = A[0] + 560, MANX = A[1] + 740, WOMX = A[1] + 560;
 
         // ---------- sets ----------
         // 1: rainy street in front of the orphanage gate
@@ -186,7 +186,7 @@
           const bub = (g, a0, b0, p) => { const kk = hold(s, a0, b0, 0.12); g.setAttribute("opacity", kk.toFixed(3)); g.setAttribute("transform", `translate(${r1(p[0])} ${r1(p[1])}) scale(${(0.6 + 0.4 * backOut(kk)).toFixed(3)})`); };
           bub(bHalf, T_SHARE, T_TAKE + 0.4, [hh[0] - 30, hh[1] - 150]);
           bub(bHome, T_KNEEL + 0.2, T_YES, [mh[0] + 20, mh[1] - 100]);
-          bub(bYes, T_YES, T_HOLD + 0.4, [hh[0] - 40, hh[1] - 100]);
+          bub(bYes, T_YES, T_HUG + 0.25, [hh[0] - 40, hh[1] - 100]);
           const hb = sc === 0 ? T_SMILE : T_HOLD;
           const hq = clamp((s - hb) / 0.4, 0, 1), beat = 1 + 0.08 * Math.max(0, Math.sin(t * 7)) * (hq >= 1 ? 1 : 0);
           heart.setAttribute("opacity", hq > 0 && s < T_CARD ? 1 : 0);
