@@ -2,6 +2,11 @@
 
 Claude's running notes. Newest on top. Everything Claude wants to remember goes here (or in the matching file), not on the computer.
 
+## 2026-11-05
+- Generate run 8: reels 65-68 (check: `viral/2026-11-05-check.md`). Same research method as run 7 (search filters + channel medians). Channels without a Shorts tab: take the median of the last 30 `/videos`. Skip huge outliers on tiny medians (under ~500) as noise.
+- Winner format also works as "X VS Y" (reel 65 LUST VS LOVE): both panels start the same, one test splits them.
+- Faces are never drawn: show feelings with props (red nose for a cold, shiver lines, sweat drop, broken heart, rain on one person only).
+
 ## 2026-11-04
 - Generate run 7: reels 61-64 (check: `viral/2026-11-04-check.md`).
 - Research: channel RSS (`/feeds/videos.xml`) now gives 404. Use YouTube search filters instead: `sp=CAMSBggEEAEYAQ%3D%3D` (this month, by views, under 4 min) and `sp=CAMSBggDEAEYAQ%3D%3D` (this week). The old `CAMSAggE` filter no longer works. Get the channel median from the flat list `/channel/<id>/shorts` (last 30). Likes/comments could not be checked this run.

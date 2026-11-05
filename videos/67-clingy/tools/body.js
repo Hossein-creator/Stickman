@@ -17,7 +17,7 @@
         const T_BYE = 0.4, T_GRAB = 1.0, T_DRAG1 = 1.4, T_DROP = 3.0, T_DRAG2 = 3.2, T_STOP = 4.6, T_SIGH = 4.9;
         const T_UP = 5.7, T_STAY = 6.0, T_TOSS = 6.8, T_HUG = 7.2, T_HOLD = 7.6;
         const T_H1 = 8.6, T_H2 = 9.5, T_CARD = 10.6;
-        const DOORX = 930;
+        const DOORX = 830;
 
         svgEl("circle", { cx: 560, cy: FL - 260, r: 460, fill: "url(#fireGlow)", opacity: 0.3 }, backG);
         svgEl("polygon", { points: `460,${FL - 520} 660,${FL - 520} 780,${FL} 340,${FL}`, fill: "url(#beam)", filter: "url(#soft)", opacity: 0.16 }, beams);
@@ -160,7 +160,7 @@
           bub(bNo, T_GRAB + 0.1, T_DROP - 0.4, [hp.head[0] - 30, hp.head[1] - 110]);
           bub(bStay, T_DROP + 0.2, T_STOP, [hp.head[0] - 20, hp.head[1] - 110]);
           bub(bSigh, T_SIGH, T_UP, [mp.head[0] + 20, mp.head[1] - 110]);
-          bub(bFine, T_STAY, T_HUG + 0.2, [mp.head[0] + 30, mp.head[1] - 110]);
+          bub(bFine, T_STAY, T_TOSS + 0.05, [mp.head[0] + 30, mp.head[1] - 110]);
           smallH.forEach((h, k) => { const q = clamp((s - T_STAY - 0.2 - k * 0.15) / 0.8, 0, 1); h.setAttribute("opacity", q > 0 && q < 1 ? Math.sin(Math.PI * q).toFixed(3) : 0); h.setAttribute("transform", `translate(${r1(hp.head[0] - 10 + k * 20)} ${r1(hp.head[1] - 40 - 60 * q)}) scale(0.45)`); });
           const hq = clamp((s - T_HOLD) / 0.4, 0, 1), beat = 1 + 0.08 * Math.max(0, Math.sin(t * 7)) * (hq >= 1 ? 1 : 0);
           heart.setAttribute("opacity", hq > 0 ? 1 : 0);

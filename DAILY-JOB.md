@@ -115,3 +115,7 @@ Lines up to 17 were scheduled in Metricool. 2026-10-25 ~10:42: all still-pending
 - 2026-11-05 18:00: 62 Red Flags (relationship humour), sent to Telegram
 - 2026-11-06 10:00: 63 Blanket War (relationship humour), sent to Telegram
 - 2026-11-06 12:00: 64 Mixed Signals (relationship), sent to Telegram
+- 2026-11-06 16:00: 65 Lust Vs Love (relationship, winner format), sent to Telegram
+- 2026-11-06 18:00: 66 No Family (relationship), sent to Telegram
+- 2026-11-07 10:00: 67 Clingy (relationship humour), sent to Telegram
+- 2026-11-07 12:00: 68 Taken For Granted (relationship), sent to Telegram
