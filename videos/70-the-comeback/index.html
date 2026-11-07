@@ -340,6 +340,7 @@
 
         const glowC = svgEl("circle", { cx: 560, cy: FL - 260, r: 460, fill: "url(#fireGlow)", opacity: 0.3 }, backG);
         svgEl("polygon", { points: `460,${FL - 520} 660,${FL - 520} 780,${FL} 340,${FL}`, fill: "url(#beam)", filter: "url(#soft)", opacity: 0.16 }, beams);
+        const daySky = svgEl("rect", { x: -1400, y: -1400, width: 3400, height: 3400, fill: "#7aa8d8", opacity: 0 }, backG); backG.insertBefore(daySky, backG.firstChild);
         const nightT = svgEl("rect", { x: -1400, y: -1400, width: 3400, height: 3400, fill: "#0b1640", opacity: 0 }, backG);
         const moon = svgEl("circle", { cx: 860, cy: FL - 420, r: 30, fill: "#f3efd8", opacity: 0 }, backG);
         const sun = svgEl("circle", { cx: 860, cy: FL - 420, r: 34, fill: "#ffd060", opacity: 0 }, backG);
@@ -402,7 +403,7 @@
         }
         function himRaw(s) {
           if (s < T_DAY) {
-            const back = win(s, T_PUSH, T_PUSH + 0.5), x = lerp(HE - 60, HE + 20, ease(back));
+            const back = win(s, T_PUSH, T_PUSH + 0.5), x = lerp(HE, HE + 70, ease(back));
             const st = standOn(x, -1, FL); st.head = 4; st.torso -= 14 * hold(s, T_PUSH, T_PUSH + 0.6, 0.1);
             const hit = hold(s, T_HIT - 0.05, T_HIT + 0.4, 0.05); st.head += 20 * hit;
             reachTo(st, win(s, T_HIT, T_HIT + 0.3), [x - 30, stand - 100]); reachTo(st, win(s, T_HIT, T_HIT + 0.3), [x - 14, stand - 96], "b");
@@ -416,11 +417,11 @@
             }
             return st;
           }
-          const x = s > T_HUG ? lerp(HE - 40, 690, win(s, T_HUG, T_HUG + 0.4)) : HE - 40;
+          const x = s > T_HUG ? lerp(HE + 10, 690, win(s, T_HUG, T_HUG + 0.4)) : HE + 10;
           const st = standOn(x, -1, FL); st.head = 6;
           const off = 1 - win(s, T_HUG, T_HUG + 0.3);
           const lift = hold(s, T_SORRY - 0.2, T_HUG, 0.2);
-          reachTo(st, off, [x - lerp(40, 70, lift), stand - lerp(80, 110, lift)]); reachTo(st, off, [x - lerp(20, 50, lift), stand - lerp(78, 108, lift)], "b");
+          reachTo(st, off, [x - lerp(40, 80, lift), stand - lerp(70, 84, lift)]); reachTo(st, off, [x - lerp(20, 60, lift), stand - lerp(68, 82, lift)], "b");
           st.head += 16 * hold(s, T_SORRY, T_GASP, 0.15);
           if (s > T_HUG) { const k = win(s, T_HUG, T_HUG + 0.4); reachTo(st, k, [x - 50, stand - 135]); reachTo(st, k, [x - 40, stand - 70], "b"); }
           return st;
@@ -464,7 +465,7 @@
           knob.setAttribute("cx", r1(DX + DW * (1 - 0.86 * open) - 20)); knob.setAttribute("cy", FL - 160); knob.setAttribute("opacity", open < 0.5 ? 1 : 0);
           room.setAttribute("opacity", (0.9 * open).toFixed(3));
           herG.setAttribute("opacity", open > 0.05 ? 1 : 0);
-          nightT.setAttribute("opacity", night(s) ? 0.5 : 0); moon.setAttribute("opacity", night(s) ? 1 : 0); sun.setAttribute("opacity", night(s) ? 0 : 1);
+          nightT.setAttribute("opacity", night(s) ? 0.5 : 0); moon.setAttribute("opacity", night(s) ? 1 : 0); daySky.setAttribute("opacity", night(s) ? 0 : 0.22); sun.setAttribute("opacity", night(s) ? 0 : 1);
           glowC.setAttribute("opacity", night(s) ? 0.12 : 0.35); winLit.setAttribute("opacity", night(s) && s < T_SIT ? 0.8 : 0);
           const hp = drawFig(her, livePose(herRaw, s, 1.4), 1);
           const mp = drawFig(him, livePose(himRaw, s, 0.3), -1);
