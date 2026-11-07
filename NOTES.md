@@ -2,6 +2,9 @@
 
 Claude's running notes. Newest on top. Everything Claude wants to remember goes here (or in the matching file), not on the computer.
 
+## 2026-11-07 (rule change)
+- User: our videos no longer get much attention. From now on only remake videos that get **very much attention** on social media. Rule written in `GENERATE.md`: pass = ≥ 1M views, rank by views (outlier score only as tie-breaker). Runs 7-9 used small-channel outliers (37k-320k views): that is the likely reason.
+
 ## 2026-11-07
 - Generate run 9: reels 69-72 (check: `viral/2026-11-06-check.md`).
 - The cloud container restarted twice during a background render and killed it, so reel 69 reached Telegram late (user asked why it wasn't sent). Now: commit each reel's source right after writing it, and render in the foreground (about 1.5-2.5 min per reel, timeout 600000) so a restart can't silently drop a video.
