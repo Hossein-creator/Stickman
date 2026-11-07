@@ -1,0 +1,488 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+    <style>
+      @font-face {
+        font-family: "HFMono";
+        src: url("assets/fonts/consolab.ttf") format("truetype");
+        font-weight: 700;
+      }
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      html,
+      body {
+        width: 1080px;
+        height: 1920px;
+        overflow: hidden;
+        background: #000;
+      }
+      #root {
+        position: relative;
+        width: 1080px;
+        height: 1920px;
+        overflow: hidden;
+        background: #000;
+      }
+      #stage {
+        position: absolute;
+        inset: 0;
+        width: 1080px;
+        height: 1920px;
+      }
+      #stage svg {
+        position: absolute;
+        inset: 0;
+      }
+      .mono {
+        position: absolute;
+        font-family: "HFMono", monospace;
+        font-weight: 700;
+        white-space: nowrap;
+      }
+      /* everything readable stays inside the Instagram safe area: x 120-960, y 220-1500 */
+      #head {
+        position: absolute;
+        left: 0;
+        right: 0;
+        top: 222px;
+        text-align: center;
+        font-family: "HFMono", monospace;
+        font-weight: 700;
+        font-size: 38px;
+        letter-spacing: 0.12em;
+        line-height: 1.45;
+        color: #fff;
+        text-shadow: 0 0 16px rgba(255, 255, 255, 0.3);
+      }
+      #head .ghost {
+        visibility: hidden;
+      }
+      #ctr {
+        position: absolute;
+        left: 0;
+        right: 0;
+        top: 430px;
+        text-align: center;
+        font-family: "HFMono", monospace;
+        font-weight: 700;
+        white-space: nowrap;
+      }
+      #ctr .lbl {
+        font-size: 26px;
+        letter-spacing: 0.24em;
+        color: #9a9a9a;
+        vertical-align: middle;
+      }
+      #num {
+        display: inline-block;
+        min-width: 2.4ch;
+        font-size: 58px;
+        letter-spacing: 0.08em;
+        color: #fff;
+        vertical-align: middle;
+        text-shadow: 0 0 14px rgba(255, 255, 255, 0.35);
+      }
+      #tag {
+        display: inline-block;
+        min-width: 5.2ch;
+        padding: 6px 12px 4px;
+        font-size: 26px;
+        letter-spacing: 0.18em;
+        vertical-align: middle;
+        visibility: hidden;
+      }
+      #tag.fail {
+        visibility: visible;
+        background: #d62a2a;
+        color: #fff;
+      }
+      #tag.pass {
+        visibility: visible;
+        background: #fff;
+        color: #000;
+        box-shadow: 0 0 22px rgba(255, 255, 255, 0.6);
+      }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="15" data-width="1080" data-height="1920">
+      <div id="stage" class="clip" data-start="0" data-duration="15" data-track-index="0">
+        <svg id="svg" width="1080" height="1920" viewBox="0 0 1080 1920" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <linearGradient id="beam" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0" stop-color="#ffffff" stop-opacity="0.55" />
+              <stop offset="0.7" stop-color="#ffffff" stop-opacity="0.12" />
+              <stop offset="1" stop-color="#ffffff" stop-opacity="0.04" />
+            </linearGradient>
+            <radialGradient id="pool" cx="0.5" cy="0.5" r="0.5">
+              <stop offset="0" stop-color="#ffffff" stop-opacity="0.32" />
+              <stop offset="1" stop-color="#ffffff" stop-opacity="0" />
+            </radialGradient>
+            <radialGradient id="dustG" cx="0.5" cy="0.5" r="0.5">
+              <stop offset="0" stop-color="#b5b5b5" stop-opacity="0.8" />
+              <stop offset="1" stop-color="#b5b5b5" stop-opacity="0" />
+            </radialGradient>
+            <linearGradient id="ply" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0" stop-color="#d9c29b" />
+              <stop offset="1" stop-color="#8f7858" />
+            </linearGradient>
+            <linearGradient id="floorFade" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0" stop-color="#000" stop-opacity="0.45" />
+              <stop offset="1" stop-color="#000" stop-opacity="1" />
+            </linearGradient>
+            <filter id="blur" x="-50%" y="-50%" width="200%" height="200%">
+              <feGaussianBlur stdDeviation="12" />
+            </filter>
+            <filter id="soft" x="-50%" y="-50%" width="200%" height="200%">
+              <feGaussianBlur stdDeviation="16" />
+            </filter>
+                      <linearGradient id="streak" x1="0" y1="0" x2="1" y2="0">
+              <stop offset="0" stop-color="#ffffff" stop-opacity="0" />
+              <stop offset="1" stop-color="#ffffff" stop-opacity="0.9" />
+            </linearGradient>
+            <filter id="chromaF" x="-30%" y="-30%" width="160%" height="160%" color-interpolation-filters="sRGB">
+              <feOffset id="chR" in="SourceGraphic" dx="0" dy="0" result="r" />
+              <feColorMatrix in="r" type="matrix" values="1 0 0 0 0  0 0.15 0 0 0  0 0 0.2 0 0  0 0 0 0.85 0" result="rr" />
+              <feOffset id="chB" in="SourceGraphic" dx="0" dy="0" result="b" />
+              <feColorMatrix in="b" type="matrix" values="0.1 0 0 0 0  0 0.9 0 0 0  0 0 1 0 0  0 0 0 0.85 0" result="bb" />
+              <feMerge><feMergeNode in="rr" /><feMergeNode in="bb" /><feMergeNode in="SourceGraphic" /></feMerge>
+            </filter>
+            <radialGradient id="fireGlow" cx="0.5" cy="0.5" r="0.5">
+              <stop offset="0" stop-color="#ffb35c" stop-opacity="0.7" />
+              <stop offset="0.45" stop-color="#ff7a3a" stop-opacity="0.22" />
+              <stop offset="1" stop-color="#ff7a3a" stop-opacity="0" />
+            </radialGradient>
+          </defs>
+          <!-- world: floor at world y 600 -> screen y 1400, world x 400 -> screen x 540 -->
+          <g transform="translate(540 1400) scale(1.45) translate(-400 -600)">
+            <g id="beams"></g>
+            <g id="back"></g>
+            
+            <use href="#world" transform="translate(0 1200) scale(1 -1)" opacity="0.16" />
+            <rect x="-200" y="600" width="1200" height="260" fill="url(#floorFade)" />
+            <rect x="-600" y="858" width="2000" height="1400" fill="#000" />
+            <rect x="-200" y="599" width="1200" height="2" fill="#2a2a2a" />
+            <g id="world"></g>
+          </g>
+        </svg>
+        <style>
+  #head span.w { display: inline-block; margin: 0 0.18em; }
+  #head { font-size: 44px !important; }
+  #fx { position: absolute; inset: 0; pointer-events: none; }
+  #flash { position: absolute; inset: 0; background: #fff; opacity: 0; }
+  #vig { position: absolute; inset: 0; background: radial-gradient(ellipse at center, rgba(0,0,0,0) 55%, rgba(0,0,0,0.75) 100%); }
+  #card span.w { display: inline-block; margin: 0 0.16em; }
+</style>
+<svg id="fx" width="1080" height="1920" viewBox="0 0 1080 1920"></svg>
+<div id="vig"></div>
+<div id="flash"></div>
+        <div id="head">
+          <div id="h1"></div>
+          <div id="h2"></div>
+        </div>
+      </div>
+      <audio id="mix" src="assets/audio/mix.wav" data-start="0" data-duration="15" data-track-index="1"></audio>
+    </div>
+
+    <script>
+      (function () {
+        const DUR = 15;
+        const FL = 600, BX0 = 380, BX1 = 520, BTOP = 410, TOPF = 404, SX = 250;
+        const THIGH = 80, SHIN = 78, LEG = 154;
+        const UARM = 64, FARM = 60, TORSO = 116, NECK = 12, HEADR = 31;
+        const NS = "http://www.w3.org/2000/svg";
+        const svgEl = (tag, attrs, parent) => {
+          const e = document.createElementNS(NS, tag);
+          for (const k in attrs || {}) e.setAttribute(k, attrs[k]);
+          if (parent) parent.appendChild(e);
+          return e;
+        };
+        const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
+        const lerp = (a, b, p) => a + (b - a) * p;
+        const ease = (p) => 0.5 - 0.5 * Math.cos(Math.PI * clamp(p, 0, 1));
+        const backOut = (p) => { p = clamp(p, 0, 1); const s = 2.2; return 1 + (s + 1) * Math.pow(p - 1, 3) + s * Math.pow(p - 1, 2); };
+        const win = (t, a, b) => ease((t - a) / (b - a));
+        const rad = (x) => (x * Math.PI) / 180;
+        const down = (a, f) => [Math.sin(rad(a)) * f, Math.cos(rad(a))];
+        const up = (a, f) => [Math.sin(rad(a)) * f, -Math.cos(rad(a))];
+        const r1 = (v) => Math.round(v * 10) / 10;
+        const E = (id) => document.getElementById(id);
+        let seed = 31;
+        const rnd = () => ((seed = (seed * 16807) % 2147483647) / 2147483647);
+
+        // ---------- rig v2 (from reel 05): blended poses, head/arm follow-through, breathing ----------
+        function makeFig(parent, front, back, glow, id) {
+          const g = svgEl("g", { id }, parent);
+          if (glow) parent.insertBefore(svgEl("use", { href: "#" + id, filter: "url(#blur)", opacity: 0.45 }), g);
+          const parts = { g };
+          for (const [n, col] of [["armB", back], ["legB", back], ["torso", front], ["legF", front], ["armF", front]]) {
+            const o = svgEl("path", { fill: "none", stroke: "#000", "stroke-width": 34, "stroke-linecap": "round", "stroke-linejoin": "round" }, g);
+            const w = svgEl("path", { fill: "none", stroke: col, "stroke-width": 22, "stroke-linecap": "round", "stroke-linejoin": "round" }, g);
+            parts[n] = [o, w];
+          }
+          parts.head = svgEl("circle", { r: HEADR, fill: front, stroke: "#000", "stroke-width": 6 }, g);
+          return parts;
+        }
+        function ik(a, b, l1, l2, pick) {
+          let dx = b[0] - a[0], dy = b[1] - a[1];
+          let d = Math.hypot(dx, dy);
+          const maxd = l1 + l2 - 0.5;
+          if (d > maxd) {
+            b = [a[0] + (dx / d) * maxd, a[1] + (dy / d) * maxd];
+            dx = b[0] - a[0];
+            dy = b[1] - a[1];
+            d = maxd;
+          }
+          d = Math.max(d, Math.abs(l1 - l2) + 1);
+          const al = Math.acos(clamp((l1 * l1 + d * d - l2 * l2) / (2 * l1 * d), -1, 1));
+          const base = Math.atan2(dy, dx);
+          const c1 = [a[0] + Math.cos(base + al) * l1, a[1] + Math.sin(base + al) * l1];
+          const c2 = [a[0] + Math.cos(base - al) * l1, a[1] + Math.sin(base - al) * l1];
+          return [pick(c1, c2), b];
+        }
+        const P = (pts) => "M" + pts.map((p) => r1(p[0]) + " " + r1(p[1])).join("L");
+        const setD = (pair, d) => {
+          pair[0].setAttribute("d", d);
+          pair[1].setAttribute("d", d);
+        };
+        // flat pose: hx hy torso head ax ay bx by | per arm a*/b*: sh el w tx ty
+        function drawFig(parts, s, f) {
+          const hip = [s.hx, s.hy];
+          const tu = up(s.torso, f);
+          const sh = [hip[0] + tu[0] * TORSO, hip[1] + tu[1] * TORSO];
+          const nk = [hip[0] + tu[0] * (TORSO + NECK), hip[1] + tu[1] * (TORSO + NECK)];
+          const hu = up(s.torso + s.head, f);
+          const hc = [nk[0] + hu[0] * HEADR, nk[1] + hu[1] * HEADR];
+          setD(parts.torso, P([hip, sh, nk]));
+          parts.head.setAttribute("cx", r1(hc[0]));
+          parts.head.setAttribute("cy", r1(hc[1]));
+          const knee = (c1, c2) => (c1[0] * f > c2[0] * f ? c1 : c2);
+          const elbow = (c1, c2) => (c1[1] - 0.5 * f * c1[0] > c2[1] - 0.5 * f * c2[0] ? c1 : c2);
+          [["legF", [s.ax, s.ay]], ["legB", [s.bx, s.by]]].forEach(([n, ft]) => {
+            const [kn, fo] = ik(hip, ft, THIGH, SHIN, knee);
+            setD(parts[n], P([hip, kn, fo]));
+          });
+          const hands = [];
+          [["armF", "a"], ["armB", "b"]].forEach(([n, k]) => {
+            const u = down(s[k + "sh"], f);
+            const el = [sh[0] + u[0] * UARM, sh[1] + u[1] * UARM];
+            const v = down(s[k + "sh"] + s[k + "el"], f);
+            const fk = [el[0] + v[0] * FARM, el[1] + v[1] * FARM];
+            const w = clamp(s[k + "w"], 0, 1);
+            const hand = [lerp(fk[0], s[k + "tx"], w), lerp(fk[1], s[k + "ty"], w)];
+            const [e2, h2] = ik(sh, hand, UARM, FARM, elbow);
+            setD(parts[n], P([sh, e2, h2]));
+            hands.push(h2);
+          });
+          return { head: hc, hands, hip };
+        }
+        const KER = [-4, -3, -2, -1, 0, 1, 2, 3, 4].map((k) => [k * 0.03, Math.exp(-((k / 2.3) ** 2))]);
+        function blend(raw, t) {
+          const out = {};
+          let ws = 0;
+          for (const [dt, w] of KER) {
+            const p = raw(clamp(t + dt, 0, DUR));
+            for (const k in p) out[k] = (out[k] || 0) + p[k] * w;
+            ws += w;
+          }
+          for (const k in out) out[k] /= ws;
+          return out;
+        }
+        const LAGGED = ["head", "ash", "ael", "aw", "atx", "aty", "bsh", "bel", "bw", "btx", "bty"];
+        function livePose(raw, t, phase) {
+          const s = blend(raw, t);
+          const lag = blend(raw, t - 0.05);
+          for (const k of LAGGED) s[k] = lag[k];
+          const br = Math.sin(t * 1.9 + phase);
+          s.hy += br * 1.3;
+          s.torso += br * 0.8;
+          s.head += Math.sin(t * 1.2 + phase * 2) * 1.6;
+          return s;
+        }
+        const ARMS = { ash: 8, ael: 12, aw: 0, atx: 0, aty: 0, bsh: -4, bel: 10, bw: 0, btx: 0, bty: 0 };
+        const base = (o) => ({ hx: 0, hy: 0, torso: 3, head: 0, ax: 0, ay: FL, bx: 0, by: FL, ...ARMS, ...o });
+        function standOn(x, f, fy) {
+          return base({ hx: x, hy: fy - Math.sqrt(LEG * LEG - 15 * 15), ax: x + f * 15, ay: fy, bx: x - f * 15, by: fy });
+        }
+        const mixPose = (a, b, p) => {
+          const o = {};
+          for (const k in a) o[k] = lerp(a[k], b[k], p);
+          return o;
+        };
+
+        // ---------- "pregnant for a day": she is heavily pregnant, tired, hand on her back. He laughs: "PREGNANCY IS EASY." Magic sparkles swap the belly onto him: back pain "OOF!", cravings (pickles + ice cream), a kick "OW!", "I TAKE IT BACK!". Sparkles swap it back, and he kneels and rubs her feet ----------
+        // remake of a 13.0x outlier (Swapnimations, "Body Swap with my pregnant wife!"), see viral/2026-11-06-check.md
+        const cam = E("svg").children[1];
+        for (const el of Array.from(cam.children)) {
+          const fill = el.getAttribute("fill") || "";
+          if (fill.includes("floorFade") || fill === "#2a2a2a") { el.setAttribute("x", -1400); el.setAttribute("width", 3400); }
+        }
+        const W = E("world");
+        const backG = E("back");
+        const beams = E("beams");
+        const roomG = svgEl("g", {}, W);
+        const figG = svgEl("g", {}, W);
+        const fxG = svgEl("g", {}, W);
+        const frac = (v) => v - Math.floor(v);
+        const stand = FL - Math.sqrt(LEG * LEG - 15 * 15);
+
+        const T_LAUGH = 0.5, T_SWAP = 1.9, T_OOF = 2.5, T_CRAVE = 3.6, T_KICK = 5.0, T_BACK = 5.9, T_SWAP2 = 7.0, T_RUB = 7.7, T_HOLD = 8.3;
+        const T_H1 = 9.0, T_H2 = 9.9, T_CARD = 11.0;
+        const SHE = 460, HE = 650;
+
+        svgEl("circle", { cx: 560, cy: FL - 260, r: 460, fill: "url(#fireGlow)", opacity: 0.3 }, backG);
+        svgEl("polygon", { points: `460,${FL - 520} 660,${FL - 520} 780,${FL} 340,${FL}`, fill: "url(#beam)", filter: "url(#soft)", opacity: 0.16 }, beams);
+        svgEl("rect", { x: 160, y: FL - 400, width: 140, height: 220, fill: "#1e2430", stroke: "#2c2c2c", "stroke-width": 6 }, backG);
+        svgEl("rect", { x: 820, y: FL - 340, width: 120, height: 90, rx: 6, fill: "#3a3a42", stroke: "#000", "stroke-width": 5 }, backG);
+        svgEl("path", { d: `M836 ${FL - 280} l20 -30 l20 20 l24 -34 l24 44`, fill: "none", stroke: "#8aa", "stroke-width": 4 }, backG);
+        const warm = svgEl("ellipse", { cx: 540, cy: FL - 160, rx: 300, ry: 220, fill: "url(#fireGlow)", opacity: 0 }, backG);
+
+        const bun = svgEl("circle", { r: 15, fill: "#ffffff", stroke: "#000", "stroke-width": 6 }, figG);
+        const her = makeFig(figG, "#ffffff", "#e2e2e2", true, "her");
+        figG.insertBefore(bun, her.g.previousSibling);
+        const him = makeFig(figG, "#ffffff", "#dedede", true, "him");
+        const belly = svgEl("ellipse", { rx: 36, ry: 42, fill: "#ffffff", stroke: "#000", "stroke-width": 6 }, fxG);
+        const kickL = Array.from({ length: 3 }, () => svgEl("line", { stroke: "#fff", "stroke-width": 4, "stroke-linecap": "round", opacity: 0 }, fxG));
+        const jar = svgEl("g", { opacity: 0 }, fxG);
+        svgEl("rect", { x: -16, y: -40, width: 32, height: 44, rx: 6, fill: "#a8d08d", stroke: "#000", "stroke-width": 4 }, jar);
+        svgEl("rect", { x: -18, y: -48, width: 36, height: 10, rx: 3, fill: "#d04a3a", stroke: "#000", "stroke-width": 3 }, jar);
+        for (let i = 0; i < 2; i++) svgEl("ellipse", { cx: -5 + i * 10, cy: -18, rx: 5, ry: 13, fill: "#4f8a3a", stroke: "#000", "stroke-width": 2 }, jar);
+        const cone = svgEl("g", { opacity: 0 }, fxG);
+        svgEl("path", { d: "M-14 -10 L14 -10 L0 26 Z", fill: "#e0b070", stroke: "#000", "stroke-width": 3 }, cone);
+        svgEl("circle", { cx: 0, cy: -20, r: 15, fill: "#ff9ac0", stroke: "#000", "stroke-width": 3 }, cone);
+        const stars = Array.from({ length: 10 }, () => svgEl("path", { d: "M0 -14 L4 -4 L14 0 L4 4 L0 14 L-4 4 L-14 0 L-4 -4 Z", fill: "#fff6b0", stroke: "#000", "stroke-width": 2, opacity: 0 }, fxG));
+        const sweat = svgEl("path", { d: "M0 -14 Q10 2 0 8 Q-10 2 0 -14 Z", fill: "#7cc8ff", stroke: "#000", "stroke-width": 3, opacity: 0 }, fxG);
+        const HEART = "M0 18 C-40 -8 -30 -40 0 -22 C30 -40 40 -8 0 18 Z";
+        const heart = svgEl("path", { d: HEART, fill: "#ff3b30", stroke: "#000", "stroke-width": 4, opacity: 0 }, fxG);
+        const smallH = Array.from({ length: 3 }, () => svgEl("path", { d: HEART, fill: "#ff6a9a", stroke: "#000", "stroke-width": 3, opacity: 0 }, fxG));
+        const bubble = (txt, w, size = 30, col = "#111") => {
+          const g = svgEl("g", { opacity: 0 }, fxG);
+          svgEl("rect", { x: -w / 2, y: -40, width: w, height: 70, rx: 30, fill: "#fff", stroke: "#000", "stroke-width": 5 }, g);
+          svgEl("path", { d: "M-8 28 L-20 58 L12 28 Z", fill: "#fff", stroke: "#000", "stroke-width": 5, "stroke-linejoin": "round" }, g);
+          svgEl("rect", { x: -12, y: 22, width: 22, height: 10, fill: "#fff" }, g);
+          const tx = svgEl("text", { x: 0, y: 12, "font-family": "HFMono, monospace", "font-weight": 700, "font-size": size, fill: col, "text-anchor": "middle" }, g);
+          tx.textContent = txt;
+          return g;
+        };
+        const bEasy = bubble("PREGNANCY IS EASY.", 360), bOof = bubble("OOF!", 120, 30, "#ff3b30"), bCrave = bubble("PICKLES + ICE CREAM?!", 380);
+        const bOw = bubble("OW!", 110, 30, "#ff3b30"), bBack = bubble("I TAKE IT BACK!", 300, 30, "#ff3b30");
+
+        const reachTo = (s, k, p, hand = "a") => { if (s[hand + "w"] < 1e-6) { s[hand + "tx"] = p[0]; s[hand + "ty"] = p[1]; s[hand + "w"] = k; return s; } s[hand + "w"] = Math.max(s[hand + "w"], k); s[hand + "tx"] = lerp(s[hand + "tx"], p[0], k); s[hand + "ty"] = lerp(s[hand + "ty"], p[1], k); return s; };
+        const hold = (s, a, b, r = 0.2) => win(s, a, a + r) * (1 - win(s, b - r, b));
+        const swapK = (s) => win(s, T_SWAP + 0.1, T_SWAP + 0.4) * (1 - win(s, T_SWAP2 + 0.1, T_SWAP2 + 0.4));   // 1 = belly on him
+        function herRaw(s) {
+          const st = standOn(SHE, 1, FL); st.head = 2;
+          const preg = 1 - swapK(s);
+          reachTo(st, preg, [SHE - 34, stand - 30], "b"); st.torso -= 6 * preg;
+          reachTo(st, preg * (s < T_RUB ? 1 : 0.6), [SHE + 46, stand - 60]);
+          const str = hold(s, T_OOF, T_CRAVE, 0.25); reachTo(st, str, [SHE - 26, stand - 230]); reachTo(st, str, [SHE + 26, stand - 230], "b"); st.hy -= 8 * Math.abs(Math.sin(s * 8)) * str;
+          const lol = hold(s, T_KICK, T_SWAP2, 0.2); reachTo(st, lol, [SHE + 40, stand - 148]); st.torso += 6 * lol * Math.abs(Math.sin(s * 16));
+          const love = win(s, T_RUB + 0.2, T_RUB + 0.6); st.head -= 8 * love; reachTo(st, love, [SHE + 30, stand - 130], "b");
+          return st;
+        }
+        function himRaw(s) {
+          if (s > T_RUB) {
+            const x = SHE + 100;
+            const kn = base({ hx: x, hy: FL - 96, torso: 20, head: 10, ax: x - 58, ay: FL, bx: x + 64, by: FL - 2 });
+            const rub = Math.sin(s * 12) * 8;
+            reachTo(kn, 1, [SHE + 30 + rub, FL - 26]); reachTo(kn, 1, [SHE + 44 - rub, FL - 34], "b");
+            const st = standOn(HE, -1, FL);
+            return mixPose(st, kn, win(s, T_RUB, T_RUB + 0.4));
+          }
+          const st = standOn(HE, -1, FL); st.head = 4;
+          const lg = hold(s, T_LAUGH, T_SWAP, 0.15); reachTo(st, lg, [HE - 10, stand - 62]); reachTo(st, lg, [HE + 6, stand - 58], "b"); st.torso -= (6 + 5 * Math.sin(s * 22)) * lg; st.head -= 14 * lg;
+          const oof = hold(s, T_OOF, T_CRAVE, 0.15); st.torso += 18 * oof; st.hy += 12 * oof; reachTo(st, oof, [HE + 34, stand - 30], "b"); reachTo(st, oof, [HE - 46, stand - 60]);
+          const cr = hold(s, T_CRAVE, T_KICK, 0.2); reachTo(st, cr, [HE - 46, stand - 92]); if (cr > 0) { const c = 0.5 - 0.5 * Math.cos((s - T_CRAVE) * 2 * Math.PI * 1.4); reachTo(st, cr, [HE - 30, lerp(stand - 96, stand - 150, c)], "b"); }
+          const kick = hold(s, T_KICK, T_KICK + 0.5, 0.06); st.hy -= 16 * kick; reachTo(st, kick, [HE - 46, stand - 60]); reachTo(st, kick, [HE - 40, stand - 50], "b");
+          const back = hold(s, T_BACK, T_SWAP2 + 0.2, 0.15); reachTo(st, back, [HE - 30, stand - 205]); reachTo(st, back, [HE + 20, stand - 205], "b"); st.torso -= 6 * back;
+          return st;
+        }
+
+        const slam = (words, times, t, red) => words.map((w, i) => {
+          const q = clamp((t - times[i]) / 0.2, 0, 1);
+          if (q <= 0) return `<span class="w" style="opacity:0">${w}</span>`;
+          const sc = lerp(2.3, 1, backOut(q)), bl = (1 - q) * 6;
+          return `<span class="w" style="transform:scale(${sc.toFixed(3)});filter:blur(${bl.toFixed(1)}px);${red.includes(i) ? "color:#ff3b30;" : ""}">${w}</span>`;
+        }).join("");
+        const dim = document.createElement("div");
+        dim.style.cssText = "position:absolute;inset:0;background:#000;opacity:0";
+        E("stage").appendChild(dim);
+        const card = document.createElement("div");
+        card.id = "card";
+        card.style.cssText = "position:absolute;left:90px;right:90px;top:640px;text-align:center;font-family:HFMono,monospace;font-weight:700;color:#fff;letter-spacing:0.08em";
+        card.innerHTML = `<div id="cm1" style="font-size:60px;line-height:1.25;text-shadow:0 0 18px rgba(255,255,255,0.35)"></div>
+          <div id="cm2" style="font-size:52px;line-height:1.35;margin-top:22px;text-shadow:0 0 14px rgba(255,255,255,0.25)"></div>
+          <div id="cq" style="opacity:0;margin-top:110px;font-size:27px;line-height:1.5;color:#bdbdbd;letter-spacing:0.05em">"MAKING THE DECISION TO HAVE<br/>A CHILD IS MOMENTOUS. IT IS TO<br/>DECIDE FOREVER TO HAVE YOUR HEART<br/>GO WALKING AROUND OUTSIDE YOUR BODY."<div style="margin-top:22px;font-size:24px;color:#8a8a8a;letter-spacing:0.2em">ELIZABETH STONE</div></div>`;
+        E("stage").appendChild(card);
+        const fade = document.createElement("div");
+        fade.style.cssText = "position:absolute;inset:0;background:#000;opacity:0";
+        E("stage").appendChild(fade);
+
+        function render(t) {
+          const s = t;
+          let kick = 0;
+          const hit = (tr, k, d) => { if (t >= tr) kick += k * Math.exp(-(t - tr) / d); };
+          hit(T_SWAP + 0.3, 0.6, 0.15); hit(T_SWAP2 + 0.3, 0.6, 0.15); hit(T_KICK, 0.5, 0.12);
+          const cs = 1.9 * (s > T_RUB ? 1 + 0.1 * ease(clamp((s - T_RUB) / 1.2, 0, 1)) : 1);
+          const sc = cs * (1 + 0.05 * Math.min(kick, 1.5));
+          const shx = Math.sin(t * 67) * 8 * Math.min(kick, 1), shy = Math.cos(t * 59) * 6 * Math.min(kick, 1);
+          cam.setAttribute("transform", `translate(${r1(540 + shx)} ${r1(1180 + shy)}) scale(${sc.toFixed(4)}) translate(-555 -440)`);
+          const hp = drawFig(her, livePose(herRaw, s, 1.4), 1);
+          const mp = drawFig(him, livePose(himRaw, s, 0.3), -1);
+          bun.setAttribute("cx", r1(hp.head[0] - 25)); bun.setAttribute("cy", r1(hp.head[1] - 16));
+          // belly: on her, swaps to him, swaps back
+          const bpos = (fig, dir) => [lerp(fig.head[0], fig.hip[0], 0.62) + dir * 30, lerp(fig.head[1], fig.hip[1], 0.7)];
+          const k = swapK(s), bH = bpos(hp, 1), bM = bpos(mp, -1);
+          const bk = 1 + 0.12 * Math.exp(-Math.max(0, s - T_KICK) * 6) * (s > T_KICK ? 1 : 0);
+          belly.setAttribute("cx", r1(lerp(bH[0], bM[0], k))); belly.setAttribute("cy", r1(lerp(bH[1], bM[1], k)));
+          belly.setAttribute("rx", r1(36 * bk)); belly.setAttribute("ry", r1(42 * bk));
+          kickL.forEach((l, i) => { const a = -0.6 + i * 0.6, on = hold(s, T_KICK, T_KICK + 0.4, 0.05); l.setAttribute("x1", r1(bM[0] - 44 * Math.cos(a))); l.setAttribute("y1", r1(bM[1] + 44 * Math.sin(a))); l.setAttribute("x2", r1(bM[0] - 64 * Math.cos(a))); l.setAttribute("y2", r1(bM[1] + 64 * Math.sin(a))); l.setAttribute("opacity", on.toFixed(3)); });
+          // sparkles swirling around both at each swap
+          stars.forEach((st, i) => { const on = Math.max(hold(s, T_SWAP - 0.1, T_SWAP + 0.7, 0.15), hold(s, T_SWAP2 - 0.1, T_SWAP2 + 0.7, 0.15)); const a = t * 5 + i * 0.63; const cx = 555 + 150 * Math.cos(a), cy = FL - 200 + 120 * Math.sin(a * 1.3); st.setAttribute("transform", `translate(${r1(cx)} ${r1(cy)}) rotate(${r1(t * 200 + i * 30)}) scale(${(0.8 + 0.4 * Math.sin(t * 9 + i)).toFixed(3)})`); st.setAttribute("opacity", on.toFixed(3)); });
+          E("flash").style.opacity = (0.5 * Math.max(hold(s, T_SWAP + 0.2, T_SWAP + 0.45, 0.08), hold(s, T_SWAP2 + 0.2, T_SWAP2 + 0.45, 0.08))).toFixed(3);
+          // cravings
+          const crOn = s > T_CRAVE && s < T_KICK ? 1 : 0;
+          jar.setAttribute("opacity", crOn); jar.setAttribute("transform", `translate(${r1(mp.hands[0][0])} ${r1(mp.hands[0][1] + 14)})`);
+          cone.setAttribute("opacity", crOn); cone.setAttribute("transform", `translate(${r1(mp.hands[1][0])} ${r1(mp.hands[1][1] - 6)})`);
+          sweat.setAttribute("opacity", s > T_OOF && s < T_SWAP2 ? 1 : 0); sweat.setAttribute("transform", `translate(${r1(mp.head[0] + 40)} ${r1(mp.head[1] - 10 + 14 * frac(s * 1.4))})`);
+          // speech
+          const bub = (g, a, b, p) => { const kk = hold(s, a, b, 0.1); g.setAttribute("opacity", kk.toFixed(3)); g.setAttribute("transform", `translate(${r1(p[0])} ${r1(p[1])}) scale(${(0.6 + 0.4 * backOut(kk)).toFixed(3)})`); };
+          bub(bEasy, T_LAUGH, T_SWAP - 0.1, [mp.head[0] - 20, mp.head[1] - 110]);
+          bub(bOof, T_OOF, T_CRAVE - 0.2, [mp.head[0] + 20, mp.head[1] - 110]);
+          bub(bCrave, T_CRAVE + 0.1, T_KICK - 0.1, [mp.head[0] - 40, mp.head[1] - 110]);
+          bub(bOw, T_KICK, T_BACK - 0.1, [mp.head[0] + 20, mp.head[1] - 110]);
+          bub(bBack, T_BACK, T_SWAP2 + 0.1, [mp.head[0] - 40, mp.head[1] - 110]);
+          smallH.forEach((h, i) => { const q = clamp((s - T_RUB - 0.4 - i * 0.2) / 0.8, 0, 1); h.setAttribute("opacity", q > 0 && q < 1 ? Math.sin(Math.PI * q).toFixed(3) : 0); h.setAttribute("transform", `translate(${r1(hp.head[0] + 20 - i * 20)} ${r1(hp.head[1] - 40 - 60 * q)}) scale(0.45)`); });
+          const hq = clamp((s - T_HOLD) / 0.4, 0, 1), beat = 1 + 0.08 * Math.max(0, Math.sin(t * 7)) * (hq >= 1 ? 1 : 0);
+          heart.setAttribute("opacity", hq > 0 ? 1 : 0);
+          heart.setAttribute("transform", `translate(${r1(hp.head[0] + 50)} ${r1(hp.head[1] - 110)}) scale(${(backOut(hq) * 1.1 * beat).toFixed(3)})`);
+          warm.setAttribute("opacity", (0.8 * win(s, T_RUB, T_RUB + 0.8)).toFixed(3));
+
+          E("h1").innerHTML = slam(["HE", "SAID", "IT", "WAS", "EASY."], [T_H1, T_H1 + 0.13, T_H1 + 0.26, T_H1 + 0.39, T_H1 + 0.52], t, [4]);
+          E("h2").innerHTML = slam(["THEN", "HE", "TRIED", "IT", "FOR", "A", "DAY."], [T_H2, T_H2 + 0.1, T_H2 + 0.2, T_H2 + 0.3, T_H2 + 0.4, T_H2 + 0.5, T_H2 + 0.6], t, []);
+          E("h1").style.opacity = (1 - 0.45 * win(t, T_H2 - 0.1, T_H2 + 0.2)).toFixed(3);
+          dim.style.opacity = (0.8 * win(t, T_CARD - 0.4, T_CARD)).toFixed(3);
+          E("head").style.opacity = (1 - win(t, T_CARD - 0.4, T_CARD)).toFixed(3);
+          E("cm1").innerHTML = slam(["MOMS", "ARE"], [T_CARD, T_CARD + 0.2], t, []);
+          E("cm2").innerHTML = slam(["SUPERHEROES."], [T_CARD + 0.8], t, [0]);
+          E("cq").style.opacity = win(t, T_CARD + 1.5, T_CARD + 2.0).toFixed(3);
+          fade.style.opacity = win(t, DUR - 0.3, DUR - 0.02).toFixed(3);
+        }
+
+        window.__timelines = window.__timelines || {};
+        const tl = gsap.timeline({ paused: true });
+        const clock = { t: 0 };
+        tl.to(clock, { t: DUR, duration: DUR, ease: "none", onUpdate: () => render(clock.t) }, 0);
+        window.__timelines["main"] = tl;
+        render(0);
+        tl.seek(0);
+      })();
+    </script>
+  </body>
+</html>
