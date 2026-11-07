@@ -453,7 +453,7 @@
           const lk = hold(s, T_PRIV, T_STARE + 0.6, 0.12);
           lock.setAttribute("opacity", lk.toFixed(3)); lock.setAttribute("transform", `translate(${r1(hp.hands[0][0])} ${r1(hp.hands[0][1] - 60)}) scale(${(0.6 + 0.4 * backOut(lk)).toFixed(3)})`);
           const bg = hold(s, T_SHOW + 0.15, T_HUG, 0.2);
-          big.setAttribute("opacity", bg.toFixed(3)); big.setAttribute("transform", `translate(${r1(hp.hands[0][0] + 10)} ${r1(hp.hands[0][1] - 120)}) scale(${(0.4 + 0.6 * backOut(bg)).toFixed(3)})`);
+          big.setAttribute("opacity", bg.toFixed(3)); big.setAttribute("transform", `translate(${r1(hp.head[0] + 20)} ${r1(hp.head[1] - 160)}) scale(${(0.4 + 0.6 * backOut(bg)).toFixed(3)})`);
           notes.forEach((n, i) => { const q = frac(s * 0.8 + i / 2), on = s > T_GRAB + 0.4 && s < T_CLEAN; n.setAttribute("x", r1(mp.head[0] + 30 + 30 * q)); n.setAttribute("y", r1(mp.head[1] - 30 - 70 * q)); n.setAttribute("opacity", on ? Math.sin(Math.PI * q).toFixed(3) : 0); });
           qs.forEach((q2, i) => { const on = hold(s, T_PRIV + 0.2, T_STARE, 0.1); q2.setAttribute("x", r1(mp.head[0] - 16 + i * 32)); q2.setAttribute("y", r1(mp.head[1] - 56)); q2.setAttribute("opacity", on.toFixed(3)); });
           // speech
@@ -461,9 +461,9 @@
           bub(bShow, T_GRAB, T_SCAN + 0.6, [hp.head[0] - 40, hp.head[1] - 110]);
           bub(bClean, T_CLEAN, T_ASK, [hp.head[0] - 40, hp.head[1] - 110]);
           bub(bAsk, T_ASK, T_PRIV, [mp.head[0] + 10, mp.head[1] - 110]);
-          bub(bPriv, T_PRIV, T_STARE, [hp.head[0] - 50, hp.head[1] - 110]);
+          bub(bPriv, T_PRIV, T_STARE, [hp.head[0] + 50, hp.head[1] - 110]);
           bub(bDots, T_STARE, T_SHOW, [mp.head[0] + 20, mp.head[1] - 110]);
-          bub(bPics, T_PICS, T_HUG, [hp.head[0] - 10, hp.head[1] - 300]);
+          bub(bPics, T_PICS, T_HUG, [hp.head[0] + 90, hp.head[1] - 330]);
           smallH.forEach((h, k) => { const q = clamp((s - T_PICS - 0.4 - k * 0.15) / 0.8, 0, 1); h.setAttribute("opacity", q > 0 && q < 1 ? Math.sin(Math.PI * q).toFixed(3) : 0); h.setAttribute("transform", `translate(${r1(mp.head[0] - 20 + k * 16)} ${r1(mp.head[1] - 40 - 60 * q)}) scale(0.45)`); });
           const hq = clamp((s - T_HOLD) / 0.4, 0, 1), beat = 1 + 0.08 * Math.max(0, Math.sin(t * 7)) * (hq >= 1 ? 1 : 0);
           heart.setAttribute("opacity", hq > 0 ? 1 : 0);

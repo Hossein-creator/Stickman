@@ -119,3 +119,7 @@ Lines up to 17 were scheduled in Metricool. 2026-10-25 ~10:42: all still-pending
 - 2026-11-06 18:00: 66 No Family (relationship), sent to Telegram
 - 2026-11-07 10:00: 67 Clingy (relationship humour), sent to Telegram
 - 2026-11-07 12:00: 68 Taken For Granted (relationship), sent to Telegram
+- 2026-11-07 16:00: 69 Love Is A Garden (relationship, winner format), sent to Telegram
+- 2026-11-07 18:00: 70 The Comeback (relationship), sent to Telegram
+- 2026-11-08 10:00: 71 Pregnant For A Day (relationship humour), sent to Telegram
+- 2026-11-08 12:00: 72 Private (relationship humour), sent to Telegram

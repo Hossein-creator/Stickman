@@ -2,6 +2,11 @@
 
 Claude's running notes. Newest on top. Everything Claude wants to remember goes here (or in the matching file), not on the computer.
 
+## 2026-11-07
+- Generate run 9: reels 69-72 (check: `viral/2026-11-06-check.md`).
+- The cloud container restarted twice during a background render and killed it, so reel 69 reached Telegram late (user asked why it wasn't sent). Now: commit each reel's source right after writing it, and render in the foreground (about 1.5-2.5 min per reel, timeout 600000) so a restart can't silently drop a video.
+- A twist ending works for "double standard" stories (reel 72: "THAT'S PRIVATE!" → her phone is full of him). It keeps the reel wholesome instead of toxic.
+
 ## 2026-11-05
 - Generate run 8: reels 65-68 (check: `viral/2026-11-05-check.md`). Same research method as run 7 (search filters + channel medians). Channels without a Shorts tab: take the median of the last 30 `/videos`. Skip huge outliers on tiny medians (under ~500) as noise.
 - Winner format also works as "X VS Y" (reel 65 LUST VS LOVE): both panels start the same, one test splits them.
