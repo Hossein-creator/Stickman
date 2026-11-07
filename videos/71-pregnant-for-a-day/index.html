@@ -316,7 +316,7 @@
           return o;
         };
 
-        // ---------- "pregnant for a day": she is heavily pregnant, tired, hand on her back. He laughs: "PREGNANCY IS EASY." Magic sparkles swap the belly onto him: back pain "OOF!", cravings (pickles + ice cream), a kick "OW!", "I TAKE IT BACK!". Sparkles swap it back, and he kneels and rubs her feet ----------
+        // ---------- "pregnant for a day": she is heavily pregnant, tired, hand on her back. He laughs: "PREGNANCY IS EASY." Magic sparkles swap the belly onto him: back pain "OOF!", cravings (pickles + ice cream), a kick "OW!", "I TAKE IT BACK!". Sparkles swap it back, and he kneels beside her and gently holds her belly ----------
         // remake of a 13.0x outlier (Swapnimations, "Body Swap with my pregnant wife!"), see viral/2026-11-06-check.md
         const cam = E("svg").children[1];
         for (const el of Array.from(cam.children)) {
@@ -388,10 +388,10 @@
         }
         function himRaw(s) {
           if (s > T_RUB) {
-            const x = SHE + 100;
-            const kn = base({ hx: x, hy: FL - 96, torso: 20, head: 10, ax: x - 58, ay: FL, bx: x + 64, by: FL - 2 });
-            const rub = Math.sin(s * 12) * 8;
-            reachTo(kn, 1, [SHE + 30 + rub, FL - 26]); reachTo(kn, 1, [SHE + 44 - rub, FL - 34], "b");
+            const x = SHE + 150;
+            const kn = base({ hx: x, hy: FL - 96, torso: 14, head: -4, ax: x - 58, ay: FL, bx: x + 64, by: FL - 2 });
+            const rub = Math.sin(s * 6) * 6;
+            reachTo(kn, 1, [SHE + 64 + rub, stand - 74]); reachTo(kn, 1, [SHE + 60 - rub, stand - 40], "b");
             const st = standOn(HE, -1, FL);
             return mixPose(st, kn, win(s, T_RUB, T_RUB + 0.4));
           }
