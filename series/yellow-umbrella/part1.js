@@ -1,12 +1,14 @@
         // ===== PART 1/4 "The Umbrella": storm at the bus stop, a stranger gives her his yellow umbrella and runs off in the rain; next day she gives it back, he sneezes, it rains again: one umbrella, two people; every day after; cliffhanger: her dad sees them =====
-        const DURP = 36;
+        const MAPDEF = [["tease", 30.9, 32.3, 1], ["rew", 32.3, 0, 0.45], ["play", 0, 8.3, 1], ["play", 8.3, 9.0, 0.4], ["play", 9.0, 32.6, 1], ["freeze", 32.6, 1.1], ["play", 32.6, 36, 1]];
+        const FXP = { tease: "HOW DID THIS HAPPEN?", punch: [[17.9, 0.06], [31.0, 0.08]], bars: [[8.2, 9.6], [30.6, 33.6]] };
         const PART = 1;
         bubble("here", "HERE."); bubble("wet", "YOU'LL GET WET!"); bubble("achoo", "ACHOO!"); bubble("haha", "HAHA!"); bubble("who", "WHO IS HE?!", "#ff3b30", 34);
         const FLASH = [0.3, 1.7, 31.0];
         const SHE = 900, HE0 = 1380, HE1 = 1070;
         const SC = [
           { a: 0, b: 13.6, set: "stop", sky: () => ({ storm: 1 }), rain: () => 1,
-            cam: (t) => { const k = win(t, 2.4, 4.6), k2 = win(t, 10.6, 12.4); return [lerp(lerp(910, 1000, k), 930, k2), lerp(430, 420, k), lerp(lerp(2.2, 1.75, k), 2.1, k2)]; },
+            grade: ["cold", 0.6], glow: (t) => 0.5 * win(t, 10.8, 11.6),
+            cam: shots([[0, 910, 430, 2.3], [2.4, 1180, 440, 1.95], [4.2, 1000, 420, 1.75], [5.9, 1050, 400, 2.4], [7.2, 930, 400, 2.4], [8.2, 1000, 420, 1.8], [9.5, 1240, 430, 1.6], [10.6, 930, 400, 2.3]]),
             cast: {
               her: (t) => {
                 const st = pose(SHE + 3 * Math.sin(t * 40) * (1 - win(t, 8.6, 9.0)), 1, { head: 14 });
@@ -33,7 +35,8 @@
               floatHearts([P.her.head[0], P.her.head[1] - 60], 11.4, t);
             } },
           { a: 13.6, b: 23.6, set: "stop", sky: (t) => ({ gray: 1, storm: win(t, 19.4, 20.2) * 0.8 }), rain: (t) => win(t, 19.6, 20.4),
-            cam: (t) => [lerp(930, 990, win(t, 15.8, 16.8)), 430, lerp(2.1, 1.85, win(t, 15.8, 16.8)) + 0.15 * win(t, 20.6, 22.6)],
+            grade: (t) => (t < 20.1 ? ["cold", 0.3] : ["warm", 0.45]), glow: (t) => 0.8 * win(t, 20.2, 21.0),
+            cam: shots([[13.6, 930, 430, 2.0], [16.0, 1040, 430, 1.7], [17.9, 1050, 400, 2.4], [18.5, 990, 430, 1.85], [20.1, 960, 410, 2.15]]),
             cast: {
               her: (t) => {
                 const look = t < 14.6 ? 1 : t < 15.6 ? lerp(1, -1, win(t, 14.6, 14.9)) : lerp(-1, 1, win(t, 15.6, 15.9));
@@ -63,30 +66,32 @@
               if (P.him) { floatHearts([(P.him.head[0] + P.her.head[0]) / 2, P.her.head[1] - 40], 21.3, t); }
             } },
           { a: 23.6, b: 36, set: "road", sky: (t) => ({ storm: 1 }), rain: () => 0.75,
-            cam: (t) => { const x = Math.min(280 + 85 * (t - 23.6), 280 + 85 * 6.6); const k = win(t, 30.6, 31.6); return [lerp(x + 20, x + 220, k), lerp(430, 410, k), lerp(1.75, 1.6, k) + 0.25 * win(t, 31.0, 31.5)]; },
+            grade: (t) => (t < 30.4 ? ["warm", 0.4] : ["cold", 0.6]), glow: (t) => 0.6 * (1 - win(t, 30.0, 30.6)),
+            cam: (t) => (t < 30.6 ? [Math.min(280 + 85 * (t - 23.6), 280 + 85 * 6.6) - 40, 430, 1.75] : shots([[30.6, 1000, 430, 1.6], [31.0, 1030, 400, 2.4], [32.0, 900, 400, 2.2]])(t)),
             cast: {
-              him: (t) => { const x = Math.min(280 + 85 * (t - 23.6), 280 + 85 * 6.6); const st = t < 30.2 ? walking(280, x, 1) : pose(x, 1, { head: -6 }); reachTo(st, 1, [x - 34, stand - 170]); if (t < 31.3) reachTo(st, 1, [x - 70, stand - 100], "b"); return st; },
-              her: (t) => { const x = Math.min(170 + 85 * (t - 23.6), 170 + 85 * 6.6); const st = t < 30.2 ? walking(170, x, 1) : pose(x, 1, { head: -6 }); const drop = win(t, 31.2, 31.5); reachTo(st, 1 - drop, [x + 50, stand - 100]); st.hx -= 20 * drop; st.torso -= 10 * drop; reachTo(st, drop, [x + 30, stand - 150], "b"); return st; },
+              him: (t) => { const x = Math.min(280 + 85 * (t - 23.6), 280 + 85 * 6.6); const st = t < 30.2 ? walking(280, x, 1) : pose(x, 1, { head: -6 }); reachTo(st, 1, [x + 12, stand - 180]); if (t < 31.3) reachTo(st, 1, [x - 62, stand + 6], "b"); return st; },
+              her: (t) => { const x = Math.min(170 + 85 * (t - 23.6), 170 + 85 * 6.6); const st = t < 30.2 ? walking(170, x, 1) : pose(x, 1, { head: -6 }); const drop = win(t, 31.2, 31.5); reachTo(st, 1 - drop, [x + 48, stand + 8]); st.hx -= 20 * drop; st.torso -= 10 * drop; reachTo(st, drop, [x + 30, stand - 150], "b"); return st; },
               dad: (t) => { if (t < 29.6) return null; const x = lerp(1180, 1020, win(t, 29.6, 30.8)); const st = t < 30.8 ? walking(1180, x, -1) : pose(x, -1, { head: 6 }); reachTo(st, 1, [x - 30, stand - 140]); const pt = win(t, 31.4, 31.7); reachTo(st, pt, [x - 140, stand - 160], "b"); st.torso += 10 * pt; return st; },
             },
             draw: (t, P) => {
-              putUmb(U1, P.him.hands[0], "open", -10);
+              putUmb(U1, P.him.hands[0], "open", -16);
               if (P.dad) putUmb(U2, P.dad.hands[0], "open", 4);
               if (t < 30.6) floatHearts([(P.him.head[0] + P.her.head[0]) / 2, P.her.head[1] - 50], 24.8 + 2.4 * Math.floor((t - 24.8) / 2.4), t);
               if (P.dad) { say("who", hold(t, 31.5, 34, 0.12), [P.dad.head[0] - 30, P.dad.head[1] - 120]); const b = clamp((t - 31.05) / 0.2, 0, 1); bang.setAttribute("opacity", b); bang.setAttribute("x", r1(P.her.head[0])); bang.setAttribute("y", r1(P.her.head[1] - 60)); }
             } },
         ];
         const CAPS = [
-          [0.2, 3.4, "SHE WAS STUCK IN THE STORM."],
+          [0.2, 3.4, "STUCK IN THE STORM."],
           [3.6, 6.2, "THEN A STRANGER STOPPED..."],
-          [9.0, 11.6, "...AND GAVE HER HIS UMBRELLA.", "y"],
-          [11.6, 13.5, "HE DIDN'T EVEN SAY HIS NAME."],
+          [9.0, 11.6, "HE GAVE HER HIS UMBRELLA.", "y"],
+          [11.6, 13.5, "HE TOOK THE RAIN FOR HER."],
           [13.7, 15.8, "THE NEXT DAY..."],
-          [15.8, 17.9, "SHE WAITED TO GIVE IT BACK."],
+          [15.8, 17.9, "SHE WAITED FOR HIM."],
           [20.4, 23.5, "ONE UMBRELLA. TWO PEOPLE."],
-          [23.7, 26.8, "EVERY DAY AFTER THAT..."],
+          [23.7, 26.8, "EVERY DAY AFTER..."],
           [26.8, 29.8, "THEY WALKED HOME TOGETHER."],
           [30.0, 33.4, "UNTIL HER DAD SAW THEM.", [2]],
         ];
         const CARD = { t: 33.6, html: (t) => `<div style="font-size:52px;line-height:1.3">${slam(["WHAT", "WILL", "HER", "DAD", "DO?"], 33.6, t, [3])}</div>${follow(t, 34.3, "2/4")}` };
-        const render = (t) => renderAll(t, PART, SC, CAPS, FLASH, CARD);
+        const MAP = buildMap(MAPDEF);
+        const render = (t) => renderVideo(t, MAP, FXP, PART, SC, CAPS, FLASH, CARD);
