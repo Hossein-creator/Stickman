@@ -14,6 +14,9 @@ User, 2026-10-27: "diese repo ist deine ordner du speicherst und notierst nichts
 ## "generiere"
 When the user writes "generiere": run `GENERATE.md` (find viral videos with `ig-viral`, check virality first, remake them one to one in our style, **only relationship**: user 2026-10-30 "die relationships videos explodieren gerade bleibe in diese nische").
 
+## "serie"
+When the user writes "serie": run `SERIES.md` (one gripping 4-part numbered relationship series). "generiere" stays as before.
+
 ## When a video is finished
 User, 2026-10-27: "wenn du mit dem video fertig bist schickst du mir nur das video mit passende und virale hashtags und caption auf telegram hier sagst du nur das video wurde erstellt."
 - Send ONLY the video to Telegram, with the caption and fitting, viral hashtags (6-8 tags: niche + broad reach, e.g. #relationship #love #relationshipgoals #couplegoals + topic tags + #stickman #animation).

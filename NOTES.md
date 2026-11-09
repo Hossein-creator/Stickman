@@ -58,4 +58,4 @@ Claude's running notes. Newest on top. Everything Claude wants to remember goes 
 
 ## 2026-11-09: numbered series
 - User: accounts get almost no new followers or views. Idea: longer, numbered videos as a series so people follow for the next part; must be a gripping story watched to the end.
-- Saved as rule in `GENERATE.md`: one run = one 4-part series (30-60 s each), same couple, "PART N/4" on top, hook in 2 s, cliffhanger + "FOLLOW" end card, recap at the start of parts 2-4. Story idea from a ≥1M-view relationship video.
+- Separate job `SERIES.md`, trigger "serie" ("generiere" stays as before): one 4-part series (30-60 s each), same couple, "PART N/4" on top, hook in 2 s, cliffhanger + "FOLLOW" end card, recap at the start of parts 2-4. Story idea from a ≥1M-view relationship video.
