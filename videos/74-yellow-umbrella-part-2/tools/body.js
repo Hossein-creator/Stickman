@@ -202,6 +202,12 @@
         // ---- DOM: tag, captions, end card ----
         E("head").style.display = "none";
         const css = (el, c) => { el.style.cssText = c; E("stage").appendChild(el); return el; };
+        const gradeEl = css(document.createElement("div"), "position:absolute;inset:0;mix-blend-mode:soft-light;opacity:0");
+        const leakEl = css(document.createElement("div"), "position:absolute;inset:0;background:radial-gradient(ellipse at 85% 20%, rgba(255,190,90,0.55), rgba(255,140,60,0.0) 60%);mix-blend-mode:screen;opacity:0");
+        const scanEl = css(document.createElement("div"), "position:absolute;inset:0;background:repeating-linear-gradient(0deg, rgba(255,255,255,0.08) 0 3px, rgba(0,0,0,0) 3px 9px);opacity:0");
+        const barT = css(document.createElement("div"), "position:absolute;left:0;right:0;top:0;height:0;background:#000");
+        const barB = css(document.createElement("div"), "position:absolute;left:0;right:0;bottom:0;height:0;background:#000");
+        const fxLabel = css(document.createElement("div"), "position:absolute;left:0;right:0;top:1560px;text-align:center;font-family:HFMono,monospace;font-weight:700;font-size:34px;letter-spacing:0.3em;color:#fff;opacity:0");
         const tagEl = css(document.createElement("div"), "position:absolute;left:0;right:0;top:206px;text-align:center;font-family:HFMono,monospace;font-weight:700;");
         const capEl = css(document.createElement("div"), "position:absolute;left:60px;right:60px;top:330px;text-align:center;font-family:HFMono,monospace;font-weight:700;font-size:44px;line-height:1.35;letter-spacing:0.06em;color:#fff;text-shadow:0 0 16px rgba(0,0,0,0.9),0 0 30px rgba(0,0,0,0.6)");
         const flashEl = E("flash");
@@ -264,6 +270,7 @@
           for (const k in bubbles) bubbles[k].setAttribute("opacity", 0);
           U1.span = U2.span = null; U1.g.setAttribute("opacity", 0); U2.g.setAttribute("opacity", 0);
           if (sc.draw) sc.draw(t, PS);
+          renderAll.sc = sc;
           // rain
           const rk = sc.rain ? sc.rain(t) : 0;
           const shields = [U1.span, U2.span, sc.set === "stop" ? [540, 860, FL - 400] : null].filter(Boolean);
@@ -284,11 +291,11 @@
           // quick black dip on each scene cut
           let cut = 0;
           for (const S of SCENES) if (S.a > 0) cut = Math.max(cut, 1 - clamp(Math.abs(t - S.a) / 0.14, 0, 1));
-          cutEl.style.opacity = cut.toFixed(3);
+          cutEl.style.opacity = 0;
           // tag + captions
           tagEl.innerHTML = `<div style="font-size:28px;letter-spacing:0.3em;color:${YEL};text-shadow:0 0 14px rgba(255,210,58,0.5)">THE YELLOW UMBRELLA</div><div style="margin-top:8px;font-size:40px;letter-spacing:0.18em;color:#fff">PART ${PART}/4</div>`;
           let cap = "";
-          for (const [a, b, txt, red] of CAPS) if (t >= a && t < b) { const o = Math.min(1, (b - t) / 0.2); cap = `<div style="opacity:${o.toFixed(3)}">${slam(txt.split(" "), a, t, red || [], 0.1)}</div>`; }
+          for (const [a, b, txt, red] of (renderAll.capsOverride || CAPS)) if (t >= a && t < b) { const o = Math.min(1, (b - t) / 0.2); cap = `<div style="opacity:${o.toFixed(3)}">${slam(txt.split(" "), a, t, red || [], 0.1)}</div>`; }
           capEl.innerHTML = cap;
           // end card
           const ck = win(t, CARD.t - 0.3, CARD.t + 0.1);
@@ -307,15 +314,63 @@
         const say = (key, k, p) => { const g = bubbles[key]; g.setAttribute("opacity", k.toFixed(3)); g.setAttribute("transform", `translate(${r1(p[0])} ${r1(p[1])}) scale(${(0.6 + 0.4 * backOut(k)).toFixed(3)})`); };
         const cry = (p, t, f) => tears.forEach((e, i) => { const q = frac(t * 1.3 + i / 4); e.setAttribute("opacity", Math.sin(Math.PI * q).toFixed(3)); e.setAttribute("cx", r1(p[0] + f * (12 + (i % 2) * -24))); e.setAttribute("cy", r1(p[1] + 10 + 70 * q)); });
         const doSplash = (p, t0, t) => splash.forEach((e, i) => { const q = clamp((t - t0) / 0.6, 0, 1); const ang = Math.PI * (0.15 + 0.7 * (i / 9)); e.setAttribute("opacity", q > 0 && q < 1 ? (1 - q).toFixed(3) : 0); e.setAttribute("cx", r1(p[0] + Math.cos(ang) * 120 * q)); e.setAttribute("cy", r1(p[1] - Math.sin(ang) * 140 * q + 200 * q * q)); });
+
+        // ===== video time -> story time (teaser, rewind, slow motion, freeze) + finishing effects =====
+        // MAPDEF entries: ["play", T0, T1, rate] | ["freeze", T, dur] | ["rew", T0, T1, dur] | ["tease", T0, T1, rate]
+        function buildMap(def) { let v = 0; return def.map((e) => { let o; if (e[0] === "freeze") o = { k: "freeze", v0: v, v1: v + e[2], T0: e[1], T1: e[1] }; else if (e[0] === "rew") o = { k: "rew", v0: v, v1: v + e[3], T0: e[1], T1: e[2] }; else o = { k: e[0], v0: v, v1: v + (e[2] - e[1]) / e[3], T0: e[1], T1: e[2], rate: e[3] }; v = o.v1; return o; }); }
+        function mapT(M, t) { let m = M[M.length - 1]; for (const x of M) if (t < x.v1) { m = x; break; } const p = clamp((t - m.v0) / (m.v1 - m.v0), 0, 1); return { T: lerp(m.T0, m.T1, m.k === "rew" ? ease(p) : p), m, p }; }
+        const shots = (list, drift = 0.02) => (t) => { let s = list[0]; for (const x of list) if (t >= x[0]) s = x; return [s[1], s[2], s[3] * (1 + drift * Math.min(4, t - s[0]))]; };
+        const GRADE = { cold: "#3a6ab0", warm: "#ffb070", night: "#20305a", gold: "#ffd27a" };
+        function renderVideo(t, M, FXP, PART, SC, CAPS, FLASH, CARD) {
+          const { T, m, p } = mapT(M, t);
+          renderAll.capsOverride = m.k === "tease" || m.k === "rew" ? [] : null;
+          renderAll(T, PART, SC, CAPS, FLASH, CARD);
+          if (m.k === "tease") capEl.innerHTML = `<div>${slam(FXP.tease.split(" "), m.v0 + 0.15, t, FXP.teaseRed || [], 0.12)}</div>`;
+          const sc = renderAll.sc;
+          // whip pan around scene cuts (story time)
+          let wx = 0, wb = 0;
+          if (m.k === "play") for (const S of SC) if (S.a > 0) { const d = (T - S.a) / 0.16; if (Math.abs(d) < 1) { const k = 1 - Math.abs(d); wx = 420 * k * (d < 0 ? -1 : 1); wb = 22 * k; } }
+          // punch-ins (story time)
+          let pz = 1; for (const [pt, amt] of FXP.punch || []) if (T >= pt) pz *= 1 + amt * win(T, pt, pt + 0.12) * (1 - win(T, pt + 0.9, pt + 1.6));
+          let filt = "", gray = 0;
+          if (m.k === "tease") { gray = 0.55; }
+          if (m.k === "freeze") { gray = 0.85 * win(t, m.v0, m.v0 + 0.15); pz *= 1 + 0.07 * ease(p); }
+          if (m.k === "rew") { wb = Math.max(wb, 10); wx = 40 * Math.sin(t * 90); }
+          if (gray) filt += `grayscale(${gray.toFixed(2)}) contrast(1.15) `;
+          if (wb > 0.2) filt += `blur(${wb.toFixed(1)}px)`;
+          const svgS = E("svg").style;
+          svgS.transformOrigin = "540px 1100px";
+          svgS.transform = `translateX(${r1(wx)}px) scale(${pz.toFixed(4)})`;
+          svgS.filter = filt || "none";
+          scanEl.style.opacity = m.k === "rew" ? 1 : 0;
+          // grade + light leak per scene
+          const g = sc.grade ? (typeof sc.grade === "function" ? sc.grade(T) : [sc.grade, 0.55]) : null;
+          gradeEl.style.background = g ? GRADE[g[0]] : "transparent"; gradeEl.style.opacity = g ? g[1] : 0;
+          leakEl.style.opacity = sc.glow ? (sc.glow(T) * (0.75 + 0.25 * Math.sin(t * 1.7))).toFixed(3) : 0;
+          // letterbox
+          let bar = 0; for (const [a, b] of FXP.bars || []) bar = Math.max(bar, win(T, a, a + 0.4) * (1 - win(T, b - 0.4, b)));
+          if (m.k === "tease" || m.k === "freeze") bar = 1;
+          barT.style.height = barB.style.height = `${Math.round(150 * bar)}px`;
+          // labels
+          let lab = "", lo = 0;
+          if (m.k === "tease") { lab = "LATER..."; lo = 1; }
+          if (m.k === "rew") { lab = "◀◀ REWIND"; lo = 1; }
+          if (m.k === "play" && m.rate < 1) { lab = ""; }
+          fxLabel.textContent = lab; fxLabel.style.opacity = lo;
+          // freeze: pulsing ring + sting
+          const ft = M.find((x) => x.k === "freeze");
+          flashEl.style.opacity = Math.max(parseFloat(flashEl.style.opacity) || 0, ft && t >= ft.v0 ? 0.8 * Math.exp(-(t - ft.v0) / 0.08) : 0, m.k === "rew" ? 0 : (M[1] && Math.abs(t - M[1].v0) < 0.06 ? 0.6 : 0)).toFixed(3);
+        }
         // ===== PART 2/4 "The Window": dad drags her away ("STAY AWAY FROM MY DAUGHTER!", "YOU HAVE NOTHING!"); he watches her go in the rain; she's locked in, he comes to her window every night, paper plane "I WILL WAIT", she answers with a heart; dad finds the note and tears it; a week later a rich man brings a ring, dad says yes; cliffhanger: the wedding is tomorrow =====
-        const DURP = 36;
+        const MAPDEF = [["tease", 19.6, 21.2, 1], ["rew", 21.2, 0, 0.45], ["play", 0, 14.9, 1], ["play", 14.9, 16.0, 0.5], ["play", 16.0, 30.9, 1], ["play", 30.9, 31.6, 0.4], ["play", 31.6, 31.9, 1], ["freeze", 31.9, 1.1], ["play", 31.9, 36, 1]];
+        const FXP = { tease: "WHAT WAS IN THE NOTE?", punch: [[0.4, 0.06], [19.9, 0.08], [24.9, 0.05]], bars: [[14.8, 16.2], [30.6, 33.6]] };
         const PART = 2;
-        bubble("stay", "STAY AWAY FROM MY DAUGHTER!", "#ff3b30", 26); bubble("nothing", "YOU HAVE NOTHING!", "#ff3b30", 30); bubble("perfect", "PERFECT!", "#111", 30); bubble("no", "NO...", "#111", 30);
+        bubble("stay", "STAY AWAY FROM HER!", "#ff3b30", 30); bubble("nothing", "YOU HAVE NOTHING!", "#ff3b30", 30); bubble("perfect", "PERFECT!", "#111", 30); bubble("no", "NO...", "#111", 30);
         const FLASH = [0.4, 19.8];
         const G = (t) => (t < 6.4 ? [880, stand - 100] : [lerp(930, 1530, (t - 6.4) / 2.8) - 55, stand - 100]);
         const SC = [
           { a: 0, b: 9.4, set: "road", sky: () => ({ storm: 1 }), rain: () => 0.8,
-            cam: (t) => [lerp(lerp(840, 860, win(t, 0, 1)), 720, win(t, 6.6, 8.6)), 430, lerp(1.7, 2.0, win(t, 6.6, 8.6))],
+            grade: ["cold", 0.6], cam: shots([[0, 860, 430, 1.7], [1.4, 870, 400, 2.2], [3.6, 860, 400, 2.2], [5.0, 700, 410, 2.4], [6.4, 1000, 430, 1.6], [7.6, 700, 420, 2.2]]),
             cast: {
               him: (t) => { const st = pose(700, 1, { head: 4 }); const low = win(t, 6.8, 7.8); reachTo(st, 1, [lerp(666, 735, low), stand - lerp(170, 40, low)]); st.head += 26 * low; st.torso += 6 * low; const sh = hold(t, 0.4, 1.4, 0.1); st.hx -= 10 * sh; return st; },
               her: (t) => {
@@ -331,11 +386,11 @@
               putUmb(U1, P.him.hands[0], "open", lerp(0, 70, win(t, 6.8, 7.8)));
               putUmb(U2, P.dad.hands[0], "open", 0);
               say("stay", hold(t, 1.4, 3.4, 0.12), [P.dad.head[0] - 120, P.dad.head[1] - 130]);
-              say("nothing", hold(t, 3.6, 6.2, 0.12), [P.dad.head[0] - 100, P.dad.head[1] - 130]);
+              say("nothing", hold(t, 3.6, 5.0, 0.12), [P.dad.head[0] - 100, P.dad.head[1] - 130]);
               if (t > 7.6) cry(P.him.head, t, 1);
             } },
           { a: 9.4, b: 22, set: "house", inside: ["her", "dad"], sky: () => ({ night: 1, moon: 0.6 }), rain: () => 0.75, room: (t) => 0.85,
-            cam: (t) => [lerp(640, 560, win(t, 11.4, 13.0)), lerp(380, 420, win(t, 11.4, 13.0)), lerp(2.1, 1.65, win(t, 11.4, 13.0)) + 0.35 * win(t, 19.6, 20.2) * (1 - win(t, 21.2, 21.9))],
+            grade: ["night", 0.5], glow: (t) => 0.7 * hold(t, 18.0, 19.6, 0.3), cam: shots([[9.4, 650, 380, 2.1], [11.6, 380, 420, 1.9], [13.6, 520, 420, 1.65], [16.0, 640, 360, 2.6], [18.0, 640, 380, 2.3], [19.4, 690, 380, 2.2], [20.5, 650, 360, 2.5]]),
             cast: {
               her: (t) => { const x = 640; const st = pose(x, -1, { head: 16 }); const glass = hold(t, 13.8, 22, 0.3); reachTo(st, 1, [x - 50, FL - lerp(178, 280, glass)]); reachTo(st, 1 - win(t, 15.8, 16.1), [x - 30, FL - 178], "b"); st.head -= 26 * glass; const n = hold(t, 16.0, 20.4, 0.2); reachTo(st, n, [x - 60, FL - 250], "b"); const scared = win(t, 19.8, 20.2); st.hx -= 30 * scared; st.head += 10 * scared; return st; },
               dad: (t) => { if (t < 19.4) return null; const x = lerp(820, 740, win(t, 19.4, 19.9)); const st = pose(x, -1, { head: 10 }); const grab = hold(t, 20.0, 21.0, 0.15); reachTo(st, grab, [600, FL - 250]); const rip = win(t, 20.6, 20.8); reachTo(st, grab, [700, FL - 260], "b"); st.torso += 10 * grab; return st; },
@@ -344,7 +399,7 @@
             draw: (t, P) => {
               if (P.him) putUmb(U1, P.him.hands[0], "open", 6);
               const ft = 15.0, q = clamp((t - ft) / 0.9, 0, 1);
-              if (P.him && q > 0 && q < 1) { const a = P.him.hands[1], b = [600, FL - 270]; plane.setAttribute("opacity", 1); plane.setAttribute("transform", `translate(${r1(lerp(a[0], b[0], q))} ${r1(lerp(a[1], b[1], q) - 140 * Math.sin(Math.PI * q))}) rotate(${r1(-20 + 30 * q)})`); }
+              if (P.him && q > 0 && q < 1) { const a = P.him.hands[1], b = [600, FL - 270]; plane.setAttribute("opacity", 1); plane.setAttribute("transform", `translate(${r1(lerp(a[0], b[0], q))} ${r1(lerp(a[1], b[1], q) - 140 * Math.sin(Math.PI * q))}) rotate(${r1(-20 + 30 * q)}) scale(2)`); }
               let np = null, ns = 0.5;
               if (t > 15.9 && t < 20.6) np = t < 20.2 ? P.her.hands[1] : P.dad.hands[0];
               if (np) { noteTx.textContent = "I WILL WAIT."; note.setAttribute("opacity", 1); note.setAttribute("transform", `translate(${r1(np[0])} ${r1(np[1] - 20)}) scale(${ns})`); }
@@ -355,7 +410,7 @@
               if (t < 13.8) cry(P.her.head, t, -1);
             } },
           { a: 22, b: 36, set: "house", inside: ["her"], sky: (t) => ({ gray: 1 }), rain: (t) => 0.6 * win(t, 30.2, 30.8), room: () => 0.6,
-            cam: (t) => { const k = win(t, 30.0, 31.0); return [lerp(840, 520, k), 420, lerp(1.55, 1.9, k)]; },
+            grade: (t) => (t > 24.6 && t < 27.6 ? ["gold", 0.4] : ["cold", 0.35]), cam: shots([[22, 860, 420, 1.55], [24.6, 1080, 400, 2.3], [25.8, 920, 400, 2.2], [26.2, 960, 420, 1.8], [27.6, 640, 370, 2.4], [30.0, 450, 420, 1.9], [31.4, 400, 400, 2.4]]),
             cast: {
               her: (t) => { const x = 640; const st = pose(x, 1, { head: 20 }); reachTo(st, 1, [x + 40, FL - 178]); reachTo(st, hold(t, 27.6, 30.2, 0.2), [x + 30, FL - 300], "b"); return st; },
               dad: (t) => { const st = pose(920, 1, { head: -4 }); const sh = hold(t, 26.2, 27.6, 0.2); reachTo(st, sh, [1000 + 6 * Math.sin(t * 22) * sh, stand - 100]); const arms = hold(t, 25.4, 26.2, 0.15); reachTo(st, arms, [940, stand - 220]); reachTo(st, arms, [890, stand - 220], "b"); return st; },
@@ -368,7 +423,7 @@
               say("perfect", hold(t, 25.9, 27.6, 0.12), [P.dad.head[0] - 30, P.dad.head[1] - 140]);
               say("no", hold(t, 27.8, 29.8, 0.12), [P.her.head[0] - 60, P.her.head[1] - 120]);
               if (t > 27.6 && t < 30.2) cry(P.her.head, t, 1);
-              if (P.him) { const d = win(t, 31.0, 31.5); const hp = t < 31.0 ? P.him.hands[0] : [lerp(P.him.hands[0][0], 440, d), lerp(P.him.hands[0][1], FL - 8, d)]; putUmb(U1, hp, "closed", lerp(-15, 95, d)); const k = win(t, 31.6, 31.9); brokenH.setAttribute("opacity", k); brokenH.setAttribute("transform", `translate(${r1(P.him.head[0])} ${r1(P.him.head[1] - 100)}) scale(1.4)`); cry(P.him.head, t, 1); }
+              if (P.him) { const d = win(t, 31.0, 31.5); const hp = t < 31.0 ? P.him.hands[0] : [lerp(P.him.hands[0][0], 440, d), lerp(P.him.hands[0][1], FL - 8, d)]; putUmb(U1, hp, "closed", lerp(170, 95, d)); const k = win(t, 31.6, 31.9); brokenH.setAttribute("opacity", k); brokenH.setAttribute("transform", `translate(${r1(P.him.head[0])} ${r1(P.him.head[1] - 100)}) scale(1.4)`); cry(P.him.head, t, 1); }
             } },
         ];
         const CAPS = [
@@ -376,16 +431,17 @@
           [3.6, 6.4, "BECAUSE HE WAS POOR.", [3]],
           [6.8, 9.3, "HE WATCHED HER GO."],
           [9.5, 12.0, "HER DAD LOCKED HER IN.", [1]],
-          [12.2, 14.8, "BUT EVERY NIGHT HE CAME BACK."],
+          [12.2, 14.8, "EVERY NIGHT, HE CAME BACK."],
           [15.6, 18.0, "\"I WILL WAIT.\"", "y"],
-          [19.9, 21.9, "THEN HER DAD FOUND THE NOTE.", [2]],
+          [19.9, 21.9, "HER DAD FOUND THE NOTE.", [1]],
           [22.1, 24.4, "ONE WEEK LATER..."],
-          [24.6, 27.4, "A RICH MAN CAME WITH A RING."],
+          [24.6, 27.4, "A RICH MAN CAME."],
           [27.6, 30.0, "HER DAD SAID YES.", [1]],
           [30.2, 33.4, "THE WEDDING IS TOMORROW.", [3]],
         ];
         const CARD = { t: 33.6, html: (t) => `<div style="font-size:52px;line-height:1.3">${slam(["WILL", "SHE", "MARRY", "HIM?"], 33.6, t, [2])}</div>${follow(t, 34.2, "3/4")}` };
-        const render = (t) => renderAll(t, PART, SC, CAPS, FLASH, CARD);
+        const MAP = buildMap(MAPDEF);
+        const render = (t) => renderVideo(t, MAP, FXP, PART, SC, CAPS, FLASH, CARD);
 
         window.__timelines = window.__timelines || {};
         const tl = gsap.timeline({ paused: true });
