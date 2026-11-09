@@ -55,3 +55,7 @@ Claude's running notes. Newest on top. Everything Claude wants to remember goes 
   - Kit clash hit again: `SX` is a kit name (blank black frames). Check the list in DAILY-JOB.md before naming.
 - User: "generiere" = find the most viral videos (YT Shorts, IG Reels, TikTok, any niche) with ig-viral, check virality first (skill, else external tool/plugin), remake one to one in our style, mostly relationship. Written in `GENERATE.md`. Defaults until the user says otherwise: 3 relationship + 1 other per run, delivery via Telegram.
 - User: this repo is my folder. Save and note nothing on the computer. Rule written in `CLAUDE.md`.
+
+## 2026-11-09: numbered series
+- User: accounts get almost no new followers or views. Idea: longer, numbered videos as a series so people follow for the next part; must be a gripping story watched to the end.
+- Saved as rule in `GENERATE.md`: one run = one 4-part series (30-60 s each), same couple, "PART N/4" on top, hook in 2 s, cliffhanger + "FOLLOW" end card, recap at the start of parts 2-4. Story idea from a ≥1M-view relationship video.

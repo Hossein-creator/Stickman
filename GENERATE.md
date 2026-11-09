@@ -9,14 +9,22 @@ but in our look and rules (ACTION STYLE, black stage, rig v2, code only).
 
 ## Rules
 - **Winner format first (user, 2026-10-28):** the "LOVE IS A ___" split screen (reel 36 Bridge For Two and its reference got millions of views, comments, likes, reposts and shares). Every run makes at least one new reel in this format from the backlog in `REFERENCE-ANALYSIS.md` ("WINNER FORMAT"), and viral candidates with the same shape (A/B split, love as an object both build, one partner on the phone) rank first.
+- **Numbered series for followers (user, 2026-11-09):** "in letzter Zeit bekommen meine Social-Media-Accounts keine Follower und keine Aufrufe mehr ... längere Videos generieren und nummerieren wie eine Serie, damit Leute mir folgen" + "es soll eine spannende Geschichte sein, damit Leute es bis zum Ende schauen".
+  - One run = **one series** about the same stickman couple (same look, same names/colours in every part), **4 parts** ("PART 1/4" ... "PART 4/4" always on top).
+  - Each part **30-60 s** (not longer: watch time to the end matters more than length).
+  - The story idea comes from a relationship video with **≥ 1M views** (rule above), stretched into a gripping arc: Part 1 hook + conflict, Parts 2-3 escalation and a twist, Part 4 payoff/emotional ending.
+  - **Hook in the first 2 s** of every part (action, not a slow intro). Something new happens every 3-5 s.
+  - Every part except the last **ends on a cliffhanger**, then an end card "PART 2 → FOLLOW" (no fade-out before the open question).
+  - Parts 2-4 start with a **2-3 s recap** ("PREVIOUSLY ...") so new viewers get it.
+  - Caption: "Part N/4", the cliffhanger question, "Follow for Part N+1"; parts post in consecutive slots in order.
 - **Only the most viral videos get remade.** Check virality before building anything (step 2).
 - **Only videos with huge reach (user, 2026-11-07):** "Deine Video bekommen nicht mehr viel Aufmerksamkeit. Ab jetzt suche die Videos die sehr viel Aufmerksamkeit bekommen auf Social Media." Runs 7-9 picked small channels with a high outlier score but low reach (37k-320k views), and our reels stopped getting attention. From now on the main filter is **absolute attention**: **at least 1,000,000 views** (better several million) and lots of likes, comments and shares. The outlier score is only a tie-breaker, never a reason to pick a small video.
-- **Only relationship.** User, 2026-10-30: "weisst du die relationships videos explodieren gerade bleibe in diese nische". Every run: 4 relationship reels (couples, love, effort, trust, care, jealousy, breakups, old couples, relationship humour). No other topics.
+- **Only relationship.** User, 2026-10-30: "weisst du die relationships videos explodieren gerade bleibe in diese nische". Every run: 4 relationship reels (couples, love, effort, trust, care, jealousy, breakups, old couples, relationship humour). No other topics. (Since 2026-11-09 the 4 reels are the 4 parts of one series.)
 - Sources may come from **any niche**. A video from outside the niche gets turned into our niche
   (fitness or motivation video → relationship story, same structure).
 - Platforms: YouTube Shorts, Instagram Reels, TikTok.
 - "One to one" = copy the idea and the structure. Never copy their footage, music, voice or exact text.
-- Code only: SVG + GSAP in HyperFrames, sound made in code, no AI images, no voice. 1080×1920, 12–14 s.
+- Code only: SVG + GSAP in HyperFrames, sound made in code, no AI images, no voice. 1080×1920, 12–14 s (series parts: 30–60 s).
 - All research results are saved in this repo (`viral/`), never on the computer.
 
 ## Steps
