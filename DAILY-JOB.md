@@ -129,3 +129,5 @@ Lines up to 17 were scheduled in Metricool. 2026-10-25 ~10:42: all still-pending
 - 2026-11-10 12:00: 76 The Yellow Umbrella Part 4/4 (relationship series, final), sent to Telegram
 - 2026-11-09: 73 Part 1/4 re-made (v2: teaser, rewind, slow-mo, freeze, whip cuts, grades) and re-sent to Telegram
 - 2026-11-09: 74 Part 2/4 re-made (v2) and re-sent to Telegram
+- 2026-11-09: 75 Part 3/4 re-made (v2) and re-sent to Telegram
+- 2026-11-09: 76 Part 4/4 re-made (v2) and re-sent to Telegram
