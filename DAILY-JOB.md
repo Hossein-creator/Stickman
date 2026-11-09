@@ -123,3 +123,4 @@ Lines up to 17 were scheduled in Metricool. 2026-10-25 ~10:42: all still-pending
 - 2026-11-07 18:00: 70 The Comeback (relationship), sent to Telegram
 - 2026-11-08 10:00: 71 Pregnant For A Day (relationship humour), sent to Telegram
 - 2026-11-08 12:00: 72 Private (relationship humour), sent to Telegram
+- 2026-11-09 16:00: 73 The Yellow Umbrella Part 1/4 (relationship series), sent to Telegram
