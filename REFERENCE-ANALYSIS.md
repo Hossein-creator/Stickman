@@ -29,7 +29,7 @@ Backlog in this format (make these next, one per run at least):
 - (done as reel 61) LOVE IS A PUZZLE. BOTH BRING PIECES → the heart picture finishes / ONE BRINGS PIECES → a hole stays in the middle.
 - (done as reel 65, a VS version of the format) LUST VS LOVE: same start in both panels, the test (she gets sick) splits them.
 - (done as reel 69) LOVE IS A GARDEN.
-- New ideas: LOVE IS A CANDLE (both shield it from the wind / one shields).
+- (done as reel 77) LOVE IS A CANDLE. New ideas: LOVE IS A BRIDGE IN THE STORM, LOVE IS A KITE (both hold the string / one lets go).
 - Friendship / family versions with the same shape (FRIENDSHIP IS A ___, BOTH CALL / ONE CALLS).
 
 Separate from @moneypsych.explained. Nothing here is shared with the money account.
@@ -294,3 +294,7 @@ Source shape: animated love stories with rain + a family between the couple (Ban
 - 74 Part 2/4 (36 s): dad drags her away, "YOU HAVE NOTHING!"; window + paper plane "I WILL WAIT"; dad tears the note; rich man with a ring; cliffhanger: wedding tomorrow.
 - 75 Part 3/4 (36 s): wedding; he runs through the storm, umbrella breaks, he falls; bursts in, thrown out; ring almost on; cliffhanger: did she say yes?
 - 76 Part 4/4 (40 s): "NO.", she runs out; bus leaves, she's too late; he got off and holds the broken umbrella over her; dad: "TAKE CARE OF HER."; 5 years later with a kid.
+- 77 Love Is A Candle (WINNER FORMAT, backlog): wind gusts; BOTH SHIELD (each covers the flame from their side, it grows into a heart) vs ONE SHIELDS (she scrolls, the wind from her side blows it out) ("LOVE IS A CANDLE. / ONE PAIR OF HANDS / CAN'T STOP EVERY WIND." + "SHIELD IT TOGETHER.") — `ready/77-love-is-a-candle.mp4`
+- 78 Can't Reach ← Nomi Femi 5.15M views: she jumps for the cookie jar, "NEED HELP?" "NO.", he lifts her; first cookie for him ("SHE COULDN'T REACH IT. / SO HE BECAME HER LADDER.") — `ready/78-cant-reach.mp4`
+- 79 That Time Of The Month ← Aesthetic Asmr 3.08M: cramps on the sofa; he brings hot water bottle, blanket, tea, chocolate, rubs her back ("SHE HAD CRAMPS. / HE DIDN'T ASK. HE JUST CARED.") — `ready/79-that-time-of-the-month.mp4`
+- 80 Grandma Vs Grandpa ← Amazing LP 1.8M: old couple table tennis final, he misses the smash on purpose, wink, kiss ("50 YEARS MARRIED. / HE STILL LETS HER WIN.") — `ready/80-grandma-vs-grandpa.mp4`
