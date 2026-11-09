@@ -126,3 +126,4 @@ Lines up to 17 were scheduled in Metricool. 2026-10-25 ~10:42: all still-pending
 - 2026-11-09 16:00: 73 The Yellow Umbrella Part 1/4 (relationship series), sent to Telegram
 - 2026-11-09 18:00: 74 The Yellow Umbrella Part 2/4 (relationship series), sent to Telegram
 - 2026-11-10 10:00: 75 The Yellow Umbrella Part 3/4 (relationship series), sent to Telegram
+- 2026-11-10 12:00: 76 The Yellow Umbrella Part 4/4 (relationship series, final), sent to Telegram

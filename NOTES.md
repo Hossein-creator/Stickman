@@ -59,3 +59,8 @@ Claude's running notes. Newest on top. Everything Claude wants to remember goes 
 ## 2026-11-09: numbered series
 - User: accounts get almost no new followers or views. Idea: longer, numbered videos as a series so people follow for the next part; must be a gripping story watched to the end.
 - Separate job `SERIES.md`, trigger "serie" ("generiere" stays as before): one 4-part series (30-60 s each), same couple, "PART N/4" on top, hook in 2 s, cliffhanger + "FOLLOW" end card, recap at the start of parts 2-4. Story idea from a ≥1M-view relationship video.
+
+## 2026-11-09: first series built
+- "serie" run 1 = The Yellow Umbrella, reels 73-76 (36-40 s each). Reusable setup: `series/yellow-umbrella/lib.js` (scenes, sets: stop/road/house/hall, actors him/her/dad/rich/kid, umbrella open/closed/broken, rain with umbrella shields, captions, PART tag, FOLLOW card) + `make.sh <part> <videos/NN-slug>`. Copy the folder for the next series.
+- Render time at 60 fps: ~5-6.5 min per 36-40 s part, in the foreground (timeout 600 s). Longer parts would need 30 fps or splitting.
+- YouTube video pages + plot articles are blocked here; the source story could only be judged by title + views.
