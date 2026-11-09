@@ -374,7 +374,7 @@
           svgEl("rect", { x: -2400, y: FL - 900, width: 6000, height: 900, fill: "#141a24" }, g);
           lamp(g, 1000); }
         const wall = svgEl("g", { opacity: 0 }, wallG);
-        svgEl("path", { d: `M250 ${FL - 600} H1080 V${FL} H250 Z M560 ${FL - 400} V${FL - 170} H780 V${FL - 400} Z`, fill: "#3a3330", "fill-rule": "evenodd", stroke: "#000", "stroke-width": 6 }, wall);
+        svgEl("path", { d: `M250 ${FL - 600} H1080 V${FL + 40} H250 Z M560 ${FL - 400} V${FL - 170} H780 V${FL - 400} Z`, fill: "#3a3330", "fill-rule": "evenodd", stroke: "#000", "stroke-width": 6 }, wall);
         svgEl("path", { d: `M230 ${FL - 600} L665 ${FL - 820} L1100 ${FL - 600} Z`, fill: "#4a2a24", stroke: "#000", "stroke-width": 6 }, wall);
         svgEl("rect", { x: 552, y: FL - 408, width: 236, height: 246, fill: "none", stroke: "#6b4a30", "stroke-width": 14 }, wall);
         svgEl("rect", { x: 664, y: FL - 400, width: 12, height: 230, fill: "#6b4a30" }, wall);
