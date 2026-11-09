@@ -17,6 +17,7 @@ function pad(segs, g = 0.009) { for (const [t0, t1, ms] of segs) { const s0 = Ma
 const heartbeat = (t0, t1, g = 0.12) => { for (let t = t0; t < t1; t += 0.8) { thump(t, g, 48, 0); thump(t + 0.22, g * 0.7, 48, 0); } };
 const sneeze = (t) => { noise(t, 0.12, 0.02, 0.2, 0.2, (p) => p); noise(t + 0.15, 0.25, 0.09, 0.2, 0.7, (p) => Math.exp(-p * 5)); voice(t + 0.15, 520, 0.18, 0.03, 0.2, -0.3); };
 const laugh = (t, f = 480, pan = -0.2) => { for (let k = 0; k < 4; k++) voice(t + k * 0.14, f - k * 15, 0.1, 0.03, pan, 0.1); };
+        const MAPDEF = [["tease", 22.5, 23.8, 1], ["rew", 23.8, 0, 0.45], ["play", 0, 10.3, 1], ["play", 10.3, 10.9, 0.35], ["play", 10.9, 32.8, 1], ["freeze", 32.8, 1.1], ["play", 32.8, 36, 1]];
 // ---- part 3: wedding bells + organ chord, ring box click + sparkle, her sniff; storm, running splashes, thunder, wind rips the umbrella, slip + splash + thud, getting up, running again; doors bang open, gasp, dad's angry voice, the rich man laughs, his small voice, "get out!", steps, umbrella clatters; ring moment with heartbeat; gleam on the umbrella; card ----
 [0, 0.5, 1.0, 1.5, 3.0, 3.5].forEach((t, i) => bell(t + 0.1, [76, 72, 74, 67, 76, 79][i], 0.03, 0, 1.2));
 pad([[0, 6, [60, 64, 67, 72]]], 0.007);
@@ -45,3 +46,28 @@ pad([[25.2, 30.6, [53, 56, 60]], [30.6, 36, [48, 51, 55]]], 0.011);
 piano([[31.4, 79], [31.8, 76], [32.2, 72, 0.8]]);
 words(33.6, 4, 0.13);
 bell(34.2, 76, 0.03, 0, 1.4); bell(34.28, 83, 0.02, 0, 1.4);
+// ---- remap story-time audio to video time (teaser, rewind, slow motion, freeze) + video-time stings ----
+{
+  let v = 0;
+  const M = MAPDEF.map((e) => { let o; if (e[0] === "freeze") o = { k: "freeze", v0: v, v1: v + e[2], T0: e[1], T1: e[1] }; else if (e[0] === "rew") o = { k: "rew", v0: v, v1: v + e[3], T0: e[1], T1: e[2] }; else o = { k: e[0], v0: v, v1: v + (e[2] - e[1]) / e[3], T0: e[1], T1: e[2], rate: e[3] }; v = o.v1; return o; });
+  const sL = Float32Array.from(L), sR = Float32Array.from(R);
+  L.fill(0); R.fill(0);
+  let mi = 0;
+  for (let i = 0; i < N; i++) {
+    const t = i / SR;
+    while (mi < M.length - 1 && t >= M[mi].v1) mi++;
+    const m = M[mi], p = clamp((t - m.v0) / (m.v1 - m.v0), 0, 1);
+    const pe = m.k === "rew" ? p * p * (3 - 2 * p) : p;
+    const T = m.T0 + (m.T1 - m.T0) * pe;
+    const g = m.k === "freeze" ? 0 : m.k === "rew" ? 0.25 : m.k === "tease" ? 0.85 : 1;
+    const e = Math.min(1, (t - m.v0) / 0.03, (m.v1 - t) / 0.03 + (mi === M.length - 1 ? 1 : 0));
+    const j = T * SR, j0 = Math.floor(j), f = j - j0;
+    if (j0 >= 0 && j0 + 1 < N) { L[i] = (sL[j0] * (1 - f) + sL[j0 + 1] * f) * g * Math.max(0, e); R[i] = (sR[j0] * (1 - f) + sR[j0 + 1] * f) * g * Math.max(0, e); }
+  }
+  for (const m of M) {
+    if (m.k === "tease") { thump(m.v0 + 0.02, 0.12, 40, 0); noise(m.v0, 0.5, 0.05, 0, 0.05, (p) => 1 - p); }
+    if (m.k === "rew") { sweep(m.v0, m.v1 - m.v0 + 0.1, 0.09, 0, 0.1, 0.9); for (let k = 0; k < 6; k++) tone(m.v0 + k * (m.v1 - m.v0) / 6, 1800 - k * 200, 0.05, 0.01, 0, 0.001, 50); thump(m.v1, 0.1, 50, 0); }
+    if (m.k === "freeze") { thump(m.v0, 0.16, 42, 0); noise(m.v0, 0.5, 0.07, 0, 0.7, (p) => Math.pow(1 - p, 2)); bell(m.v0 + 0.02, 84, 0.025, 0, 0.9); bell(m.v0 + 0.02, 72, 0.02, 0, 0.6); for (let i = Math.floor(m.v0 * SR); i < Math.floor(m.v1 * SR) && i < N; i++) { const tt = i / SR - m.v0; add(i, Math.sin(2 * Math.PI * 55 * tt) * 0.03 * Math.min(1, tt / 0.2) * Math.min(1, (m.v1 - m.v0 - tt) / 0.2), 0); } }
+    if (m.k === "play" && m.rate < 1) { sweep(m.v0 - 0.15, 0.4, 0.05, 0, 0.05, 0.4); thump(m.v0, 0.06, 45, 0); }
+  }
+}

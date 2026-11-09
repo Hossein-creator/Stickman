@@ -202,6 +202,12 @@
         // ---- DOM: tag, captions, end card ----
         E("head").style.display = "none";
         const css = (el, c) => { el.style.cssText = c; E("stage").appendChild(el); return el; };
+        const gradeEl = css(document.createElement("div"), "position:absolute;inset:0;mix-blend-mode:soft-light;opacity:0");
+        const leakEl = css(document.createElement("div"), "position:absolute;inset:0;background:radial-gradient(ellipse at 85% 20%, rgba(255,190,90,0.55), rgba(255,140,60,0.0) 60%);mix-blend-mode:screen;opacity:0");
+        const scanEl = css(document.createElement("div"), "position:absolute;inset:0;background:repeating-linear-gradient(0deg, rgba(255,255,255,0.08) 0 3px, rgba(0,0,0,0) 3px 9px);opacity:0");
+        const barT = css(document.createElement("div"), "position:absolute;left:0;right:0;top:0;height:0;background:#000");
+        const barB = css(document.createElement("div"), "position:absolute;left:0;right:0;bottom:0;height:0;background:#000");
+        const fxLabel = css(document.createElement("div"), "position:absolute;left:0;right:0;top:1560px;text-align:center;font-family:HFMono,monospace;font-weight:700;font-size:34px;letter-spacing:0.3em;color:#fff;opacity:0");
         const tagEl = css(document.createElement("div"), "position:absolute;left:0;right:0;top:206px;text-align:center;font-family:HFMono,monospace;font-weight:700;");
         const capEl = css(document.createElement("div"), "position:absolute;left:60px;right:60px;top:330px;text-align:center;font-family:HFMono,monospace;font-weight:700;font-size:44px;line-height:1.35;letter-spacing:0.06em;color:#fff;text-shadow:0 0 16px rgba(0,0,0,0.9),0 0 30px rgba(0,0,0,0.6)");
         const flashEl = E("flash");
@@ -264,6 +270,7 @@
           for (const k in bubbles) bubbles[k].setAttribute("opacity", 0);
           U1.span = U2.span = null; U1.g.setAttribute("opacity", 0); U2.g.setAttribute("opacity", 0);
           if (sc.draw) sc.draw(t, PS);
+          renderAll.sc = sc;
           // rain
           const rk = sc.rain ? sc.rain(t) : 0;
           const shields = [U1.span, U2.span, sc.set === "stop" ? [540, 860, FL - 400] : null].filter(Boolean);
@@ -284,11 +291,11 @@
           // quick black dip on each scene cut
           let cut = 0;
           for (const S of SCENES) if (S.a > 0) cut = Math.max(cut, 1 - clamp(Math.abs(t - S.a) / 0.14, 0, 1));
-          cutEl.style.opacity = cut.toFixed(3);
+          cutEl.style.opacity = 0;
           // tag + captions
           tagEl.innerHTML = `<div style="font-size:28px;letter-spacing:0.3em;color:${YEL};text-shadow:0 0 14px rgba(255,210,58,0.5)">THE YELLOW UMBRELLA</div><div style="margin-top:8px;font-size:40px;letter-spacing:0.18em;color:#fff">PART ${PART}/4</div>`;
           let cap = "";
-          for (const [a, b, txt, red] of CAPS) if (t >= a && t < b) { const o = Math.min(1, (b - t) / 0.2); cap = `<div style="opacity:${o.toFixed(3)}">${slam(txt.split(" "), a, t, red || [], 0.1)}</div>`; }
+          for (const [a, b, txt, red] of (renderAll.capsOverride || CAPS)) if (t >= a && t < b) { const o = Math.min(1, (b - t) / 0.2); cap = `<div style="opacity:${o.toFixed(3)}">${slam(txt.split(" "), a, t, red || [], 0.1)}</div>`; }
           capEl.innerHTML = cap;
           // end card
           const ck = win(t, CARD.t - 0.3, CARD.t + 0.1);
@@ -307,16 +314,64 @@
         const say = (key, k, p) => { const g = bubbles[key]; g.setAttribute("opacity", k.toFixed(3)); g.setAttribute("transform", `translate(${r1(p[0])} ${r1(p[1])}) scale(${(0.6 + 0.4 * backOut(k)).toFixed(3)})`); };
         const cry = (p, t, f) => tears.forEach((e, i) => { const q = frac(t * 1.3 + i / 4); e.setAttribute("opacity", Math.sin(Math.PI * q).toFixed(3)); e.setAttribute("cx", r1(p[0] + f * (12 + (i % 2) * -24))); e.setAttribute("cy", r1(p[1] + 10 + 70 * q)); });
         const doSplash = (p, t0, t) => splash.forEach((e, i) => { const q = clamp((t - t0) / 0.6, 0, 1); const ang = Math.PI * (0.15 + 0.7 * (i / 9)); e.setAttribute("opacity", q > 0 && q < 1 ? (1 - q).toFixed(3) : 0); e.setAttribute("cx", r1(p[0] + Math.cos(ang) * 120 * q)); e.setAttribute("cy", r1(p[1] - Math.sin(ang) * 140 * q + 200 * q * q)); });
+
+        // ===== video time -> story time (teaser, rewind, slow motion, freeze) + finishing effects =====
+        // MAPDEF entries: ["play", T0, T1, rate] | ["freeze", T, dur] | ["rew", T0, T1, dur] | ["tease", T0, T1, rate]
+        function buildMap(def) { let v = 0; return def.map((e) => { let o; if (e[0] === "freeze") o = { k: "freeze", v0: v, v1: v + e[2], T0: e[1], T1: e[1] }; else if (e[0] === "rew") o = { k: "rew", v0: v, v1: v + e[3], T0: e[1], T1: e[2] }; else o = { k: e[0], v0: v, v1: v + (e[2] - e[1]) / e[3], T0: e[1], T1: e[2], rate: e[3] }; v = o.v1; return o; }); }
+        function mapT(M, t) { let m = M[M.length - 1]; for (const x of M) if (t < x.v1) { m = x; break; } const p = clamp((t - m.v0) / (m.v1 - m.v0), 0, 1); return { T: lerp(m.T0, m.T1, m.k === "rew" ? ease(p) : p), m, p }; }
+        const shots = (list, drift = 0.02) => (t) => { let s = list[0]; for (const x of list) if (t >= x[0]) s = x; return [s[1], s[2], s[3] * (1 + drift * Math.min(4, t - s[0]))]; };
+        const GRADE = { cold: "#3a6ab0", warm: "#ffb070", night: "#20305a", gold: "#ffd27a" };
+        function renderVideo(t, M, FXP, PART, SC, CAPS, FLASH, CARD) {
+          const { T, m, p } = mapT(M, t);
+          renderAll.capsOverride = m.k === "tease" || m.k === "rew" ? [] : null;
+          renderAll(T, PART, SC, CAPS, FLASH, CARD);
+          if (m.k === "tease") capEl.innerHTML = `<div>${slam(FXP.tease.split(" "), m.v0 + 0.15, t, FXP.teaseRed || [], 0.12)}</div>`;
+          const sc = renderAll.sc;
+          // whip pan around scene cuts (story time)
+          let wx = 0, wb = 0;
+          if (m.k === "play") for (const S of SC) if (S.a > 0) { const d = (T - S.a) / 0.16; if (Math.abs(d) < 1) { const k = 1 - Math.abs(d); wx = 420 * k * (d < 0 ? -1 : 1); wb = 22 * k; } }
+          // punch-ins (story time)
+          let pz = 1; for (const [pt, amt] of FXP.punch || []) if (T >= pt) pz *= 1 + amt * win(T, pt, pt + 0.12) * (1 - win(T, pt + 0.9, pt + 1.6));
+          let filt = "", gray = 0;
+          if (m.k === "tease") { gray = 0.55; }
+          if (m.k === "freeze") { gray = 0.85 * win(t, m.v0, m.v0 + 0.15); pz *= 1 + 0.07 * ease(p); }
+          if (m.k === "rew") { wb = Math.max(wb, 10); wx = 40 * Math.sin(t * 90); }
+          if (gray) filt += `grayscale(${gray.toFixed(2)}) contrast(1.15) `;
+          if (wb > 0.2) filt += `blur(${wb.toFixed(1)}px)`;
+          const svgS = E("svg").style;
+          svgS.transformOrigin = "540px 1100px";
+          svgS.transform = `translateX(${r1(wx)}px) scale(${pz.toFixed(4)})`;
+          svgS.filter = filt || "none";
+          scanEl.style.opacity = m.k === "rew" ? 1 : 0;
+          // grade + light leak per scene
+          const g = sc.grade ? (typeof sc.grade === "function" ? sc.grade(T) : [sc.grade, 0.55]) : null;
+          gradeEl.style.background = g ? GRADE[g[0]] : "transparent"; gradeEl.style.opacity = g ? g[1] : 0;
+          leakEl.style.opacity = sc.glow ? (sc.glow(T) * (0.75 + 0.25 * Math.sin(t * 1.7))).toFixed(3) : 0;
+          // letterbox
+          let bar = 0; for (const [a, b] of FXP.bars || []) bar = Math.max(bar, win(T, a, a + 0.4) * (1 - win(T, b - 0.4, b)));
+          if (m.k === "tease" || m.k === "freeze") bar = 1;
+          barT.style.height = barB.style.height = `${Math.round(150 * bar)}px`;
+          // labels
+          let lab = "", lo = 0;
+          if (m.k === "tease") { lab = "LATER..."; lo = 1; }
+          if (m.k === "rew") { lab = "◀◀ REWIND"; lo = 1; }
+          if (m.k === "play" && m.rate < 1) { lab = ""; }
+          fxLabel.textContent = lab; fxLabel.style.opacity = lo;
+          // freeze: pulsing ring + sting
+          const ft = M.find((x) => x.k === "freeze");
+          flashEl.style.opacity = Math.max(parseFloat(flashEl.style.opacity) || 0, ft && t >= ft.v0 ? 0.8 * Math.exp(-(t - ft.v0) / 0.08) : 0, m.k === "rew" ? 0 : (M[1] && Math.abs(t - M[1].v0) < 0.06 ? 0.6 : 0)).toFixed(3);
+        }
         // ===== PART 3/4 "The Wedding": wedding day, the ring box opens; he runs through the storm, the wind breaks his umbrella, he falls in a puddle and gets up; he bursts into the wedding with the broken umbrella, the rich man laughs, dad throws him out; the ring comes closer to her finger... she sees his umbrella by the door. Cliffhanger: did she say yes? =====
-        const DURP = 36;
+        const MAPDEF = [["tease", 22.5, 23.8, 1], ["rew", 23.8, 0, 0.45], ["play", 0, 10.3, 1], ["play", 10.3, 10.9, 0.35], ["play", 10.9, 32.8, 1], ["freeze", 32.8, 1.1], ["play", 32.8, 36, 1]];
+        const FXP = { tease: "WHO WILL SHE CHOOSE?", punch: [[10.45, 0.08], [15.2, 0.08], [22.7, 0.06]], bars: [[10.2, 11.2], [25.0, 33.6]] };
         const PART = 3;
-        bubble("again", "YOU AGAIN?!", "#ff3b30", 32); bubble("lol", "HAHA! LOOK AT HIM!", "#111", 28); bubble("only", "THIS IS ALL I HAVE.", "#111", 28); bubble("out", "GET OUT!", "#ff3b30", 32);
+        bubble("again", "YOU AGAIN?!", "#ff3b30", 32); bubble("lol", "LOOK AT HIM! HAHA!", "#111", 28); bubble("only", "IT'S ALL I HAVE.", "#111", 28); bubble("out", "GET OUT!", "#ff3b30", 32);
         const FLASH = [8.4, 15.2];
         const X = (t) => -100 + 300 * (t - 6), XF = X(10.4) + 60;
         const RING = (t) => [lerp(800, 774, win(t, 25.4, 30.4)), stand - lerp(70, 44, win(t, 25.4, 30.4))];
         const SC = [
           { a: 0, b: 6, set: "hall", sky: () => ({ warm: 1 }), rain: () => 0, veil: () => 1,
-            cam: (t) => [lerp(720, 760, win(t, 0, 6)), 430, lerp(2.2, 1.9, win(t, 0, 3))],
+            grade: ["warm", 0.35], cam: shots([[0, 790, 420, 2.6], [1.4, 720, 400, 2.4], [3.0, 700, 430, 1.75], [4.6, 540, 410, 2.3]]),
             cast: {
               her: (t) => { const st = pose(700, 1, { head: 22 }); reachTo(st, 1, [722, stand - 80]); reachTo(st, 1, [710, stand - 84], "b"); return st; },
               rich: (t) => { const st = pose(840, -1, { head: -6 }); reachTo(st, 1, [790, stand - 120]); return st; },
@@ -329,7 +384,7 @@
             } },
           { a: 6, b: 15, set: "road", sky: () => ({ storm: 1 }), rain: () => 1,
             kick: (t) => (t > 10.5 ? 1.2 * Math.exp(-(t - 10.5) / 0.2) : 0),
-            cam: (t) => { const x = t < 10.4 ? X(t) : t < 12.6 ? XF : XF + 200 * (t - 12.6); return [x + 80, 430, t > 10.3 && t < 12.6 ? 1.95 : 1.7]; },
+            grade: ["cold", 0.6], cam: (t) => { const x = t < 10.4 ? X(t) : t < 12.6 ? XF : XF + 200 * (t - 12.6); return [x + 80, 430, t > 10.3 && t < 12.6 ? 1.95 : 1.7]; },
             cast: {
               him: (t) => {
                 const run = (tt) => { const x = X(tt); const st = walking(-100, x, 1, 1); reachTo(st, 1, [x + 20, stand - 200]); return st; };
@@ -347,7 +402,7 @@
             } },
           { a: 15, b: 36, set: "hall", sky: () => ({ warm: 1 }), rain: () => 0, veil: () => 1,
             kick: (t) => (t > 15.2 ? 0.8 * Math.exp(-(t - 15.2) / 0.2) : 0),
-            cam: (t) => { const z1 = win(t, 25.0, 27.0), z2 = win(t, 30.8, 31.8); return [lerp(lerp(560, 780, z1), 300, z2), lerp(lerp(430, 470, z1), 500, z2), lerp(lerp(1.5, 2.5, z1), 2.4, z2)]; },
+            grade: (t) => (t < 22.6 ? ["warm", 0.3] : ["cold", 0.45]), glow: (t) => 0.6 * win(t, 31.2, 31.8), cam: shots([[15, 420, 430, 1.6], [16.0, 700, 400, 2.3], [16.4, 560, 410, 2.2], [18.3, 760, 410, 2.0], [20.3, 400, 400, 2.3], [21.6, 700, 400, 2.4], [22.6, 420, 430, 1.8], [25.0, 780, 470, 2.5], [30.6, 700, 380, 2.5], [31.0, 300, 500, 2.4], [32.2, 700, 370, 2.7]]),
             cast: {
               him: (t) => {
                 if (t > 24.6) return null;
@@ -379,13 +434,14 @@
           [9.1, 11.7, "THE STORM BROKE HIS UMBRELLA.", "y"],
           [11.9, 14.9, "BUT HE GOT UP."],
           [15.3, 17.9, "HE BURST IN."],
-          [20.2, 22.7, "ALL HE HAD WAS A BROKEN UMBRELLA."],
+          [20.2, 22.7, "HE HAD NOTHING ELSE."],
           [22.8, 25.0, "HER DAD THREW HIM OUT.", [1]],
-          [25.4, 30.4, "THE RING WAS ALMOST ON HER FINGER..."],
+          [25.4, 30.4, "THE RING CAME CLOSER..."],
           [30.7, 33.5, "THEN SHE SAW HIS UMBRELLA.", "y"],
         ];
         const CARD = { t: 33.6, html: (t) => `<div style="font-size:52px;line-height:1.3">${slam(["DID", "SHE", "SAY", "YES?"], 33.6, t, [3])}</div>${follow(t, 34.2, "4/4")}` };
-        const render = (t) => renderAll(t, PART, SC, CAPS, FLASH, CARD);
+        const MAP = buildMap(MAPDEF);
+        const render = (t) => renderVideo(t, MAP, FXP, PART, SC, CAPS, FLASH, CARD);
 
         window.__timelines = window.__timelines || {};
         const tl = gsap.timeline({ paused: true });

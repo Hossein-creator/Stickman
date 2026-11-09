@@ -1,13 +1,14 @@
         // ===== PART 3/4 "The Wedding": wedding day, the ring box opens; he runs through the storm, the wind breaks his umbrella, he falls in a puddle and gets up; he bursts into the wedding with the broken umbrella, the rich man laughs, dad throws him out; the ring comes closer to her finger... she sees his umbrella by the door. Cliffhanger: did she say yes? =====
-        const DURP = 36;
+        const MAPDEF = [["tease", 22.5, 23.8, 1], ["rew", 23.8, 0, 0.45], ["play", 0, 10.3, 1], ["play", 10.3, 10.9, 0.35], ["play", 10.9, 32.8, 1], ["freeze", 32.8, 1.1], ["play", 32.8, 36, 1]];
+        const FXP = { tease: "WHO WILL SHE CHOOSE?", punch: [[10.45, 0.08], [15.2, 0.08], [22.7, 0.06]], bars: [[10.2, 11.2], [25.0, 33.6]] };
         const PART = 3;
-        bubble("again", "YOU AGAIN?!", "#ff3b30", 32); bubble("lol", "HAHA! LOOK AT HIM!", "#111", 28); bubble("only", "THIS IS ALL I HAVE.", "#111", 28); bubble("out", "GET OUT!", "#ff3b30", 32);
+        bubble("again", "YOU AGAIN?!", "#ff3b30", 32); bubble("lol", "LOOK AT HIM! HAHA!", "#111", 28); bubble("only", "IT'S ALL I HAVE.", "#111", 28); bubble("out", "GET OUT!", "#ff3b30", 32);
         const FLASH = [8.4, 15.2];
         const X = (t) => -100 + 300 * (t - 6), XF = X(10.4) + 60;
         const RING = (t) => [lerp(800, 774, win(t, 25.4, 30.4)), stand - lerp(70, 44, win(t, 25.4, 30.4))];
         const SC = [
           { a: 0, b: 6, set: "hall", sky: () => ({ warm: 1 }), rain: () => 0, veil: () => 1,
-            cam: (t) => [lerp(720, 760, win(t, 0, 6)), 430, lerp(2.2, 1.9, win(t, 0, 3))],
+            grade: ["warm", 0.35], cam: shots([[0, 790, 420, 2.6], [1.4, 720, 400, 2.4], [3.0, 700, 430, 1.75], [4.6, 540, 410, 2.3]]),
             cast: {
               her: (t) => { const st = pose(700, 1, { head: 22 }); reachTo(st, 1, [722, stand - 80]); reachTo(st, 1, [710, stand - 84], "b"); return st; },
               rich: (t) => { const st = pose(840, -1, { head: -6 }); reachTo(st, 1, [790, stand - 120]); return st; },
@@ -20,7 +21,7 @@
             } },
           { a: 6, b: 15, set: "road", sky: () => ({ storm: 1 }), rain: () => 1,
             kick: (t) => (t > 10.5 ? 1.2 * Math.exp(-(t - 10.5) / 0.2) : 0),
-            cam: (t) => { const x = t < 10.4 ? X(t) : t < 12.6 ? XF : XF + 200 * (t - 12.6); return [x + 80, 430, t > 10.3 && t < 12.6 ? 1.95 : 1.7]; },
+            grade: ["cold", 0.6], cam: (t) => { const x = t < 10.4 ? X(t) : t < 12.6 ? XF : XF + 200 * (t - 12.6); return [x + 80, 430, t > 10.3 && t < 12.6 ? 1.95 : 1.7]; },
             cast: {
               him: (t) => {
                 const run = (tt) => { const x = X(tt); const st = walking(-100, x, 1, 1); reachTo(st, 1, [x + 20, stand - 200]); return st; };
@@ -38,7 +39,7 @@
             } },
           { a: 15, b: 36, set: "hall", sky: () => ({ warm: 1 }), rain: () => 0, veil: () => 1,
             kick: (t) => (t > 15.2 ? 0.8 * Math.exp(-(t - 15.2) / 0.2) : 0),
-            cam: (t) => { const z1 = win(t, 25.0, 27.0), z2 = win(t, 30.8, 31.8); return [lerp(lerp(560, 780, z1), 300, z2), lerp(lerp(430, 470, z1), 500, z2), lerp(lerp(1.5, 2.5, z1), 2.4, z2)]; },
+            grade: (t) => (t < 22.6 ? ["warm", 0.3] : ["cold", 0.45]), glow: (t) => 0.6 * win(t, 31.2, 31.8), cam: shots([[15, 420, 430, 1.6], [16.0, 700, 400, 2.3], [16.4, 560, 410, 2.2], [18.3, 760, 410, 2.0], [20.3, 400, 400, 2.3], [21.6, 700, 400, 2.4], [22.6, 420, 430, 1.8], [25.0, 780, 470, 2.5], [30.6, 700, 380, 2.5], [31.0, 300, 500, 2.4], [32.2, 700, 370, 2.7]]),
             cast: {
               him: (t) => {
                 if (t > 24.6) return null;
@@ -70,10 +71,11 @@
           [9.1, 11.7, "THE STORM BROKE HIS UMBRELLA.", "y"],
           [11.9, 14.9, "BUT HE GOT UP."],
           [15.3, 17.9, "HE BURST IN."],
-          [20.2, 22.7, "ALL HE HAD WAS A BROKEN UMBRELLA."],
+          [20.2, 22.7, "HE HAD NOTHING ELSE."],
           [22.8, 25.0, "HER DAD THREW HIM OUT.", [1]],
-          [25.4, 30.4, "THE RING WAS ALMOST ON HER FINGER..."],
+          [25.4, 30.4, "THE RING CAME CLOSER..."],
           [30.7, 33.5, "THEN SHE SAW HIS UMBRELLA.", "y"],
         ];
         const CARD = { t: 33.6, html: (t) => `<div style="font-size:52px;line-height:1.3">${slam(["DID", "SHE", "SAY", "YES?"], 33.6, t, [3])}</div>${follow(t, 34.2, "4/4")}` };
-        const render = (t) => renderAll(t, PART, SC, CAPS, FLASH, CARD);
+        const MAP = buildMap(MAPDEF);
+        const render = (t) => renderVideo(t, MAP, FXP, PART, SC, CAPS, FLASH, CARD);
