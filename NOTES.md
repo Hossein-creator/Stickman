@@ -64,3 +64,4 @@ Claude's running notes. Newest on top. Everything Claude wants to remember goes 
 - "serie" run 1 = The Yellow Umbrella, reels 73-76 (36-40 s each). Reusable setup: `series/yellow-umbrella/lib.js` (scenes, sets: stop/road/house/hall, actors him/her/dad/rich/kid, umbrella open/closed/broken, rain with umbrella shields, captions, PART tag, FOLLOW card) + `make.sh <part> <videos/NN-slug>`. Copy the folder for the next series.
 - Render time at 60 fps: ~5-6.5 min per 36-40 s part, in the foreground (timeout 600 s). Longer parts would need 30 fps or splitting.
 - YouTube video pages + plot articles are blocked here; the source story could only be judged by title + views.
+- User feedback on series 1 (2026-11-09): good, but clearer sentences/movement/message, smoother, more effects, professional cuts, more curiosity → saved as "Quality rules" in `SERIES.md`.
