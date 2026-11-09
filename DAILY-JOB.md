@@ -131,3 +131,4 @@ Lines up to 17 were scheduled in Metricool. 2026-10-25 ~10:42: all still-pending
 - 2026-11-09: 74 Part 2/4 re-made (v2) and re-sent to Telegram
 - 2026-11-09: 75 Part 3/4 re-made (v2) and re-sent to Telegram
 - 2026-11-09: 76 Part 4/4 re-made (v2) and re-sent to Telegram
+- 2026-11-10 16:00: 77 Love Is A Candle (relationship, winner format), sent to Telegram
