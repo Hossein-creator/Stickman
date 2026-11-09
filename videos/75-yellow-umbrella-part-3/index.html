@@ -652,7 +652,7 @@
           let pz = 1; for (const [pt, amt] of FXP.punch || []) if (T >= pt) pz *= 1 + amt * win(T, pt, pt + 0.12) * (1 - win(T, pt + 0.9, pt + 1.6));
           let filt = "", gray = 0;
           if (m.k === "tease") { gray = 0.55; }
-          if (m.k === "freeze") { gray = 0.85 * win(t, m.v0, m.v0 + 0.15); pz *= 1 + 0.07 * ease(p); }
+          if (m.k === "freeze") { gray = FXP.photo ? 0 : 0.85 * win(t, m.v0, m.v0 + 0.15); pz *= 1 + 0.07 * ease(p); if (FXP.photo) leakEl.style.opacity = 1; }
           if (m.k === "rew") { wb = Math.max(wb, 10); wx = 40 * Math.sin(t * 90); }
           if (gray) filt += `grayscale(${gray.toFixed(2)}) contrast(1.15) `;
           if (wb > 0.2) filt += `blur(${wb.toFixed(1)}px)`;
@@ -664,10 +664,10 @@
           // grade + light leak per scene
           const g = sc.grade ? (typeof sc.grade === "function" ? sc.grade(T) : [sc.grade, 0.55]) : null;
           gradeEl.style.background = g ? GRADE[g[0]] : "transparent"; gradeEl.style.opacity = g ? g[1] : 0;
-          leakEl.style.opacity = sc.glow ? (sc.glow(T) * (0.75 + 0.25 * Math.sin(t * 1.7))).toFixed(3) : 0;
+          leakEl.style.opacity = m.k === "freeze" && FXP.photo ? 1 : sc.glow ? (sc.glow(T) * (0.75 + 0.25 * Math.sin(t * 1.7))).toFixed(3) : 0;
           // letterbox
           let bar = 0; for (const [a, b] of FXP.bars || []) bar = Math.max(bar, win(T, a, a + 0.4) * (1 - win(T, b - 0.4, b)));
-          if (m.k === "tease" || m.k === "freeze") bar = 1;
+          if (m.k === "tease" || (m.k === "freeze" && !FXP.photo)) bar = 1;
           barT.style.height = barB.style.height = `${Math.round(150 * bar)}px`;
           // labels
           let lab = "", lo = 0;
