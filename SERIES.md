@@ -44,6 +44,9 @@ User: "ich will dass du mehr deutlicher das machen also klarer die sätze bewegu
 - Cut on action and on music hits; sound leads the picture (hear the bus before you see it).
 - No dead air: every second either moves the story or builds tension.
 
+**Follow ask (user, 2026-11-10)**
+- The FOLLOW card is not a static card: the cliffhanger freeze-frame cracks open into "PART N+1 → + FOLLOW", a hand taps it, "FOLLOWING ✓" + click. Max 1.5 s, see `REFERENCE-ANALYSIS.md` → "FOLLOW ENDING + NEW MIX".
+
 **Curiosity**
 - Open with a 1-2 s flash-forward teaser of the part's biggest moment ("HOW DID IT COME TO THIS?"), then rewind.
 - Captions ask questions the picture answers later; end on a freeze-frame of the open question + a short preview of the next part on the FOLLOW card.

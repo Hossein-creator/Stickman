@@ -1,5 +1,21 @@
 # New Instagram account — reference style (10 example reels)
 
+## 🔔 FOLLOW ENDING + NEW MIX (user, 2026-11-10)
+User, 2026-11-10: "ich bekomme keine aufrufe mehr wie damals ändere deine strategie ich habe dir schon mal gesagt welche videos richtig gut funktionieren ... ich bekomme keine follower mehr ich will dass du die videos am ende so baust dass eine call to follow gefordert wird ohne dass es langweilig wird".
+
+**New mix per run (4 reels):** 3 in the WINNER FORMAT ("LOVE IS A ___" split screen, like 36 Bridge For Two) + 1 viral relationship remake (≥1M views). Was: 1 winner + 3 remakes. The winner format is what the user says worked; remakes only fill the rest.
+
+**Ending rules (every reel, also series parts):**
+1. **No more quote end card.** The 3 s card with message + famous quote is cut: a static card after the payoff = people swipe away before the end. Length back to 13-14 s.
+2. **The follow ask is part of the story, not after it** (max ~1.5 s, starts while the payoff still moves). Pick one per reel, rotate:
+   - **Heart → FOLLOW:** the red heart that pops on the payoff flies to the bottom center and turns into a "+ FOLLOW" pill; a hand taps it, it turns to "FOLLOWING ✓" with a click.
+   - **Character asks:** after the hug the top couple turn to the camera, one points down at the follow spot ("STAY FOR MORE STORIES"), tiny wink.
+   - **Bottom panel twist:** the lonely one looks up at the viewer: "DON'T BE LIKE HIM." → "+ FOLLOW" lights up in red.
+   - **Next-story tease:** last 1 s shows a dark silhouette of tomorrow's object (LOVE IS A ...?) with "FOLLOW TO SEE IT TOMORROW".
+3. **Loop:** the very last frame matches the first frame (same headline position, black), so the reel replays by itself. More watch time = more reach.
+4. **Sound:** the follow tap gets a bright "pop/click" + the warm chord resolves on it, so the CTA feels like the payoff, not an ad.
+5. **Caption:** first line = the hook, then "Follow @silent.stickman — a new LOVE IS A ___ every day." + the share line ("Send this to the one who ...") + 6-8 hashtags.
+
 ## 🏆 WINNER FORMAT: "LOVE IS A ___" split screen (user, 2026-10-28)
 User, 2026-10-28, about reel 36 Bridge For Two and its reference (the "LOVE IS A BRIDGE" reel):
 "diese video waren mit abstand die besten, haben millionen aufrufe bekommen ... nicht nur aufrufe sondern comments, likes und wurde sehr oft repostet und weitergeleitet ... generiere solche content mehr".
@@ -17,7 +33,7 @@ Why it works (what to copy every time):
 7. **Shareable target:** caption ends "Send this to the one who builds with you." People send it to their partner (or at their ex). That is why it got reposted and forwarded.
 8. Sound: quiet room tone, a wooden knock for each step of work, warm chord on the hug, a low drop on "ALONE", typing clicks on the last lines. 14 s, no voice.
 
-Code: copy `videos/36-bridge-for-two/tools/` (two clipped panels, makePanel, typed labels, heart, phone glow) and change only the object and the beats. Since 2026-10-28 add the end card (message + real quote) after the headline (dur.txt 16).
+Code: copy `videos/36-bridge-for-two/tools/` (two clipped panels, makePanel, typed labels, heart, phone glow) and change only the object and the beats. Since 2026-11-10: NO quote end card; end with the FOLLOW ending above instead (dur.txt 14).
 
 Backlog in this format (make these next, one per run at least):
 - LOVE IS A BOAT. BOTH ROW → they reach the island / ONE ROWS → the boat turns in circles. "IF ONLY ONE ROWS, / YOU GO IN CIRCLES." (reel 40)

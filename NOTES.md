@@ -2,6 +2,10 @@
 
 Claude's running notes. Newest on top. Everything Claude wants to remember goes here (or in the matching file), not on the computer.
 
+## 2026-11-10 (strategy change)
+- User: views are not like before and no new followers. Change the strategy, use what worked (WINNER FORMAT, reel 36), and end every video with a follow ask that isn't boring.
+- New: 3 winner-format reels + 1 remake per run; quote end card removed (likely retention killer: static card after the payoff); follow ask built into the payoff (heart → FOLLOW button, characters point, next-story tease); last frame loops to the first. Written in REFERENCE-ANALYSIS.md, GENERATE.md, DAILY-JOB.md, SERIES.md.
+
 ## 2026-11-07 (rule change)
 - User: our videos no longer get much attention. From now on only remake videos that get **very much attention** on social media. Rule written in `GENERATE.md`: pass = ≥ 1M views, rank by views (outlier score only as tie-breaker). Runs 7-9 used small-channel outliers (37k-320k views): that is the likely reason.
 
