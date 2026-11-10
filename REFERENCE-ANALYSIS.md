@@ -7,7 +7,10 @@ User, 2026-11-10: "ich bekomme keine aufrufe mehr wie damals ändere deine strat
 
 **Ending rules (every reel, also series parts):**
 1. **The quote stays (user, 2026-11-10: "ich will trotzdem den Zitat in meinem Video haben"), but it is no longer a separate static card.** It types in over the still-moving payoff scene (scene dims a bit, keeps moving: hug, heart, glow), max ~2.5 s, then the FOLLOW ending takes over. Order: headline line 2 → quote over the scene → heart → FOLLOW. Length 15 s (dur.txt 15).
-2. **The follow ask is part of the story, not after it** (max ~1.5 s, starts while the payoff still moves). Pick one per reel, rotate:
+2. **v2 rules from the test reel 81 (user, 2026-11-10: "halte bisschen länger wenn Zitat kommt ... call to follow auch länger ... beziehe die Figuren auch rein ... Follow-Button bisschen unten"):**
+   - Quote stays fully readable ~2.5 s after the last word (quote 9.6 → 13.4 s).
+   - FOLLOW part ~5.5 s: camera pushes into the top couple (bottom panel fades), the heart-kite comes down to them and pops into "+ FOLLOW" at **chest height beside them** (not over their heads), she waves at the viewer, he taps the button → "FOLLOWING ✓" + heart burst, both cheer, then hug. "A NEW 'LOVE IS A ___' EVERY DAY." typed on the ground. Reel length 19 s. Code: `videos/81-love-is-a-kite/tools/body.js` (cam(), ctaPose()).
+3. **The follow ask is part of the story, not after it** (max ~1.5 s, starts while the payoff still moves). Pick one per reel, rotate:
    - **Heart → FOLLOW:** the red heart that pops on the payoff flies to the bottom center and turns into a "+ FOLLOW" pill; a hand taps it, it turns to "FOLLOWING ✓" with a click.
    - **Character asks:** after the hug the top couple turn to the camera, one points down at the follow spot ("STAY FOR MORE STORIES"), tiny wink.
    - **Bottom panel twist:** the lonely one looks up at the viewer: "DON'T BE LIKE HIM." → "+ FOLLOW" lights up in red.

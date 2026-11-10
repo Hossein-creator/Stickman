@@ -34,7 +34,7 @@
           const winds = Array.from({ length: 8 }, () => svgEl("path", { fill: "none", stroke: "#cfe3ff", "stroke-width": 5, "stroke-linecap": "round", opacity: 0 }, fx));
           const dark = svgEl("rect", { x: 0, y: PY0, width: PW, height: PY1 - PY0, fill: "#05070c", opacity: 0 }, inner);
           svgEl("rect", { x: 0, y: PY0, width: PW, height: PY1 - PY0, fill: "none", stroke: "#2c2c30", "stroke-width": 5 }, g);
-          return { y0, beams, glow, string, kiteG, tail, bows, body, heart, figs, fx, winds, dark };
+          return { g, y0, beams, glow, string, kiteG, tail, bows, body, heart, figs, fx, winds, dark };
         }
         const top = makePanel(412, "T");
         const bot = makePanel(1010, "B");
@@ -47,7 +47,12 @@
         const GU = [0.9, 2.6, 4.2];          // wind gusts (from the right, pull the kite away)
         const GD = 1.1;
         const T_LET = 1.7, T_SLIP = 4.75, T_HEART = 6.2, T_LEAN = 6.8;
-        const T_T1 = 7.7, T_T2 = 8.4, T_Q = 9.7, T_CTA = 12.2, T_TAP = 13.55;
+        const T_T1 = 7.7, T_T2 = 8.4, T_Q = 9.6, T_CTA = 13.4, T_PILL = T_CTA + 1.2, T_TAP = T_PILL + 2.0;
+        // camera push-in on the top couple for the FOLLOW part
+        const CF = [520, 430], CS = [540, 1020], ZK = 1.55, PILL = [660, 370];
+        const zoomK = (t) => sm(t, T_CTA - 0.1, T_CTA + 1.0);
+        const cam = (t) => { const q = zoomK(t), z = lerp(PK, ZK, q), s0 = toScreen(top, CF[0], CF[1]); return { z, ox: lerp(s0[0], CS[0], q) - CF[0] * z, oy: lerp(s0[1], CS[1], q) - CF[1] * z }; };
+        const camPt = (t, x, y) => { const c = cam(t); return [c.ox + x * c.z, c.oy + y * c.z]; };
         const gust = (t) => GU.reduce((k, a) => Math.max(k, hold(t, a, a + GD, 0.3)), 0);
         // kite position: top climbs with every gust
         const climbTop = (t) => GU.reduce((c, a) => c + sm(t, a + 0.2, a + GD + 0.3), 0) / GU.length;
@@ -72,9 +77,35 @@
           reachTo(st, 1, p); reachTo(st, 1, [p[0] - 8, p[1] + 10], "b");
           return st;
         }
-        const HUG = T_CTA + 0.1;
-        const topHer = (t) => { const st = holder(SHE, t, gust(t), 0); const l = win(t, T_LEAN, T_LEAN + 0.5); st.head += 22 * l; st.hx += 22 * l; const h = win(t, HUG, HUG + 0.5); st.hx += 40 * h; st.ax += 40 * h; st.bx += 40 * h; reachTo(st, h, [HE + 20, stand - 160]); reachTo(st, h, [HE + 10, stand - 120], "b"); return st; };
-        const topHim = (t) => { const st = holder(HE, t, gust(t), 0); const l = win(t, T_LEAN, T_LEAN + 0.5); st.head -= 6 * l; const h = win(t, HUG, HUG + 0.5); st.head = lerp(st.head, 14, h); reachTo(st, h, [HE - 40, stand - 150]); reachTo(st, h, [HE - 60, stand - 120], "b"); return st; };
+        // after the heart becomes the button: he points at it, she taps it, both cheer, then hug and look at you
+        function ctaPose(st, t, me, other, f) {
+          const r = win(t, T_PILL, T_PILL + 0.4); st.aw *= 1 - r; st.bw *= 1 - r;
+          const cheer = win(t, T_TAP + 0.35, T_TAP + 0.6) * (1 - win(t, T_TAP + 1.5, T_TAP + 1.8));
+          const wv = 14 * Math.sin(t * 14);
+          reachTo(st, cheer, [me - 35, stand - 250 + wv]); reachTo(st, cheer, [me + 35, stand - 250 - wv], "b");
+          st.head = lerp(st.head, -14, cheer);
+          const hug = win(t, T_TAP + 1.6, T_TAP + 2.0);
+          st.hx += f * 34 * hug; st.ax += f * 34 * hug; st.bx += f * 34 * hug;
+          reachTo(st, hug, [other + (f > 0 ? -10 : 40), stand - 160]); reachTo(st, hug, [other + (f > 0 ? -20 : 30), stand - 120], "b");
+          return st;
+        }
+        const topHer = (t) => {
+          const st = holder(SHE, t, gust(t), 0); const l = win(t, T_LEAN, T_LEAN + 0.5); st.head += 22 * l; st.hx += 22 * l;
+          if (t < T_PILL) return st;
+          st.head = lerp(st.head, -4, win(t, T_PILL, T_PILL + 0.4));
+          ctaPose(st, t, SHE, HE, 1);
+                    const pt = hold(t, T_PILL + 0.25, T_TAP - 0.1, 0.3);
+          reachTo(st, pt, [SHE - 40 + 22 * Math.sin(t * 11), stand - 235]); st.head = lerp(st.head, -10, pt);
+          return st;
+        };
+        const topHim = (t) => {
+          const st = holder(HE, t, gust(t), 0); const l = win(t, T_LEAN, T_LEAN + 0.5); st.head -= 6 * l;
+          if (t < T_PILL) return st;
+          ctaPose(st, t, HE, SHE, -1);
+          const tap = hold(t, T_TAP - 0.55, T_TAP + 0.3, 0.35), press = t > T_TAP - 0.1 && t < T_TAP + 0.12 ? 10 : 0;
+          reachTo(st, tap, [PILL[0] - 104 + press, PILL[1] + 4]); st.head = lerp(st.head, -4, tap);
+          return st;
+        };
         function botHer(t) {
           const let1 = win(t, T_LET, T_LET + 0.4);
           if (let1 <= 0) return holder(SHE, t, gust(t), 0);
@@ -141,10 +172,10 @@
         const trail = Array.from({ length: 6 }, () => svgEl("circle", { r: 8, fill: "#ff6a60", opacity: 0 }, ctaSvg));
         const sparks = Array.from({ length: 10 }, () => svgEl("path", { d: "M0 12 C-26 -4 -19 -26 0 -14 C19 -26 26 -4 0 12 Z", fill: "#ff3b30", opacity: 0 }, ctaSvg));
         const pill = document.createElement("div");
-        pill.style.cssText = "position:absolute;left:540px;top:1000px;height:96px;border-radius:48px;display:flex;align-items:center;justify-content:center;white-space:nowrap;overflow:hidden;font-family:HFMono,monospace;font-weight:700;font-size:44px;letter-spacing:0.12em;opacity:0;border:5px solid #000;box-shadow:0 0 40px rgba(255,59,48,0.55)";
+        pill.style.cssText = "position:absolute;left:540px;top:1000px;height:96px;border-radius:48px;display:flex;align-items:center;justify-content:center;white-space:nowrap;overflow:hidden;font-family:HFMono,monospace;font-weight:700;font-size:38px;letter-spacing:0.1em;opacity:0;border:5px solid #000;box-shadow:0 0 40px rgba(255,59,48,0.55)";
         E("stage").appendChild(pill);
         const sub = document.createElement("div");
-        sub.style.cssText = "position:absolute;left:120px;right:120px;top:860px;text-align:center;font-family:HFMono,monospace;font-weight:700;font-size:28px;letter-spacing:0.14em;color:#fff;line-height:1.5";
+        sub.style.cssText = "position:absolute;left:120px;right:120px;top:1330px;text-align:center;font-family:HFMono,monospace;font-weight:700;font-size:30px;letter-spacing:0.14em;color:#fff;line-height:1.5";
         E("stage").appendChild(sub);
         const hand = svgEl("g", { opacity: 0 }, ctaSvg);
         svgEl("path", { d: "M0 10 L0 -64", stroke: "#000", "stroke-width": 40, "stroke-linecap": "round" }, hand);
@@ -196,9 +227,16 @@
           TF.bun.setAttribute("cx", r1(hp.head[0] - 25)); TF.bun.setAttribute("cy", r1(hp.head[1] - 16));
           const hk = win(t, T_HEART, T_HEART + 0.45);
           const kt = kiteTop(t);
-          const flyOut = sm(t, T_CTA, T_CTA + 0.15);
-          drawKite(top, kt, t, hk, flyOut > 0 ? null : [mid(hp), mid(mp)], 0.6 - 0.5 * climbTop(t) - 0.3 * gk);
+          const flyOut = t >= T_PILL ? 1 : 0;
+          const dq = sm(t, T_CTA + 0.2, T_PILL);
+          if (dq > 0) { kt[0] = lerp(kt[0], PILL[0], dq); kt[1] = lerp(kt[1], PILL[1], dq) - 80 * Math.sin(Math.PI * dq); kt[2] = lerp(kt[2], 0, dq); }
+          drawKite(top, kt, t, hk, flyOut > 0 ? null : [mid(hp), mid(mp)], (0.6 - 0.5 * climbTop(t) - 0.3 * gk) * (1 - dq) + 0.5 * dq);
           top.kiteG.setAttribute("opacity", (1 - flyOut).toFixed(3));
+          const c = cam(t);
+          top.g.setAttribute("transform", `translate(${r1(c.ox)} ${r1(c.oy)}) scale(${c.z.toFixed(4)})`);
+          const zq = zoomK(t);
+          bot.g.setAttribute("opacity", (1 - zq).toFixed(3));
+          [topT, topS, botT, botS].forEach((d) => (d.style.opacity = (1 - zq).toFixed(3)));
           drawWind(top, t, gk);
           const done = win(t, T_HEART - 0.2, T_HEART + 0.4) * (1 - flyOut);
           top.glow.setAttribute("cx", r1(kt[0])); top.glow.setAttribute("cy", r1(kt[1]));
@@ -230,42 +268,29 @@
 
           // ---- ending: quote over the moving scene, then FOLLOW ----
           const qOut = win(t, T_CTA - 0.35, T_CTA);
-          dim.style.opacity = (0.62 * win(t, T_Q - 0.4, T_Q) * (1 - 0.15 * qOut)).toFixed(3);
+          dim.style.opacity = (0.62 * win(t, T_Q - 0.4, T_Q) * (1 - win(t, T_CTA - 0.3, T_CTA + 0.5))).toFixed(3);
           let wi = 0;
           quote.innerHTML = QW.map((w) => { if (w === "|") return "<br/>"; const t0 = T_Q + 0.065 * wi++; const q = clamp((t - t0) / 0.18, 0, 1); return `<span style="display:inline-block;margin:0 0.14em;opacity:${q.toFixed(2)};transform:translateY(${r1(12 * (1 - q))}px);${["SAME", "DIRECTION."].includes(w) ? "color:#ff6a60;" : ""}">${w}</span>`; }).join("");
           quote.style.opacity = (1 - qOut).toFixed(3);
           qName.style.opacity = (win(t, T_Q + 1.1, T_Q + 1.4) * (1 - qOut)).toFixed(3);
-          // heart flies out of the top panel to the center
-          const hs = toScreen(top, kt[0], kt[1]);
-          const fq = sm(t, T_CTA, T_CTA + 0.7);
-          const tx = 540, ty = 1048;
-          const fx = lerp(hs[0], tx, fq), fy = lerp(hs[1], ty, fq) - 160 * Math.sin(Math.PI * fq);
-          const toPill = win(t, T_CTA + 0.7, T_CTA + 0.95);
-          flyHeart.setAttribute("opacity", t >= T_CTA && toPill < 1 ? 1 : 0);
-          flyHeart.setAttribute("transform", `translate(${r1(fx)} ${r1(fy)}) rotate(${r1(360 * fq)}) scale(${(PK * 1.25 * (1 + 0.6 * Math.sin(Math.PI * fq)) * (1 - toPill)).toFixed(3)})`);
-          trail.forEach((c, i) => { const q2 = clamp(fq - (i + 1) * 0.05, 0, 1); c.setAttribute("cx", r1(lerp(hs[0], tx, q2))); c.setAttribute("cy", r1(lerp(hs[1], ty, q2) - 160 * Math.sin(Math.PI * q2))); c.setAttribute("opacity", t >= T_CTA && fq < 1 ? (0.6 * (1 - i / 6)).toFixed(2) : 0); c.setAttribute("r", r1(10 - i)); });
+          const PS = camPt(t, PILL[0], PILL[1]);
           // pill
-          const pq = win(t, T_CTA + 0.75, T_CTA + 1.05);
+          const pq = win(t, T_PILL - 0.05, T_PILL + 0.3);
           const tapped = t >= T_TAP;
           const press = tapped ? 1 - 0.08 * Math.sin(Math.PI * clamp((t - T_TAP) / 0.18, 0, 1)) : 1;
-          const w = lerp(96, tapped ? 520 : 440, backOut(pq));
+          const w = lerp(96, tapped ? 420 : 360, backOut(pq));
           pill.style.opacity = pq > 0 ? 1 : 0;
-          pill.style.width = r1(w) + "px"; pill.style.left = r1(540 - w / 2) + "px";
+          pill.style.width = r1(w) + "px"; pill.style.left = r1(PS[0] - w / 2) + "px"; pill.style.top = r1(PS[1] - 48) + "px";
           pill.style.transform = `scale(${(press * (1 + 0.04 * Math.max(0, Math.sin(t * 6)) * (tapped ? 0 : 1))).toFixed(3)})`;
           pill.style.background = tapped ? "#ffffff" : "#ff3b30";
           pill.style.color = tapped ? "#000" : "#fff";
           pill.style.boxShadow = tapped ? "0 0 40px rgba(255,255,255,0.5)" : "0 0 40px rgba(255,59,48,0.6)";
           pill.innerHTML = pq < 0.5 ? "" : tapped ? "FOLLOWING ✓" : "+ FOLLOW";
-          const sq = t - (T_CTA + 1.1), line1 = "A NEW 'LOVE IS A ___'", line2 = "EVERY DAY.";
+          const sq = t - (T_PILL + 0.5), line1 = "A NEW 'LOVE IS A ___'", line2 = "EVERY DAY.";
           sub.innerHTML = sq > 0 ? `${line1.slice(0, Math.floor(sq * 34))}&nbsp;<br/>${line2.slice(0, Math.max(0, Math.floor((sq - 0.65) * 34)))}&nbsp;` : "";
-          // hand comes in, taps, leaves
-          const hin = sm(t, T_TAP - 0.55, T_TAP - 0.05), hout = sm(t, T_TAP + 0.3, T_TAP + 0.8);
-          const hy = lerp(1500, 1080, hin) + 420 * hout - (tapped ? 0 : 0) + (t > T_TAP - 0.05 && t < T_TAP + 0.15 ? 14 : 0);
-          hand.setAttribute("opacity", hin > 0 && hout < 1 ? 1 : 0);
-          hand.setAttribute("transform", `translate(${r1(lerp(720, 580, hin))} ${r1(hy)}) rotate(-12)`);
           const rq = clamp((t - T_TAP) / 0.5, 0, 1);
-          ring.setAttribute("opacity", tapped && rq < 1 ? (1 - rq).toFixed(3) : 0); ring.setAttribute("r", r1(30 + 300 * rq));
-          sparks.forEach((s2, i) => { const q3 = clamp((t - T_TAP) / 0.9, 0, 1), a = (i / 10) * Math.PI * 2; s2.setAttribute("opacity", tapped && q3 < 1 ? (1 - q3).toFixed(3) : 0); s2.setAttribute("transform", `translate(${r1(540 + Math.cos(a) * 320 * Math.sqrt(q3))} ${r1(1048 + Math.sin(a) * 200 * Math.sqrt(q3) - 60 * q3)}) scale(${(1 - 0.5 * q3).toFixed(2)})`); });
+          ring.setAttribute("opacity", tapped && rq < 1 ? (1 - rq).toFixed(3) : 0); ring.setAttribute("r", r1(30 + 300 * rq)); ring.setAttribute("cx", r1(PS[0])); ring.setAttribute("cy", r1(PS[1]));
+          sparks.forEach((s2, i) => { const q3 = clamp((t - T_TAP) / 0.9, 0, 1), a = (i / 10) * Math.PI * 2; s2.setAttribute("opacity", tapped && q3 < 1 ? (1 - q3).toFixed(3) : 0); s2.setAttribute("transform", `translate(${r1(PS[0] + Math.cos(a) * 320 * Math.sqrt(q3))} ${r1(PS[1] + Math.sin(a) * 200 * Math.sqrt(q3) - 60 * q3)}) scale(${(1 - 0.5 * q3).toFixed(2)})`); });
           fade.style.opacity = win(t, DUR - 0.35, DUR - 0.02).toFixed(3);
         }
         window.__timelines = window.__timelines || {};
