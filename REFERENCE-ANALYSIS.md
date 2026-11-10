@@ -1,5 +1,25 @@
 # New Instagram account — reference style (10 example reels)
 
+## 📊 STATS 2026-11-10 (user's analysis: 47 TikToks + 46 IG reels, https://claude.ai/artifact/MxJf1BA9dey8ZwQGfvZJW2)
+- Totals: TikTok 5.54M views → 7,804 followers (1.4 per 1k views); Instagram 11.69M views → 3,931 followers (0.34 per 1k).
+- **LOVE IS A ___ is the engine:** TT median 333k (6/9 hits ≥40k), IG median 259k, shared by 1.4 % of viewers. Emotional scenes median ~5-10k, tag memes 1.7k (0 hits on TT), motivation 2.2k (0 hits).
+- **Reach follows SHARES** (corr 0.73) more than completion (0.54). Bridge 38k shares, Boat 12k.
+- **Most followers per view: honest lines about a partner** ("She's not cold. She's exhausted." 3.1/1k TT, 4.0/1k IG), then Garden, Fire, Boat (>2/1k).
+- **Drop-off at 0:01-0:02 on all 47 TikToks.** Avg watch 6-9 s, only 8-15 % finish. Best finishers have the conflict in frame 1 (Gap 42 %, Bridge 41 %).
+- **Longer loses:** 36 s part 1 6.5 %, 31 s 3 %, 18 s 7.6 % finish vs 13 % median for short ones.
+- Comments almost zero (726 on 5.5M) → ask a question in the caption instead of "Tag the one".
+- Captions full of foreign quotes read like a repost page.
+- Don't double-post (camera roll twice = 0 followers).
+- Recommended: ≥ every 2nd post LOVE IS A; sequels of hits (Bridge Part 2, Boat Part 2); number the series ("LOVE IS A … #10", end frame "#11 tomorrow"); ideas: tandem, tent, lifeboat, phone call (always the same one calls).
+
+**Rules from the stats (apply now):**
+1. LOVE IS A reels **≤ 15 s total** incl. quote + follow moment (squeeze, don't drop). Conflict + headline + both panels visible in frame 1.
+2. Number them: headline "LOVE IS A KITE. #12" style + caption line 1 "Love is a … #12"; follow moment says "#13 TOMORROW".
+3. Caption ends with a question ("Which one are you, the builder or the scroller?"), not "Tag the one".
+4. Add sequels of the biggest hits (Bridge Part 2, Boat Part 2).
+5. One honest "explains-the-behavior" line per reel where it fits (follower driver).
+6. No motivation, no tag memes, never repost a reel.
+
 ## 🔔 FOLLOW ENDING + NEW MIX (user, 2026-11-10)
 User, 2026-11-10: "ich bekomme keine aufrufe mehr wie damals ändere deine strategie ich habe dir schon mal gesagt welche videos richtig gut funktionieren ... ich bekomme keine follower mehr ich will dass du die videos am ende so baust dass eine call to follow gefordert wird ohne dass es langweilig wird".
 

@@ -2,6 +2,9 @@
 
 Claude's running notes. Newest on top. Everything Claude wants to remember goes here (or in the matching file), not on the computer.
 
+## 2026-11-10 (stats)
+- User sent the analysis (artifact MxJf1BA9dey8ZwQGfvZJW2). Main facts + new rules written in REFERENCE-ANALYSIS.md → "STATS 2026-11-10". Open questions to the user: keep the quote even though it makes reels longer and the analysis says foreign quotes look like a repost page? Keep ONE-SIDED LOVE at 31 s or cut to ~15 s?
+
 ## 2026-11-10 (upload remake)
 - User uploaded a @moneyinmono reel (two weddings: big party → debt vs small wedding → own house) and asked for an exact 1:1 copy incl. lighting and props. Explained: exact copies of another creator's work are not ok (copyright + reposts get flagged); remade the story/message in our own design instead (reel 83). Do the same for future uploads.
 
