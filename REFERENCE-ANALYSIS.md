@@ -34,6 +34,7 @@ User, 2026-11-10: "ich bekomme keine aufrufe mehr wie damals ändere deine strat
 
 ## 💔 FORMAT 2: "ONE-SIDED LOVE" drama (user, 2026-11-10)
 User, 2026-11-10: "mach auch solche Formate dass eine der Personen kein Interesse aber andere sehr verliebt ist und ignoriert wird von der Person, so dramamäßig, kannst ruhig länger machen aber es soll klar sein worum es geht".
+**APPROVED by the user (2026-11-10: "das Video ist gut geworden, speichere es")**: reel 82 is the reference for this format, keep its look, pacing and clarity.
 Template: `videos/82-one-sided-love/tools/body.js` (37 s). Shape:
 1. Headline from frame 1: "ONE-SIDED LOVE." (or a variant: "SHE LOVED HIM. HE LOVED HIS GAME.", roles can flip).
 2. **Chapters with hard cuts** (black dip + whoosh + low hit): DAY 1 / DAY 30 / DAY 90 / DAY 365, red chapter tag top left, a new camera shot per chapter (wide → close → closer → wide).
