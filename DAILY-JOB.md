@@ -138,3 +138,4 @@ Lines up to 17 were scheduled in Metricool. 2026-10-25 ~10:42: all still-pending
 - 2026-11-11 12:00: 80 Grandma Vs Grandpa (relationship, old couple), sent to Telegram
 - 2026-11-11 16:00: 81 Love Is A Kite (relationship, winner format, TEST: quote over moving payoff + heart → FOLLOW button ending), sent to Telegram
 - 2026-11-12 18:00: 82 One-Sided Love (relationship, NEW FORMAT 2 example, 37 s), sent to Telegram
+- 2026-11-13 16:00: 83 Two Weddings (relationship, idea remake of user upload, 33 s), sent to Telegram

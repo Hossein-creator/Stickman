@@ -2,6 +2,9 @@
 
 Claude's running notes. Newest on top. Everything Claude wants to remember goes here (or in the matching file), not on the computer.
 
+## 2026-11-10 (upload remake)
+- User uploaded a @moneyinmono reel (two weddings: big party → debt vs small wedding → own house) and asked for an exact 1:1 copy incl. lighting and props. Explained: exact copies of another creator's work are not ok (copyright + reposts get flagged); remade the story/message in our own design instead (reel 83). Do the same for future uploads.
+
 ## 2026-11-10 (format 2)
 - User wants a drama format: one is deeply in love, the other has no interest and ignores them; may be longer but must be clear. Built as reel 82 "One-Sided Love" (chapters, cracking heart meter, color loss). Mix per run now 2 LOVE IS A + 1 ONE-SIDED LOVE + 1 remake. 37 s reel renders in ~4 min (foreground ok).
 
