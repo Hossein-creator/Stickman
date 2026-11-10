@@ -2,7 +2,7 @@
 import fs from "node:fs";
 import path from "node:path";
 
-const SR = 48000, DUR = 37, N = SR * DUR;
+const SR = 48000, DUR = 31, N = SR * DUR;
 const L = new Float32Array(N), R = new Float32Array(N);
 let seed = 71;
 const rnd = () => ((seed = (seed * 16807) % 2147483647) / 2147483647) * 2 - 1;
@@ -89,8 +89,8 @@ function bed(chords, tq = 10.6, drone = 55) {
 const typing = (t0, n, cps = 26) => { for (let c = 0; c < n; c++) noise(t0 + c / cps, 0.012, 0.05, 0, 0.9, (p) => Math.exp(-p * 5)); };
 
 // ---- "one-sided love": quiet room tone + sad slow piano (bells) that thins out each chapter; whoosh + low hit on every chapter cut; his heart cracks (glass tick + low crack), shatter on DAY 365; bubble pops; candle blown out; footsteps away; phone drop; quote bells; FOLLOW: dive whoosh, UI pop, typing, tap click + healing chime + happy arpeggio ----
-const C = [0, 6.5, 12.5, 18.5], T_FLOW = 1.0, T_PUSH = 2.9, T_C1 = 3.5, T_ARMS = 7.6, T_TURN = 8.3, T_C2 = 9.3, T_LOVE = 13.4, T_MHM = 15.0, T_C3 = 16.2;
-const T_CAKE = 19.3, T_NOT = 20.6, T_BLOW = 21.5, T_SHAT = 22.0, T_DOWNC = 22.6, T_GO = 23.6, T_OUT = 26.0, T_LOOK = 25.6, T_BABE = 26.0, T_DROP = 27.0, T_L2 = 26.3, T_L3 = 27.0, T_Q = 28.2, T_PH = 31.8, T_WALK = 33.0, T_TAP = 34.6;
+const C = [0, 4.9, 8.7, 13.2], T_FLOW = 1.0, T_PUSH = 2.9, T_C1 = 3.5, T_ARMS = 6.0, T_TURN = 6.7, T_C2 = 7.5, T_LOVE = 9.6, T_MHM = 11.2, T_C3 = 12.0;
+const T_CAKE = 14.0, T_NOT = 15.3, T_BLOW = 15.9, T_SHAT = 16.4, T_DOWNC = 16.9, T_GO = 17.6, T_OUT = 20.0, T_LOOK = 19.6, T_BABE = 20.0, T_DROP = 21.0, T_L2 = 20.3, T_L3 = 21.0, T_Q = 22.2, T_PH = 25.8, T_WALK = 27.0, T_TAP = 28.6;
 { let lp = 0; for (let i = 0; i < N; i++) { const t = i / SR; lp += (rnd() - lp) * 0.01; add(i, lp * 0.07 * Math.min(1, t / 0.6) * (1 - smooth(t, DUR - 0.8, DUR)), 0); } }
 // sad piano: A minor line, one note per ~0.75 s, gets sparser
 const MEL = [69, 72, 76, 74, 72, 71, 69, 64, 65, 69, 72, 71, 69, 67, 64, 62];

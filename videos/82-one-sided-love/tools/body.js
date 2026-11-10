@@ -18,13 +18,13 @@
         const hold = (s, a, b, r = 0.2) => win(s, a, a + r) * (1 - win(s, b - r, b));
 
         // ---------- beats ----------
-        const C = [0, 6.5, 12.5, 18.5];                      // chapter starts: DAY 1 / 30 / 90 / 365
+        const C = [0, 4.9, 8.7, 13.2];                       // chapter starts: DAY 1 / 30 / 90 / 365 (max 2 s after each rejection, user 2026-11-10)
         const T_FLOW = 1.0, T_PUSH = 2.9, T_C1 = 3.5;
-        const T_STEP = 7.0, T_ARMS = 7.6, T_TURN = 8.3, T_C2 = 9.3;
-        const T_LOVE = 13.4, T_MHM = 15.0, T_C3 = 16.2;
-        const T_CAKE = 19.3, T_NOT = 20.6, T_BLOW = 21.5, T_SHAT = 22.0, T_DOWNC = 22.6, T_GO = 23.6, T_OUT = 26.0;
-        const T_LOOK = 25.6, T_BABE = 26.0, T_DROP = 27.0, T_L2 = 26.3, T_L3 = 27.0;
-        const T_Q = 28.2, T_PH = 31.8, T_WALK = 33.0, T_TAP = 34.6;
+        const T_STEP = 5.4, T_ARMS = 6.0, T_TURN = 6.7, T_C2 = 7.5;
+        const T_LOVE = 9.6, T_MHM = 11.2, T_C3 = 12.0;
+        const T_CAKE = 14.0, T_NOT = 15.3, T_BLOW = 15.9, T_SHAT = 16.4, T_DOWNC = 16.9, T_GO = 17.6, T_OUT = 20.0;
+        const T_LOOK = 19.6, T_BABE = 20.0, T_DROP = 21.0, T_L2 = 20.3, T_L3 = 21.0;
+        const T_Q = 22.2, T_PH = 25.8, T_WALK = 27.0, T_TAP = 28.6;
         const SHE = 470, HE = 640;
         const chap = (s) => (s < C[1] ? 0 : s < C[2] ? 1 : s < C[3] ? 2 : 3);
 

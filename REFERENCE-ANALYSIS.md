@@ -35,11 +35,12 @@ User, 2026-11-10: "ich bekomme keine aufrufe mehr wie damals ändere deine strat
 ## 💔 FORMAT 2: "ONE-SIDED LOVE" drama (user, 2026-11-10)
 User, 2026-11-10: "mach auch solche Formate dass eine der Personen kein Interesse aber andere sehr verliebt ist und ignoriert wird von der Person, so dramamäßig, kannst ruhig länger machen aber es soll klar sein worum es geht".
 **APPROVED by the user (2026-11-10: "das Video ist gut geworden, speichere es")**: reel 82 is the reference for this format, keep its look, pacing and clarity.
-Template: `videos/82-one-sided-love/tools/body.js` (37 s). Shape:
+Template: `videos/82-one-sided-love/tools/body.js` (31 s). Shape:
 1. Headline from frame 1: "ONE-SIDED LOVE." (or a variant: "SHE LOVED HIM. HE LOVED HIS GAME.", roles can flip).
 2. **Chapters with hard cuts** (black dip + whoosh + low hit): DAY 1 / DAY 30 / DAY 90 / DAY 365, red chapter tag top left, a new camera shot per chapter (wide → close → closer → wide).
 3. Each chapter = one effort + one ignore, told by a **2-line caption pair** (one idea each, ≤5 words, the ignore line has a red word): "HE BRINGS HER FLOWERS." / "SHE DOESN'T EVEN LOOK."
 4. **Visible damage meter:** a heart above the one who loves cracks with every ignore and he loses color (brightness 1 → 0.4); evidence stays on set (the flower on the floor wilts).
+4b. **Max 2 s pause after every rejection** (user, 2026-11-10: "wenn er abgelehnt wird, es wird länger Pause gemacht ... mach es nur 2 Sekunden"): from the ignore moment (push away / turn away / "MHM." / "NOT NOW.") to the next cut or next action is at most 2 s; the heart crack lands inside those 2 s. Reel 82 v1 had 3.0-4.2 s, now 31 s total.
 5. Climax: the big effort (anniversary cake) is ignored → heart shatters → he puts it down and walks out.
 6. Twist beat: the ignorer looks up too late ("BABE?"), phone drops. Headline finishes: "SHE LOST HIM / LONG BEFORE HE LEFT."
 7. Quote over the dimmed, still-moving scene, held ~3 s (Elie Wiesel "the opposite of love is not hate, it's indifference").
