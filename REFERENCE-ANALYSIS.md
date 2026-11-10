@@ -45,7 +45,7 @@ Backlog in this format (make these next, one per run at least):
 - (done as reel 61) LOVE IS A PUZZLE. BOTH BRING PIECES → the heart picture finishes / ONE BRINGS PIECES → a hole stays in the middle.
 - (done as reel 65, a VS version of the format) LUST VS LOVE: same start in both panels, the test (she gets sick) splits them.
 - (done as reel 69) LOVE IS A GARDEN.
-- (done as reel 77) LOVE IS A CANDLE. New ideas: LOVE IS A BRIDGE IN THE STORM, LOVE IS A KITE (both hold the string / one lets go).
+- (done as reel 77) LOVE IS A CANDLE. (done as reel 81) LOVE IS A KITE. New idea: LOVE IS A BRIDGE IN THE STORM.
 - Friendship / family versions with the same shape (FRIENDSHIP IS A ___, BOTH CALL / ONE CALLS).
 
 Separate from @moneypsych.explained. Nothing here is shared with the money account.
@@ -314,3 +314,4 @@ Source shape: animated love stories with rain + a family between the couple (Ban
 - 78 Can't Reach ← Nomi Femi 5.15M views: she jumps for the cookie jar, "NEED HELP?" "NO.", he lifts her; first cookie for him ("SHE COULDN'T REACH IT. / SO HE BECAME HER LADDER.") — `ready/78-cant-reach.mp4`
 - 79 That Time Of The Month ← Aesthetic Asmr 3.08M: cramps on the sofa; he brings hot water bottle, blanket, tea, chocolate, rubs her back ("SHE HAD CRAMPS. / HE DIDN'T ASK. HE JUST CARED.") — `ready/79-that-time-of-the-month.mp4`
 - 80 Grandma Vs Grandpa ← Amazing LP 1.8M: old couple table tennis final, he misses the smash on purpose, wink, kiss ("50 YEARS MARRIED. / HE STILL LETS HER WIN.") — `ready/80-grandma-vs-grandpa.mp4`
+- 81 Love Is A Kite (WINNER FORMAT, FIRST TEST of the FOLLOW ending, user 2026-11-10): BOTH HOLD ON (each gust lifts the kite higher, it turns into a red heart) vs ONE HOLDS ON (she lets go for her phone, the gust drags him, the string slips, IT FLEW AWAY). Headline "LOVE IS A KITE. / IT ONLY FLIES / WHEN BOTH HOLD ON.", then Saint-Exupéry quote over the dimmed, still-moving scene, then the heart-kite flies to the center and becomes "+ FOLLOW", a hand taps it → "FOLLOWING ✓" + heart burst, "A NEW 'LOVE IS A ___' EVERY DAY." (15 s). Compare followers per view against 77-80 in the stats. — `ready/81-love-is-a-kite.mp4`

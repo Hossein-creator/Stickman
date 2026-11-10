@@ -136,3 +136,4 @@ Lines up to 17 were scheduled in Metricool. 2026-10-25 ~10:42: all still-pending
 - 2026-11-10 18:00: 78 Can't Reach (relationship humour), sent to Telegram
 - 2026-11-11 10:00: 79 That Time Of The Month (relationship), sent to Telegram
 - 2026-11-11 12:00: 80 Grandma Vs Grandpa (relationship, old couple), sent to Telegram
+- 2026-11-11 16:00: 81 Love Is A Kite (relationship, winner format, TEST: quote over moving payoff + heart → FOLLOW button ending), sent to Telegram
