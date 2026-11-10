@@ -20,6 +20,15 @@
 5. One honest "explains-the-behavior" line per reel where it fits (follower driver).
 6. No motivation, no tag memes, never repost a reel.
 
+**Decisions (user, 2026-11-10: "du hast meine Analyse und du weißt was mein Ziel ist, dann pass es genau so an"). These OVERRIDE older rules below where they conflict:**
+- **Every reel ≤ 15 s** (all formats, also ONE-SIDED LOVE; series parts the only exception). Older rules "quote held ~2.5-3 s", "FOLLOW part ~5.5 s", "19 s / 31 s / 37 s" are replaced.
+- **No famous quote any more.** In its place: our OWN honest one-liner that explains the behavior (the follower driver, like "She's not cold. She's exhausted."), as the 2nd/3rd headline line, ~1.5 s readable over the moving scene. Never a quote in the caption either.
+- **Conflict in frame 1:** headline + both sides + the imbalance visible at 0.0 s, the first ignore/letting go within 0.5-1 s.
+- **Follow moment ~2-2.5 s**, still different every reel, figures involved; LOVE IS A reels say "#N+1 TOMORROW".
+- **Numbered LOVE IS A:** #10 = Candle (77), #11 = Kite (81), next new one = #12. Headline "LOVE IS A ___. #N", caption line 1 "Love is a ___ #N".
+- **Caption:** hook line, honest line, follow line, then a **question** ("Which one are you, the one who holds on or the one who lets go?"), 6-8 hashtags.
+- Mix per run: 2 LOVE IS A (one of them may be a sequel: Bridge Part 2 / Boat Part 2) + 1 ONE-SIDED LOVE (15 s) + 1 viral remake (15 s).
+
 ## 🔔 FOLLOW ENDING + NEW MIX (user, 2026-11-10)
 User, 2026-11-10: "ich bekomme keine aufrufe mehr wie damals ändere deine strategie ich habe dir schon mal gesagt welche videos richtig gut funktionieren ... ich bekomme keine follower mehr ich will dass du die videos am ende so baust dass eine call to follow gefordert wird ohne dass es langweilig wird".
 
