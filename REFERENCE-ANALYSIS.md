@@ -10,6 +10,19 @@ User, 2026-11-10: "ich bekomme keine aufrufe mehr wie damals ändere deine strat
 2. **v2 rules from the test reel 81 (user, 2026-11-10: "halte bisschen länger wenn Zitat kommt ... call to follow auch länger ... beziehe die Figuren auch rein ... Follow-Button bisschen unten"):**
    - Quote stays fully readable ~2.5 s after the last word (quote 9.6 → 13.4 s).
    - FOLLOW part ~5.5 s: camera pushes into the top couple (bottom panel fades), the heart-kite comes down to them and pops into "+ FOLLOW" at **chest height beside them** (not over their heads), she waves at the viewer, he taps the button → "FOLLOWING ✓" + heart burst, both cheer, then hug. "A NEW 'LOVE IS A ___' EVERY DAY." typed on the ground. Reel length 19 s. Code: `videos/81-love-is-a-kite/tools/body.js` (cam(), ctaPose()).
+2b. **Never the same CTA twice in a row (user, 2026-11-10: "ich will nicht dass deine Call to Follow immer dasselbe ist oder gleich aussieht").** Every reel gets its own follow moment, **built from that reel's object and story**, and a different look (button shape, color, place, who does it, sound). Check the CTA log below before building; don't reuse one of the last 6.
+   Idea pool (adapt to the object, invent new ones):
+   - The object itself becomes the button (kite heart → pill: used in 81).
+   - The couple **writes "FOLLOW"** with the object: boat oars draw it in the water, bridge planks spell it, candle smoke forms the word, garden flowers bloom into the letters.
+   - **Notification bell:** he rings a real bell on the set, the bell turns into the 🔔 + "FOLLOWED" banner slides in.
+   - **Phone flip:** the phone (the villain) finally gets used for good: she taps "Follow @silent.stickman" on her own phone screen, the screen zooms to fill the frame.
+   - **Breaking the 4th wall:** the lonely one from the bottom panel walks up to the camera, knocks on the glass ("KNOCK KNOCK"), holds up a handwritten sign "FOLLOW SO THIS ISN'T YOU".
+   - **Profile ring:** the camera pulls back and the whole scene shrinks into a round profile picture with a "+" badge, a finger taps the "+".
+   - **Next episode tease:** a dark silhouette of tomorrow's object, a "?" over it, "FOLLOW TO SEE IT TOMORROW", the couple peeks at it.
+   - **Like/follow counter:** a heart counter above them ticks up with every good deed, at the end it tips into "+1 FOLLOWER" and they high-five.
+   - **Speech bubble from the figure:** a tiny bubble "STAY?" — then an arrow from the bubble to the follow spot, she nods.
+   - **Ticket/stamp:** he stamps a card "MEMBER #___ OF THE COUPLE CLUB" and slides it to the viewer.
+   CTA log (newest last): 81 kite heart → pill, she waves, he taps.
 3. **The follow ask is part of the story, not after it** (max ~1.5 s, starts while the payoff still moves). Pick one per reel, rotate:
    - **Heart → FOLLOW:** the red heart that pops on the payoff flies to the bottom center and turns into a "+ FOLLOW" pill; a hand taps it, it turns to "FOLLOWING ✓" with a click.
    - **Character asks:** after the hug the top couple turn to the camera, one points down at the follow spot ("STAY FOR MORE STORIES"), tiny wink.

@@ -8,7 +8,7 @@ Find the most viral short videos right now, check that they really are viral, an
 but in our look and rules (ACTION STYLE, black stage, rig v2, code only).
 
 ## Rules
-- **New strategy (user, 2026-11-10, views + followers dropped):** every run = **3 WINNER FORMAT reels + 1 viral relationship remake (≥1M views)**, and every reel ends with the built-in FOLLOW ending (quote stays but over the moving payoff, no static card; loop back to frame 1). Details: `REFERENCE-ANALYSIS.md` → "FOLLOW ENDING + NEW MIX".
+- **New strategy (user, 2026-11-10, views + followers dropped):** every run = **3 WINNER FORMAT reels + 1 viral relationship remake (≥1M views)**, and every reel ends with its own FOLLOW moment (different every reel, built from that reel's object; see the CTA log) (quote stays but over the moving payoff, no static card; loop back to frame 1). Details: `REFERENCE-ANALYSIS.md` → "FOLLOW ENDING + NEW MIX".
 - Numbered series are a separate job: `SERIES.md`, trigger "serie" (user, 2026-11-09).
 - **Winner format first (user, 2026-10-28):** the "LOVE IS A ___" split screen (reel 36 Bridge For Two and its reference got millions of views, comments, likes, reposts and shares). Every run makes at least one new reel in this format from the backlog in `REFERENCE-ANALYSIS.md` ("WINNER FORMAT"), and viral candidates with the same shape (A/B split, love as an object both build, one partner on the phone) rank first.
 - **Only the most viral videos get remade.** Check virality before building anything (step 2).
