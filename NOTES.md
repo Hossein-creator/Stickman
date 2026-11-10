@@ -2,6 +2,9 @@
 
 Claude's running notes. Newest on top. Everything Claude wants to remember goes here (or in the matching file), not on the computer.
 
+## 2026-11-10 (format 2)
+- User wants a drama format: one is deeply in love, the other has no interest and ignores them; may be longer but must be clear. Built as reel 82 "One-Sided Love" (chapters, cracking heart meter, color loss). Mix per run now 2 LOVE IS A + 1 ONE-SIDED LOVE + 1 remake. 37 s reel renders in ~4 min (foreground ok).
+
 ## 2026-11-10 (strategy change)
 - User: views are not like before and no new followers. Change the strategy, use what worked (WINNER FORMAT, reel 36), and end every video with a follow ask that isn't boring.
 - New: 3 winner-format reels + 1 remake per run; quote stays (user wants it) but runs over the still-moving payoff instead of a static black card; follow ask built into the payoff (heart → FOLLOW button, characters point, next-story tease); last frame loops to the first. Written in REFERENCE-ANALYSIS.md, GENERATE.md, DAILY-JOB.md, SERIES.md.

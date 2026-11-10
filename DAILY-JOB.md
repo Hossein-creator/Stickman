@@ -7,7 +7,7 @@ Sends them to the user's Telegram bot **the day before**, each with its caption 
 When the user writes **"generiere"**, follow `GENERATE.md` instead (viral remakes, virality check first).
 
 ## Hard rules
-- **New strategy (user, 2026-11-10):** 3 of 4 reels in the WINNER FORMAT, 1 viral relationship remake. Every reel ends with the quote over the moving payoff (no static card), then its own FOLLOW moment (different every reel, see the CTA log) (`REFERENCE-ANALYSIS.md` → "FOLLOW ENDING + NEW MIX").
+- **New strategy (user, 2026-11-10):** 2 WINNER FORMAT + 1 ONE-SIDED LOVE drama (format 2) + 1 viral relationship remake. Every reel ends with the quote over the moving payoff (no static card), then its own FOLLOW moment (different every reel, see the CTA log) (`REFERENCE-ANALYSIS.md` → "FOLLOW ENDING + NEW MIX").
 - **Winner format (user, 2026-10-28):** reel 36 Bridge For Two ("LOVE IS A BRIDGE" split screen) was by far the best: millions of views, many comments, likes, reposts and shares. At least 1 of every 4 reels uses this format (see `REFERENCE-ANALYSIS.md` → WINNER FORMAT, backlog there).
 - Never touch the money account @moneypsych.explained, its skills, scheduled tasks, Metricool posts or memory files.
   - Never create, edit or delete Metricool posts.
@@ -137,3 +137,4 @@ Lines up to 17 were scheduled in Metricool. 2026-10-25 ~10:42: all still-pending
 - 2026-11-11 10:00: 79 That Time Of The Month (relationship), sent to Telegram
 - 2026-11-11 12:00: 80 Grandma Vs Grandpa (relationship, old couple), sent to Telegram
 - 2026-11-11 16:00: 81 Love Is A Kite (relationship, winner format, TEST: quote over moving payoff + heart → FOLLOW button ending), sent to Telegram
+- 2026-11-12 18:00: 82 One-Sided Love (relationship, NEW FORMAT 2 example, 37 s), sent to Telegram

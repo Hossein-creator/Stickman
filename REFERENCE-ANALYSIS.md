@@ -22,7 +22,7 @@ User, 2026-11-10: "ich bekomme keine aufrufe mehr wie damals ändere deine strat
    - **Like/follow counter:** a heart counter above them ticks up with every good deed, at the end it tips into "+1 FOLLOWER" and they high-five.
    - **Speech bubble from the figure:** a tiny bubble "STAY?" — then an arrow from the bubble to the follow spot, she nods.
    - **Ticket/stamp:** he stamps a card "MEMBER #___ OF THE COUPLE CLUB" and slides it to the viewer.
-   CTA log (newest last): 81 kite heart → pill, she waves, he taps.
+   CTA log (newest last): 81 kite heart → pill, she waves, he taps. | 82 camera dives into her dropped phone → profile screen, he walks onto it and taps + FOLLOW, his cracked heart heals.
 3. **The follow ask is part of the story, not after it** (max ~1.5 s, starts while the payoff still moves). Pick one per reel, rotate:
    - **Heart → FOLLOW:** the red heart that pops on the payoff flies to the bottom center and turns into a "+ FOLLOW" pill; a hand taps it, it turns to "FOLLOWING ✓" with a click.
    - **Character asks:** after the hug the top couple turn to the camera, one points down at the follow spot ("STAY FOR MORE STORIES"), tiny wink.
@@ -31,6 +31,20 @@ User, 2026-11-10: "ich bekomme keine aufrufe mehr wie damals ändere deine strat
 3. **Loop:** the very last frame matches the first frame (same headline position, black), so the reel replays by itself. More watch time = more reach.
 4. **Sound:** the follow tap gets a bright "pop/click" + the warm chord resolves on it, so the CTA feels like the payoff, not an ad.
 5. **Caption:** first line = the hook, then "Follow @silent.stickman — a new LOVE IS A ___ every day." + the share line ("Send this to the one who ...") + 6-8 hashtags.
+
+## 💔 FORMAT 2: "ONE-SIDED LOVE" drama (user, 2026-11-10)
+User, 2026-11-10: "mach auch solche Formate dass eine der Personen kein Interesse aber andere sehr verliebt ist und ignoriert wird von der Person, so dramamäßig, kannst ruhig länger machen aber es soll klar sein worum es geht".
+Template: `videos/82-one-sided-love/tools/body.js` (37 s). Shape:
+1. Headline from frame 1: "ONE-SIDED LOVE." (or a variant: "SHE LOVED HIM. HE LOVED HIS GAME.", roles can flip).
+2. **Chapters with hard cuts** (black dip + whoosh + low hit): DAY 1 / DAY 30 / DAY 90 / DAY 365, red chapter tag top left, a new camera shot per chapter (wide → close → closer → wide).
+3. Each chapter = one effort + one ignore, told by a **2-line caption pair** (one idea each, ≤5 words, the ignore line has a red word): "HE BRINGS HER FLOWERS." / "SHE DOESN'T EVEN LOOK."
+4. **Visible damage meter:** a heart above the one who loves cracks with every ignore and he loses color (brightness 1 → 0.4); evidence stays on set (the flower on the floor wilts).
+5. Climax: the big effort (anniversary cake) is ignored → heart shatters → he puts it down and walks out.
+6. Twist beat: the ignorer looks up too late ("BABE?"), phone drops. Headline finishes: "SHE LOST HIM / LONG BEFORE HE LEFT."
+7. Quote over the dimmed, still-moving scene, held ~3 s (Elie Wiesel "the opposite of love is not hate, it's indifference").
+8. FOLLOW moment built from the story (different every reel, see CTA log).
+Sound: sad slow piano (bells) that gets sparser per chapter, crack sounds, cut hits, steps away.
+Ideas for next ones: she texts "good morning" every day, he leaves her on read; he plans the date, she cancels for friends; she waits at the restaurant, he's gaming; roles flipped (he ignores her) every other reel.
 
 ## 🏆 WINNER FORMAT: "LOVE IS A ___" split screen (user, 2026-10-28)
 User, 2026-10-28, about reel 36 Bridge For Two and its reference (the "LOVE IS A BRIDGE" reel):
@@ -331,3 +345,4 @@ Source shape: animated love stories with rain + a family between the couple (Ban
 - 79 That Time Of The Month ← Aesthetic Asmr 3.08M: cramps on the sofa; he brings hot water bottle, blanket, tea, chocolate, rubs her back ("SHE HAD CRAMPS. / HE DIDN'T ASK. HE JUST CARED.") — `ready/79-that-time-of-the-month.mp4`
 - 80 Grandma Vs Grandpa ← Amazing LP 1.8M: old couple table tennis final, he misses the smash on purpose, wink, kiss ("50 YEARS MARRIED. / HE STILL LETS HER WIN.") — `ready/80-grandma-vs-grandpa.mp4`
 - 81 Love Is A Kite (WINNER FORMAT, FIRST TEST of the FOLLOW ending, user 2026-11-10): BOTH HOLD ON (each gust lifts the kite higher, it turns into a red heart) vs ONE HOLDS ON (she lets go for her phone, the gust drags him, the string slips, IT FLEW AWAY). Headline "LOVE IS A KITE. / IT ONLY FLIES / WHEN BOTH HOLD ON.", then Saint-Exupéry quote over the dimmed, still-moving scene, then the heart-kite flies to the center and becomes "+ FOLLOW", a hand taps it → "FOLLOWING ✓" + heart burst, "A NEW 'LOVE IS A ___' EVERY DAY." (15 s). Compare followers per view against 77-80 in the stats. — `ready/81-love-is-a-kite.mp4`
+- 82 One-Sided Love (NEW FORMAT 2, example for the user, 37 s): DAY 1 flowers (she doesn't look, pushes them away) / DAY 30 hug (she turns away) / DAY 90 "I LOVE YOU." - "MHM." / DAY 365 cake "HAPPY 1 YEAR!" - "NOT NOW.", heart shatters, he leaves; "BABE?" ("ONE-SIDED LOVE. / SHE LOST HIM / LONG BEFORE HE LEFT." + Elie Wiesel quote + phone-dive FOLLOW) — `ready/82-one-sided-love.mp4`
