@@ -1,0 +1,611 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+    <style>
+      @font-face {
+        font-family: "HFMono";
+        src: url("assets/fonts/consolab.ttf") format("truetype");
+        font-weight: 700;
+      }
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      html,
+      body {
+        width: 1080px;
+        height: 1920px;
+        overflow: hidden;
+        background: #000;
+      }
+      #root {
+        position: relative;
+        width: 1080px;
+        height: 1920px;
+        overflow: hidden;
+        background: #000;
+      }
+      #stage {
+        position: absolute;
+        inset: 0;
+        width: 1080px;
+        height: 1920px;
+      }
+      #stage svg {
+        position: absolute;
+        inset: 0;
+      }
+      .mono {
+        position: absolute;
+        font-family: "HFMono", monospace;
+        font-weight: 700;
+        white-space: nowrap;
+      }
+      /* everything readable stays inside the Instagram safe area: x 120-960, y 220-1500 */
+      #head {
+        position: absolute;
+        left: 0;
+        right: 0;
+        top: 222px;
+        text-align: center;
+        font-family: "HFMono", monospace;
+        font-weight: 700;
+        font-size: 38px;
+        letter-spacing: 0.12em;
+        line-height: 1.45;
+        color: #fff;
+        text-shadow: 0 0 16px rgba(255, 255, 255, 0.3);
+      }
+      #head .ghost {
+        visibility: hidden;
+      }
+      #ctr {
+        position: absolute;
+        left: 0;
+        right: 0;
+        top: 430px;
+        text-align: center;
+        font-family: "HFMono", monospace;
+        font-weight: 700;
+        white-space: nowrap;
+      }
+      #ctr .lbl {
+        font-size: 26px;
+        letter-spacing: 0.24em;
+        color: #9a9a9a;
+        vertical-align: middle;
+      }
+      #num {
+        display: inline-block;
+        min-width: 2.4ch;
+        font-size: 58px;
+        letter-spacing: 0.08em;
+        color: #fff;
+        vertical-align: middle;
+        text-shadow: 0 0 14px rgba(255, 255, 255, 0.35);
+      }
+      #tag {
+        display: inline-block;
+        min-width: 5.2ch;
+        padding: 6px 12px 4px;
+        font-size: 26px;
+        letter-spacing: 0.18em;
+        vertical-align: middle;
+        visibility: hidden;
+      }
+      #tag.fail {
+        visibility: visible;
+        background: #d62a2a;
+        color: #fff;
+      }
+      #tag.pass {
+        visibility: visible;
+        background: #fff;
+        color: #000;
+        box-shadow: 0 0 22px rgba(255, 255, 255, 0.6);
+      }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="15" data-width="1080" data-height="1920">
+      <div id="stage" class="clip" data-start="0" data-duration="15" data-track-index="0">
+        <svg id="svg" width="1080" height="1920" viewBox="0 0 1080 1920" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <linearGradient id="beam" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0" stop-color="#ffffff" stop-opacity="0.55" />
+              <stop offset="0.7" stop-color="#ffffff" stop-opacity="0.12" />
+              <stop offset="1" stop-color="#ffffff" stop-opacity="0.04" />
+            </linearGradient>
+            <radialGradient id="pool" cx="0.5" cy="0.5" r="0.5">
+              <stop offset="0" stop-color="#ffffff" stop-opacity="0.32" />
+              <stop offset="1" stop-color="#ffffff" stop-opacity="0" />
+            </radialGradient>
+            <radialGradient id="dustG" cx="0.5" cy="0.5" r="0.5">
+              <stop offset="0" stop-color="#b5b5b5" stop-opacity="0.8" />
+              <stop offset="1" stop-color="#b5b5b5" stop-opacity="0" />
+            </radialGradient>
+            <linearGradient id="ply" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0" stop-color="#d9c29b" />
+              <stop offset="1" stop-color="#8f7858" />
+            </linearGradient>
+            <linearGradient id="floorFade" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0" stop-color="#000" stop-opacity="0.45" />
+              <stop offset="1" stop-color="#000" stop-opacity="1" />
+            </linearGradient>
+            <filter id="blur" x="-50%" y="-50%" width="200%" height="200%">
+              <feGaussianBlur stdDeviation="12" />
+            </filter>
+            <filter id="soft" x="-50%" y="-50%" width="200%" height="200%">
+              <feGaussianBlur stdDeviation="16" />
+            </filter>
+                      <linearGradient id="panelBg" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0" stop-color="#0c0c0e" />
+              <stop offset="1" stop-color="#111318" />
+            </linearGradient>
+            <linearGradient id="abyss" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0" stop-color="#05070a" />
+              <stop offset="1" stop-color="#1c2433" />
+            </linearGradient>
+            <linearGradient id="cliff" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0" stop-color="#ddd6c6" />
+              <stop offset="1" stop-color="#a39a88" />
+            </linearGradient>
+            <linearGradient id="redBeam" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0" stop-color="#ff4a4a" stop-opacity="0.75" />
+              <stop offset="0.7" stop-color="#ff6a6a" stop-opacity="0.2" />
+              <stop offset="1" stop-color="#ffffff" stop-opacity="0.08" />
+            </linearGradient>
+            <radialGradient id="redGlow" cx="0.5" cy="0.5" r="0.5">
+              <stop offset="0" stop-color="#ff3b30" stop-opacity="0.7" />
+              <stop offset="1" stop-color="#ff3b30" stop-opacity="0" />
+            </radialGradient>
+            <radialGradient id="phoneGlow" cx="0.5" cy="0.5" r="0.5">
+              <stop offset="0" stop-color="#6aa8ff" stop-opacity="0.75" />
+              <stop offset="0.5" stop-color="#4f8cff" stop-opacity="0.28" />
+              <stop offset="1" stop-color="#4f8cff" stop-opacity="0" />
+            </radialGradient>
+            <linearGradient id="ground" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0" stop-color="#6e665a" />
+              <stop offset="0.25" stop-color="#3a352f" />
+              <stop offset="1" stop-color="#0c0b0a" />
+            </linearGradient>
+            <radialGradient id="fireGlow" cx="0.5" cy="0.5" r="0.5">
+              <stop offset="0" stop-color="#ffb347" stop-opacity="0.75" />
+              <stop offset="0.4" stop-color="#ff7a1a" stop-opacity="0.28" />
+              <stop offset="1" stop-color="#ff5a00" stop-opacity="0" />
+            </radialGradient>
+          </defs>
+          <!-- world: floor at world y 600 -> screen y 1400, world x 400 -> screen x 540 -->
+          <g transform="translate(540 1400) scale(1.45) translate(-400 -600)">
+            <g id="beams"></g>
+            <g id="back"></g>
+            
+            <use href="#world" transform="translate(0 1200) scale(1 -1)" opacity="0.16" />
+            <rect x="-200" y="600" width="1200" height="260" fill="url(#floorFade)" />
+            <rect x="-600" y="858" width="2000" height="1400" fill="#000" />
+            <rect x="-200" y="599" width="1200" height="2" fill="#2a2a2a" />
+            <g id="world"></g>
+          </g>
+        </svg>
+        <style>
+  #fx { position: absolute; inset: 0; pointer-events: none; }
+</style>
+        <div id="head">
+          <div id="h1"></div>
+          <div id="h2"></div>
+        </div>
+      </div>
+      <audio id="mix" src="assets/audio/mix.wav" data-start="0" data-duration="15" data-track-index="1"></audio>
+    </div>
+
+    <script>
+      (function () {
+        const DUR = 15;
+        const FL = 600, BX0 = 380, BX1 = 520, BTOP = 410, TOPF = 404, SX = 250;
+        const THIGH = 80, SHIN = 78, LEG = 154;
+        const UARM = 64, FARM = 60, TORSO = 116, NECK = 12, HEADR = 31;
+        const NS = "http://www.w3.org/2000/svg";
+        const svgEl = (tag, attrs, parent) => {
+          const e = document.createElementNS(NS, tag);
+          for (const k in attrs || {}) e.setAttribute(k, attrs[k]);
+          if (parent) parent.appendChild(e);
+          return e;
+        };
+        const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
+        const lerp = (a, b, p) => a + (b - a) * p;
+        const ease = (p) => 0.5 - 0.5 * Math.cos(Math.PI * clamp(p, 0, 1));
+        const backOut = (p) => { p = clamp(p, 0, 1); const s = 2.2; return 1 + (s + 1) * Math.pow(p - 1, 3) + s * Math.pow(p - 1, 2); };
+        const win = (t, a, b) => ease((t - a) / (b - a));
+        const rad = (x) => (x * Math.PI) / 180;
+        const down = (a, f) => [Math.sin(rad(a)) * f, Math.cos(rad(a))];
+        const up = (a, f) => [Math.sin(rad(a)) * f, -Math.cos(rad(a))];
+        const r1 = (v) => Math.round(v * 10) / 10;
+        const E = (id) => document.getElementById(id);
+        let seed = 31;
+        const rnd = () => ((seed = (seed * 16807) % 2147483647) / 2147483647);
+
+        // ---------- rig v2 (from reel 05): blended poses, head/arm follow-through, breathing ----------
+        function makeFig(parent, front, back, glow, id) {
+          const g = svgEl("g", { id }, parent);
+          if (glow) parent.insertBefore(svgEl("use", { href: "#" + id, filter: "url(#blur)", opacity: 0.45 }), g);
+          const parts = { g };
+          for (const [n, col] of [["armB", back], ["legB", back], ["torso", front], ["legF", front], ["armF", front]]) {
+            const o = svgEl("path", { fill: "none", stroke: "#000", "stroke-width": 34, "stroke-linecap": "round", "stroke-linejoin": "round" }, g);
+            const w = svgEl("path", { fill: "none", stroke: col, "stroke-width": 22, "stroke-linecap": "round", "stroke-linejoin": "round" }, g);
+            parts[n] = [o, w];
+          }
+          parts.head = svgEl("circle", { r: HEADR, fill: front, stroke: "#000", "stroke-width": 6 }, g);
+          return parts;
+        }
+        function ik(a, b, l1, l2, pick) {
+          let dx = b[0] - a[0], dy = b[1] - a[1];
+          let d = Math.hypot(dx, dy);
+          const maxd = l1 + l2 - 0.5;
+          if (d > maxd) {
+            b = [a[0] + (dx / d) * maxd, a[1] + (dy / d) * maxd];
+            dx = b[0] - a[0];
+            dy = b[1] - a[1];
+            d = maxd;
+          }
+          d = Math.max(d, Math.abs(l1 - l2) + 1);
+          const al = Math.acos(clamp((l1 * l1 + d * d - l2 * l2) / (2 * l1 * d), -1, 1));
+          const base = Math.atan2(dy, dx);
+          const c1 = [a[0] + Math.cos(base + al) * l1, a[1] + Math.sin(base + al) * l1];
+          const c2 = [a[0] + Math.cos(base - al) * l1, a[1] + Math.sin(base - al) * l1];
+          return [pick(c1, c2), b];
+        }
+        const P = (pts) => "M" + pts.map((p) => r1(p[0]) + " " + r1(p[1])).join("L");
+        const setD = (pair, d) => {
+          pair[0].setAttribute("d", d);
+          pair[1].setAttribute("d", d);
+        };
+        // flat pose: hx hy torso head ax ay bx by | per arm a*/b*: sh el w tx ty
+        function drawFig(parts, s, f) {
+          const hip = [s.hx, s.hy];
+          const tu = up(s.torso, f);
+          const sh = [hip[0] + tu[0] * TORSO, hip[1] + tu[1] * TORSO];
+          const nk = [hip[0] + tu[0] * (TORSO + NECK), hip[1] + tu[1] * (TORSO + NECK)];
+          const hu = up(s.torso + s.head, f);
+          const hc = [nk[0] + hu[0] * HEADR, nk[1] + hu[1] * HEADR];
+          setD(parts.torso, P([hip, sh, nk]));
+          parts.head.setAttribute("cx", r1(hc[0]));
+          parts.head.setAttribute("cy", r1(hc[1]));
+          const knee = (c1, c2) => (c1[0] * f > c2[0] * f ? c1 : c2);
+          const elbow = (c1, c2) => (c1[1] - 0.5 * f * c1[0] > c2[1] - 0.5 * f * c2[0] ? c1 : c2);
+          [["legF", [s.ax, s.ay]], ["legB", [s.bx, s.by]]].forEach(([n, ft]) => {
+            const [kn, fo] = ik(hip, ft, THIGH, SHIN, knee);
+            setD(parts[n], P([hip, kn, fo]));
+          });
+          const hands = [];
+          [["armF", "a"], ["armB", "b"]].forEach(([n, k]) => {
+            const u = down(s[k + "sh"], f);
+            const el = [sh[0] + u[0] * UARM, sh[1] + u[1] * UARM];
+            const v = down(s[k + "sh"] + s[k + "el"], f);
+            const fk = [el[0] + v[0] * FARM, el[1] + v[1] * FARM];
+            const w = clamp(s[k + "w"], 0, 1);
+            const hand = [lerp(fk[0], s[k + "tx"], w), lerp(fk[1], s[k + "ty"], w)];
+            const [e2, h2] = ik(sh, hand, UARM, FARM, elbow);
+            setD(parts[n], P([sh, e2, h2]));
+            hands.push(h2);
+          });
+          return { head: hc, hands, hip };
+        }
+        const KER = [-4, -3, -2, -1, 0, 1, 2, 3, 4].map((k) => [k * 0.03, Math.exp(-((k / 2.3) ** 2))]);
+        function blend(raw, t) {
+          const out = {};
+          let ws = 0;
+          for (const [dt, w] of KER) {
+            const p = raw(clamp(t + dt, 0, DUR));
+            for (const k in p) out[k] = (out[k] || 0) + p[k] * w;
+            ws += w;
+          }
+          for (const k in out) out[k] /= ws;
+          return out;
+        }
+        const LAGGED = ["head", "ash", "ael", "aw", "atx", "aty", "bsh", "bel", "bw", "btx", "bty"];
+        function livePose(raw, t, phase) {
+          const s = blend(raw, t);
+          const lag = blend(raw, t - 0.05);
+          for (const k of LAGGED) s[k] = lag[k];
+          const br = Math.sin(t * 1.9 + phase);
+          s.hy += br * 1.3;
+          s.torso += br * 0.8;
+          s.head += Math.sin(t * 1.2 + phase * 2) * 1.6;
+          return s;
+        }
+        const ARMS = { ash: 8, ael: 12, aw: 0, atx: 0, aty: 0, bsh: -4, bel: 10, bw: 0, btx: 0, bty: 0 };
+        const base = (o) => ({ hx: 0, hy: 0, torso: 3, head: 0, ax: 0, ay: FL, bx: 0, by: FL, ...ARMS, ...o });
+        function standOn(x, f, fy) {
+          return base({ hx: x, hy: fy - Math.sqrt(LEG * LEG - 15 * 15), ax: x + f * 15, ay: fy, bx: x - f * 15, by: fy });
+        }
+        const mixPose = (a, b, p) => {
+          const o = {};
+          for (const k in a) o[k] = lerp(a[k], b[k], p);
+          return o;
+        };
+
+        // ---------- "love is a kite": winner split-screen format (reel 36) + TEST of the new ending (user, 2026-11-10): quote over the still-moving payoff, then the heart-kite flies out and becomes a "+ FOLLOW" button that gets tapped.
+        // BOTH HOLD: they hold the string together, every gust lifts the kite higher, it turns into a red heart. ONE HOLDS: she lets go for her phone, the gust pulls him forward, the string slips, the kite flies away.
+        E("svg").children[1].style.display = "none";
+        const SVG = E("svg");
+        const stand = FL - Math.sqrt(LEG * LEG - 15 * 15);
+        const sm = (t, a, b) => { const p = clamp((t - a) / (b - a), 0, 1); return p * p * (3 - 2 * p); };
+
+        const PW = 1233, PY0 = 98, PY1 = 815, PK = 535 / 717, PX = 81;
+        const SHE = 300, HE = 450;
+        function makePanel(y0, id) {
+          const clip = svgEl("clipPath", { id: "clip" + id }, SVG.querySelector("defs"));
+          svgEl("rect", { x: 0, y: PY0, width: PW, height: PY1 - PY0 }, clip);
+          const g = svgEl("g", { transform: `translate(${PX} ${y0}) scale(${PK}) translate(0 ${-PY0})` }, SVG);
+          const inner = svgEl("g", { "clip-path": `url(#clip${id})` }, g);
+          svgEl("rect", { x: 0, y: PY0, width: PW, height: PY1 - PY0, fill: "url(#panelBg)" }, inner);
+          const beams = svgEl("g", {}, inner);
+          for (const bx of [380, 980]) svgEl("polygon", { points: `${bx - 50},${PY0} ${bx + 50},${PY0} ${bx + 150},${FL} ${bx - 150},${FL}`, fill: "url(#beam)", filter: "url(#soft)", opacity: 0.28 }, beams);
+          const stars = svgEl("g", {}, inner);
+          for (let i = 0; i < 26; i++) svgEl("circle", { cx: (i * 397) % PW, cy: PY0 + 20 + ((i * 131) % 300), r: 2 + (i % 3), fill: "#fff", opacity: 0.25 }, stars);
+          svgEl("rect", { x: 0, y: FL, width: PW, height: PY1 - FL, fill: "url(#ground)" }, inner);
+          svgEl("rect", { x: 0, y: FL - 2, width: PW, height: 3, fill: "#8a8172" }, inner);
+          const glow = svgEl("circle", { r: 230, fill: "url(#redGlow)", opacity: 0 }, inner);
+          const string = svgEl("path", { fill: "none", stroke: "#e8e2d4", "stroke-width": 3 }, inner);
+          const kiteG = svgEl("g", {}, inner);
+          const tail = svgEl("path", { fill: "none", stroke: "#e8e2d4", "stroke-width": 3 }, kiteG);
+          const bows = [0, 1, 2].map(() => svgEl("path", { d: "M-12 -8 L0 0 L-12 8 Z M12 -8 L0 0 L12 8 Z", fill: "#ff5a4a", stroke: "#000", "stroke-width": 3 }, kiteG));
+          const body = svgEl("g", {}, kiteG);
+          svgEl("path", { d: "M0 -62 L44 0 L0 86 L-44 0 Z", fill: "#ffc93c", stroke: "#000", "stroke-width": 5 }, body);
+          svgEl("path", { d: "M0 -62 L0 86 M-44 0 L44 0", stroke: "#7a5a1a", "stroke-width": 3 }, body);
+          svgEl("path", { d: "M0 -62 L44 0 L0 0 Z", fill: "#ff9b3c", stroke: "#000", "stroke-width": 3 }, body);
+          const heart = svgEl("path", { d: "M0 40 C-90 -18 -66 -88 0 -48 C66 -88 90 -18 0 40 Z", fill: "#ff3b30", stroke: "#000", "stroke-width": 5, opacity: 0 }, kiteG);
+          const figs = svgEl("g", {}, inner);
+          const fx = svgEl("g", {}, inner);
+          const winds = Array.from({ length: 8 }, () => svgEl("path", { fill: "none", stroke: "#cfe3ff", "stroke-width": 5, "stroke-linecap": "round", opacity: 0 }, fx));
+          const dark = svgEl("rect", { x: 0, y: PY0, width: PW, height: PY1 - PY0, fill: "#05070c", opacity: 0 }, inner);
+          svgEl("rect", { x: 0, y: PY0, width: PW, height: PY1 - PY0, fill: "none", stroke: "#2c2c30", "stroke-width": 5 }, g);
+          return { y0, beams, glow, string, kiteG, tail, bows, body, heart, figs, fx, winds, dark };
+        }
+        const top = makePanel(412, "T");
+        const bot = makePanel(1010, "B");
+        const toScreen = (P2, x, y) => [PX + x * PK, P2.y0 + (y - PY0) * PK];
+
+        const reachTo = (s, k, p, hand = "a") => { if (s[hand + "w"] < 1e-6) { s[hand + "tx"] = p[0]; s[hand + "ty"] = p[1]; s[hand + "w"] = k; return s; } s[hand + "w"] = Math.max(s[hand + "w"], k); s[hand + "tx"] = lerp(s[hand + "tx"], p[0], k); s[hand + "ty"] = lerp(s[hand + "ty"], p[1], k); return s; };
+        const hold = (s, a, b, r = 0.2) => win(s, a, a + r) * (1 - win(s, b - r, b));
+
+        // ---------- beats ----------
+        const GU = [0.9, 2.6, 4.2];          // wind gusts (from the right, pull the kite away)
+        const GD = 1.1;
+        const T_LET = 1.7, T_SLIP = 4.75, T_HEART = 6.2, T_LEAN = 6.8;
+        const T_T1 = 7.7, T_T2 = 8.4, T_Q = 9.7, T_CTA = 12.2, T_TAP = 13.55;
+        const gust = (t) => GU.reduce((k, a) => Math.max(k, hold(t, a, a + GD, 0.3)), 0);
+        // kite position: top climbs with every gust
+        const climbTop = (t) => GU.reduce((c, a) => c + sm(t, a + 0.2, a + GD + 0.3), 0) / GU.length;
+        function kiteTop(t) {
+          const c = climbTop(t);
+          return [lerp(800, 950, c) + 30 * Math.sin(t * 1.3), lerp(330, 190, c) + 14 * Math.sin(t * 2.1), 10 * Math.sin(t * 1.7) + 12 * gust(t)];
+        }
+        function kiteBot(t) {
+          const sag = sm(t, T_LET, T_LET + 1.2);
+          let x = lerp(800, 840, sag) + 30 * Math.sin(t * 1.3) + 50 * gust(t), y = lerp(330, 420, sag) + 14 * Math.sin(t * 2.1) - 30 * gust(t), r = 10 * Math.sin(t * 1.7) + 25 * gust(t) + 12 * sag * Math.sin(t * 5);
+          const f = sm(t, T_SLIP, T_SLIP + 1.8);
+          return [x + 620 * f, y - 420 * f + 60 * Math.sin(f * 3), r + 260 * f];
+        }
+        const pullBot = (t) => (t < T_SLIP ? hold(t, GU[1], GU[1] + GD, 0.3) * 0.6 + hold(t, GU[2], T_SLIP + 0.05, 0.3) : 0);
+
+        // hands: one string point per person
+        const handPt = (x, k = 0) => [x + 92 + 30 * k, stand - 150 + 20 * k];
+        function holder(x, t, lean, k) {
+          const st = standOn(x + 40 * k, 1, FL); st.head = -6;
+          st.torso -= 10 * lean; st.head -= 8 * lean;
+          const p = handPt(x + 40 * k, k);
+          reachTo(st, 1, p); reachTo(st, 1, [p[0] - 8, p[1] + 10], "b");
+          return st;
+        }
+        const HUG = T_CTA + 0.1;
+        const topHer = (t) => { const st = holder(SHE, t, gust(t), 0); const l = win(t, T_LEAN, T_LEAN + 0.5); st.head += 22 * l; st.hx += 22 * l; const h = win(t, HUG, HUG + 0.5); st.hx += 40 * h; st.ax += 40 * h; st.bx += 40 * h; reachTo(st, h, [HE + 20, stand - 160]); reachTo(st, h, [HE + 10, stand - 120], "b"); return st; };
+        const topHim = (t) => { const st = holder(HE, t, gust(t), 0); const l = win(t, T_LEAN, T_LEAN + 0.5); st.head -= 6 * l; const h = win(t, HUG, HUG + 0.5); st.head = lerp(st.head, 14, h); reachTo(st, h, [HE - 40, stand - 150]); reachTo(st, h, [HE - 60, stand - 120], "b"); return st; };
+        function botHer(t) {
+          const let1 = win(t, T_LET, T_LET + 0.4);
+          if (let1 <= 0) return holder(SHE, t, gust(t), 0);
+          const st = standOn(SHE, 1, FL); st.head = lerp(-6, 24, let1); st.torso = 4 * let1;
+          const p = handPt(SHE);
+          reachTo(st, 1, [lerp(p[0], SHE + 42, let1), lerp(p[1], stand - 116, let1)]); reachTo(st, 1, [lerp(p[0] - 8, SHE + 34, let1), lerp(p[1] + 10, stand - 110, let1)], "b");
+          return st;
+        }
+        function botHim(t) {
+          const k = pullBot(t), slip = win(t, T_SLIP, T_SLIP + 0.3);
+          const drag = sm(t, GU[2], T_SLIP) * 50;
+          if (slip <= 0) { const st = holder(HE + drag, t, -0.6 * k, k * 0.6); st.torso += 14 * k; return st; }
+          const st = standOn(HE + 50 + 30 * slip, 1, FL); st.head = lerp(-6, -24, slip);
+          const reach = hold(t, T_SLIP, T_SLIP + 1.4, 0.3);
+          reachTo(st, 1, [HE + 170, stand - 250]); reachTo(st, reach, [HE + 160, stand - 230], "b");
+          const slump = win(t, T_SLIP + 1.3, T_SLIP + 1.9);
+          st.head = lerp(st.head, 30, slump); st.torso += 14 * slump;
+          st.aw *= 1 - slump; st.bw *= 1 - slump;
+          return st;
+        }
+
+        const mkFigs = (P2, white) => {
+          const bun = svgEl("circle", { r: 15, fill: white ? "#fff" : "#8e8e8e", stroke: "#000", "stroke-width": 6 }, P2.figs);
+          const her = makeFig(P2.figs, white ? "#ffffff" : "#8e8e8e", white ? "#e2e2e2" : "#767676", white, "her" + (white ? "T" : "B"));
+          P2.figs.insertBefore(bun, her.g.previousSibling);
+          const him = makeFig(P2.figs, white ? "#ffffff" : "#9a9a9a", white ? "#dedede" : "#7e7e7e", white, "him" + (white ? "T" : "B"));
+          return { bun, her, him };
+        };
+        const TF = mkFigs(top, true), BF = mkFigs(bot, false);
+        const phone = svgEl("rect", { x: -10, y: -16, width: 20, height: 32, rx: 4, fill: "#bfe0ff", stroke: "#000", "stroke-width": 4 }, bot.fx);
+        const phoneGlow = svgEl("circle", { r: 70, fill: "url(#phoneGlow)", opacity: 0 }, bot.fx);
+        const redSpot = svgEl("polygon", { fill: "url(#redBeam)", filter: "url(#soft)", opacity: 0 }, top.beams);
+
+        const label = (x, y, size, col) => { const d = document.createElement("div"); d.className = "mono"; d.style.cssText = `left:${x}px;top:${y}px;font-size:${size}px;letter-spacing:0.16em;color:${col}`; E("stage").appendChild(d); return d; };
+        const topT = label(PX + 44, 412 + 26, 30, "#ffffff"), topS = label(PX + 44, 412 + 66, 19, "#c8c8c8");
+        const botT = label(PX + 44, 1010 + 26, 30, "#a8a8a8"), botS = label(PX + 44, 1010 + 66, 19, "#a8a8a8");
+        topT.textContent = "BOTH HOLD ON"; botT.textContent = "ONE HOLDS ON";
+        topT.style.textShadow = "0 0 12px rgba(255,255,255,0.35)";
+        const typed = (seq, t, cps = 16) => { let cur = null; for (const s of seq) if (t >= s[0]) cur = s; if (!cur) return ["", "#c8c8c8"]; const n = Math.floor((t - cur[0]) * cps); return [cur[1].slice(0, n), cur[2] || null]; };
+        const TOPSEQ = [[0.4, "THEY FLY IT TOGETHER"], [GU[0], "WIND! THEY HOLD ON"], [GU[1] + 0.4, "HIGHER"], [GU[2] + 0.4, "HIGHER STILL"], [T_HEART, "IT FLIES", "#ff6a60"]];
+        const BOTSEQ = [[0.4, "THEY FLY IT TOGETHER"], [T_LET, "SHE LETS GO"], [GU[1] + 0.2, "WIND! HE HOLDS ALONE"], [GU[2] + 0.2, "TOO STRONG"], [T_SLIP + 0.1, "IT FLEW AWAY", "#ff3b30"]];
+        const HEAD = [[0, "LOVE IS A KITE."], [T_T1, "IT ONLY FLIES"], [T_T2, "WHEN BOTH HOLD ON."]];
+        E("head").style.top = "236px";
+        E("head").style.fontSize = "30px";
+        E("head").style.letterSpacing = "0.16em";
+        E("head").style.lineHeight = "1.6";
+
+        // ---- ending layer: dim over the moving scene, quote, then the FOLLOW button ----
+        const dim = document.createElement("div");
+        dim.style.cssText = "position:absolute;inset:0;background:#000;opacity:0";
+        E("stage").appendChild(dim);
+        const QW = ["LOVE", "IS", "NOT", "LOOKING", "|", "AT", "EACH", "OTHER.", "|", "IT", "IS", "LOOKING", "|", "IN", "THE", "SAME", "DIRECTION."];
+        const quote = document.createElement("div");
+        quote.style.cssText = "position:absolute;left:120px;right:120px;top:600px;text-align:center;font-family:HFMono,monospace;font-weight:700;color:#fff;font-size:46px;line-height:1.35;letter-spacing:0.06em;text-shadow:0 0 18px rgba(255,255,255,0.35)";
+        E("stage").appendChild(quote);
+        const qName = document.createElement("div");
+        qName.style.cssText = "position:absolute;left:120px;right:120px;top:880px;text-align:center;font-family:HFMono,monospace;font-weight:700;font-size:24px;color:#9a9a9a;letter-spacing:0.22em;opacity:0";
+        qName.textContent = "ANTOINE DE SAINT-EXUPÉRY";
+        E("stage").appendChild(qName);
+
+        const ctaSvg = svgEl("svg", { viewBox: "0 0 1080 1920", width: 1080, height: 1920, style: "position:absolute;left:0;top:0;overflow:visible" });
+        E("stage").appendChild(ctaSvg);
+        const flyHeart = svgEl("path", { d: "M0 40 C-90 -18 -66 -88 0 -48 C66 -88 90 -18 0 40 Z", fill: "#ff3b30", stroke: "#000", "stroke-width": 5, opacity: 0 }, ctaSvg);
+        const trail = Array.from({ length: 6 }, () => svgEl("circle", { r: 8, fill: "#ff6a60", opacity: 0 }, ctaSvg));
+        const sparks = Array.from({ length: 10 }, () => svgEl("path", { d: "M0 12 C-26 -4 -19 -26 0 -14 C19 -26 26 -4 0 12 Z", fill: "#ff3b30", opacity: 0 }, ctaSvg));
+        const pill = document.createElement("div");
+        pill.style.cssText = "position:absolute;left:540px;top:1000px;height:96px;border-radius:48px;display:flex;align-items:center;justify-content:center;white-space:nowrap;overflow:hidden;font-family:HFMono,monospace;font-weight:700;font-size:44px;letter-spacing:0.12em;opacity:0;border:5px solid #000;box-shadow:0 0 40px rgba(255,59,48,0.55)";
+        E("stage").appendChild(pill);
+        const sub = document.createElement("div");
+        sub.style.cssText = "position:absolute;left:120px;right:120px;top:860px;text-align:center;font-family:HFMono,monospace;font-weight:700;font-size:28px;letter-spacing:0.14em;color:#fff;line-height:1.5";
+        E("stage").appendChild(sub);
+        const hand = svgEl("g", { opacity: 0 }, ctaSvg);
+        svgEl("path", { d: "M0 10 L0 -64", stroke: "#000", "stroke-width": 40, "stroke-linecap": "round" }, hand);
+        svgEl("path", { d: "M0 10 L0 -64", stroke: "#fff", "stroke-width": 26, "stroke-linecap": "round" }, hand);
+        svgEl("rect", { x: -26, y: 0, width: 80, height: 90, rx: 30, fill: "#fff", stroke: "#000", "stroke-width": 6 }, hand);
+        svgEl("path", { d: "M-26 30 Q-50 20 -40 0", fill: "none", stroke: "#000", "stroke-width": 6 }, hand);
+        const ring = svgEl("circle", { cx: 540, cy: 1048, r: 40, fill: "none", stroke: "#fff", "stroke-width": 5, opacity: 0 }, ctaSvg);
+        const fade = document.createElement("div");
+        fade.style.cssText = "position:absolute;inset:0;background:#000;opacity:0";
+        E("stage").appendChild(fade);
+
+        function drawWind(P2, t, k) {
+          P2.winds.forEach((w, i) => {
+            const q = ((t * 1.6 + i / P2.winds.length) % 1 + 1) % 1, y = PY0 + 120 + (i * 61) % (FL - PY0 - 200);
+            const x0 = lerp(PW + 100, -100, q);
+            w.setAttribute("d", `M${r1(x0)} ${y} q-60 -18 -120 0 t-110 6`);
+            w.setAttribute("opacity", (0.55 * k * Math.sin(Math.PI * q)).toFixed(3));
+          });
+        }
+        function drawKite(P2, k, t, hk, from, slack) {
+          const [x, y, r] = k;
+          P2.kiteG.setAttribute("transform", `translate(${r1(x)} ${r1(y)}) rotate(${r1(r)})`);
+          P2.body.setAttribute("transform", `scale(${(1 - backOut(hk) * 0 - hk).toFixed(3)})`);
+          P2.heart.setAttribute("opacity", hk > 0 ? 1 : 0);
+          const beat = 1 + 0.08 * Math.max(0, Math.sin(t * 7)) * (hk >= 1 ? 1 : 0);
+          P2.heart.setAttribute("transform", `scale(${(backOut(hk) * 1.25 * beat).toFixed(3)})`);
+          // tail
+          let d = "M0 86"; const pts = [];
+          for (let i = 1; i <= 12; i++) { const yy = 86 + i * 14, xx = 14 * Math.sin(t * 6 - i * 0.6) * (i / 12); d += ` L${r1(xx)} ${yy}`; if (i % 4 === 0) pts.push([xx, yy]); }
+          P2.tail.setAttribute("d", d); P2.tail.setAttribute("opacity", (1 - hk).toFixed(3));
+          P2.bows.forEach((b, i) => { b.setAttribute("transform", `translate(${r1(pts[i][0])} ${pts[i][1]})`); b.setAttribute("opacity", (1 - hk).toFixed(3)); });
+          // string from the hands to the kite's bottom point
+          const rad = (r * Math.PI) / 180, by = hk > 0 ? lerp(86, 40, hk) : 86;
+          const ex = x - by * Math.sin(rad), ey = y + by * Math.cos(rad);
+          if (!from) { P2.string.setAttribute("d", ""); return; }
+          const pts2 = [...from, [ex, ey]];
+          let s = `M${r1(pts2[0][0])} ${r1(pts2[0][1])}`;
+          for (let i = 1; i < pts2.length - 1; i++) s += ` L${r1(pts2[i][0])} ${r1(pts2[i][1])}`;
+          const a = pts2[pts2.length - 2], mx = (a[0] + ex) / 2, my = (a[1] + ey) / 2 + 60 * slack;
+          s += ` Q${r1(mx)} ${r1(my)} ${r1(ex)} ${r1(ey)}`;
+          P2.string.setAttribute("d", s);
+        }
+        const mid = (p) => [(p.hands[0][0] + p.hands[1][0]) / 2, (p.hands[0][1] + p.hands[1][1]) / 2];
+        function render(t) {
+          const gk = gust(t);
+          // ---- top: BOTH HOLD ON
+          const hp = drawFig(TF.her, livePose(topHer, t, 0.4), 1);
+          const mp = drawFig(TF.him, livePose(topHim, t, 1.3), 1);
+          TF.bun.setAttribute("cx", r1(hp.head[0] - 25)); TF.bun.setAttribute("cy", r1(hp.head[1] - 16));
+          const hk = win(t, T_HEART, T_HEART + 0.45);
+          const kt = kiteTop(t);
+          const flyOut = sm(t, T_CTA, T_CTA + 0.15);
+          drawKite(top, kt, t, hk, flyOut > 0 ? null : [mid(hp), mid(mp)], 0.6 - 0.5 * climbTop(t) - 0.3 * gk);
+          top.kiteG.setAttribute("opacity", (1 - flyOut).toFixed(3));
+          drawWind(top, t, gk);
+          const done = win(t, T_HEART - 0.2, T_HEART + 0.4) * (1 - flyOut);
+          top.glow.setAttribute("cx", r1(kt[0])); top.glow.setAttribute("cy", r1(kt[1]));
+          top.glow.setAttribute("opacity", (0.8 * done).toFixed(3));
+          redSpot.setAttribute("points", `${r1(kt[0] - 50)},${PY0} ${r1(kt[0] + 50)},${PY0} ${r1(kt[0] + 160)},${FL} ${r1(kt[0] - 160)},${FL}`);
+          redSpot.setAttribute("opacity", (0.45 * done).toFixed(3));
+          // ---- bottom: ONE HOLDS ON
+          const sp = drawFig(BF.her, livePose(botHer, t, 0.9), 1);
+          const bp = drawFig(BF.him, livePose(botHim, t, 2.0), 1);
+          BF.bun.setAttribute("cx", r1(sp.head[0] - 25)); BF.bun.setAttribute("cy", r1(sp.head[1] - 16));
+          const pk = win(t, T_LET + 0.2, T_LET + 0.5);
+          const pp = mid(sp);
+          phone.setAttribute("transform", `translate(${r1(pp[0])} ${r1(pp[1] - 10)}) scale(${pk.toFixed(3)})`);
+          phoneGlow.setAttribute("cx", r1(pp[0])); phoneGlow.setAttribute("cy", r1(pp[1] - 10)); phoneGlow.setAttribute("opacity", (0.6 * pk).toFixed(3));
+          const kb = kiteBot(t);
+          const holders = t < T_LET ? [mid(sp), mid(bp)] : [mid(bp)];
+          if (t >= T_SLIP) {
+            // loose string trailing under the kite
+            const f = sm(t, T_SLIP, T_SLIP + 1.8);
+            drawKite(bot, kb, t, 0, [[kb[0] - 120 - 60 * f, kb[1] + 300 - 40 * Math.sin(t * 4)]], 0.8);
+          } else drawKite(bot, kb, t, 0, holders, 0.3 + 0.6 * sm(t, T_LET, T_LET + 1) - 0.6 * gk);
+          drawWind(bot, t, t < T_SLIP + 0.6 ? gk : 0);
+          bot.dark.setAttribute("opacity", (0.4 * win(t, T_SLIP + 0.3, T_SLIP + 1.2)).toFixed(3));
+
+          topS.textContent = typed(TOPSEQ, t)[0]; topS.style.color = typed(TOPSEQ, t)[1] || "#c8c8c8";
+          const [bs, bc] = typed(BOTSEQ, t);
+          botS.textContent = bs; botS.style.color = bc || "#a8a8a8";
+          E("head").innerHTML = HEAD.map(([t0, s], i) => `<div>${i === 0 ? s : s.slice(0, Math.max(0, Math.floor((t - t0) * 30)))}&nbsp;</div>`).join("");
+
+          // ---- ending: quote over the moving scene, then FOLLOW ----
+          const qOut = win(t, T_CTA - 0.35, T_CTA);
+          dim.style.opacity = (0.62 * win(t, T_Q - 0.4, T_Q) * (1 - 0.15 * qOut)).toFixed(3);
+          let wi = 0;
+          quote.innerHTML = QW.map((w) => { if (w === "|") return "<br/>"; const t0 = T_Q + 0.065 * wi++; const q = clamp((t - t0) / 0.18, 0, 1); return `<span style="display:inline-block;margin:0 0.14em;opacity:${q.toFixed(2)};transform:translateY(${r1(12 * (1 - q))}px);${["SAME", "DIRECTION."].includes(w) ? "color:#ff6a60;" : ""}">${w}</span>`; }).join("");
+          quote.style.opacity = (1 - qOut).toFixed(3);
+          qName.style.opacity = (win(t, T_Q + 1.1, T_Q + 1.4) * (1 - qOut)).toFixed(3);
+          // heart flies out of the top panel to the center
+          const hs = toScreen(top, kt[0], kt[1]);
+          const fq = sm(t, T_CTA, T_CTA + 0.7);
+          const tx = 540, ty = 1048;
+          const fx = lerp(hs[0], tx, fq), fy = lerp(hs[1], ty, fq) - 160 * Math.sin(Math.PI * fq);
+          const toPill = win(t, T_CTA + 0.7, T_CTA + 0.95);
+          flyHeart.setAttribute("opacity", t >= T_CTA && toPill < 1 ? 1 : 0);
+          flyHeart.setAttribute("transform", `translate(${r1(fx)} ${r1(fy)}) rotate(${r1(360 * fq)}) scale(${(PK * 1.25 * (1 + 0.6 * Math.sin(Math.PI * fq)) * (1 - toPill)).toFixed(3)})`);
+          trail.forEach((c, i) => { const q2 = clamp(fq - (i + 1) * 0.05, 0, 1); c.setAttribute("cx", r1(lerp(hs[0], tx, q2))); c.setAttribute("cy", r1(lerp(hs[1], ty, q2) - 160 * Math.sin(Math.PI * q2))); c.setAttribute("opacity", t >= T_CTA && fq < 1 ? (0.6 * (1 - i / 6)).toFixed(2) : 0); c.setAttribute("r", r1(10 - i)); });
+          // pill
+          const pq = win(t, T_CTA + 0.75, T_CTA + 1.05);
+          const tapped = t >= T_TAP;
+          const press = tapped ? 1 - 0.08 * Math.sin(Math.PI * clamp((t - T_TAP) / 0.18, 0, 1)) : 1;
+          const w = lerp(96, tapped ? 520 : 440, backOut(pq));
+          pill.style.opacity = pq > 0 ? 1 : 0;
+          pill.style.width = r1(w) + "px"; pill.style.left = r1(540 - w / 2) + "px";
+          pill.style.transform = `scale(${(press * (1 + 0.04 * Math.max(0, Math.sin(t * 6)) * (tapped ? 0 : 1))).toFixed(3)})`;
+          pill.style.background = tapped ? "#ffffff" : "#ff3b30";
+          pill.style.color = tapped ? "#000" : "#fff";
+          pill.style.boxShadow = tapped ? "0 0 40px rgba(255,255,255,0.5)" : "0 0 40px rgba(255,59,48,0.6)";
+          pill.innerHTML = pq < 0.5 ? "" : tapped ? "FOLLOWING ✓" : "+ FOLLOW";
+          const sq = t - (T_CTA + 1.1), line1 = "A NEW 'LOVE IS A ___'", line2 = "EVERY DAY.";
+          sub.innerHTML = sq > 0 ? `${line1.slice(0, Math.floor(sq * 34))}&nbsp;<br/>${line2.slice(0, Math.max(0, Math.floor((sq - 0.65) * 34)))}&nbsp;` : "";
+          // hand comes in, taps, leaves
+          const hin = sm(t, T_TAP - 0.55, T_TAP - 0.05), hout = sm(t, T_TAP + 0.3, T_TAP + 0.8);
+          const hy = lerp(1500, 1080, hin) + 420 * hout - (tapped ? 0 : 0) + (t > T_TAP - 0.05 && t < T_TAP + 0.15 ? 14 : 0);
+          hand.setAttribute("opacity", hin > 0 && hout < 1 ? 1 : 0);
+          hand.setAttribute("transform", `translate(${r1(lerp(720, 580, hin))} ${r1(hy)}) rotate(-12)`);
+          const rq = clamp((t - T_TAP) / 0.5, 0, 1);
+          ring.setAttribute("opacity", tapped && rq < 1 ? (1 - rq).toFixed(3) : 0); ring.setAttribute("r", r1(30 + 300 * rq));
+          sparks.forEach((s2, i) => { const q3 = clamp((t - T_TAP) / 0.9, 0, 1), a = (i / 10) * Math.PI * 2; s2.setAttribute("opacity", tapped && q3 < 1 ? (1 - q3).toFixed(3) : 0); s2.setAttribute("transform", `translate(${r1(540 + Math.cos(a) * 320 * Math.sqrt(q3))} ${r1(1048 + Math.sin(a) * 200 * Math.sqrt(q3) - 60 * q3)}) scale(${(1 - 0.5 * q3).toFixed(2)})`); });
+          fade.style.opacity = win(t, DUR - 0.35, DUR - 0.02).toFixed(3);
+        }
+        window.__timelines = window.__timelines || {};
+        const tl = gsap.timeline({ paused: true });
+        const clock = { t: 0 };
+        tl.to(clock, { t: DUR, duration: DUR, ease: "none", onUpdate: () => render(clock.t) }, 0);
+        window.__timelines["main"] = tl;
+        render(0);
+        tl.seek(0);
+      })();
+    </script>
+  </body>
+</html>
