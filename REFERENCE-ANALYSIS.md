@@ -6,7 +6,7 @@ User, 2026-11-10: "ich bekomme keine aufrufe mehr wie damals ändere deine strat
 **New mix per run (4 reels):** 3 in the WINNER FORMAT ("LOVE IS A ___" split screen, like 36 Bridge For Two) + 1 viral relationship remake (≥1M views). Was: 1 winner + 3 remakes. The winner format is what the user says worked; remakes only fill the rest.
 
 **Ending rules (every reel, also series parts):**
-1. **No more quote end card.** The 3 s card with message + famous quote is cut: a static card after the payoff = people swipe away before the end. Length back to 13-14 s.
+1. **The quote stays (user, 2026-11-10: "ich will trotzdem den Zitat in meinem Video haben"), but it is no longer a separate static card.** It types in over the still-moving payoff scene (scene dims a bit, keeps moving: hug, heart, glow), max ~2.5 s, then the FOLLOW ending takes over. Order: headline line 2 → quote over the scene → heart → FOLLOW. Length 15 s (dur.txt 15).
 2. **The follow ask is part of the story, not after it** (max ~1.5 s, starts while the payoff still moves). Pick one per reel, rotate:
    - **Heart → FOLLOW:** the red heart that pops on the payoff flies to the bottom center and turns into a "+ FOLLOW" pill; a hand taps it, it turns to "FOLLOWING ✓" with a click.
    - **Character asks:** after the hug the top couple turn to the camera, one points down at the follow spot ("STAY FOR MORE STORIES"), tiny wink.
@@ -33,7 +33,7 @@ Why it works (what to copy every time):
 7. **Shareable target:** caption ends "Send this to the one who builds with you." People send it to their partner (or at their ex). That is why it got reposted and forwarded.
 8. Sound: quiet room tone, a wooden knock for each step of work, warm chord on the hug, a low drop on "ALONE", typing clicks on the last lines. 14 s, no voice.
 
-Code: copy `videos/36-bridge-for-two/tools/` (two clipped panels, makePanel, typed labels, heart, phone glow) and change only the object and the beats. Since 2026-11-10: NO quote end card; end with the FOLLOW ending above instead (dur.txt 14).
+Code: copy `videos/36-bridge-for-two/tools/` (two clipped panels, makePanel, typed labels, heart, phone glow) and change only the object and the beats. Since 2026-11-10: quote over the moving payoff scene (no static black card), then the FOLLOW ending above (dur.txt 15).
 
 Backlog in this format (make these next, one per run at least):
 - LOVE IS A BOAT. BOTH ROW → they reach the island / ONE ROWS → the boat turns in circles. "IF ONLY ONE ROWS, / YOU GO IN CIRCLES." (reel 40)
