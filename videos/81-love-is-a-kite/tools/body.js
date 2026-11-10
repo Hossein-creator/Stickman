@@ -44,10 +44,10 @@
         const hold = (s, a, b, r = 0.2) => win(s, a, a + r) * (1 - win(s, b - r, b));
 
         // ---------- beats ----------
-        const GU = [0.9, 2.6, 4.2];          // wind gusts (from the right, pull the kite away)
-        const GD = 1.1;
-        const T_LET = 1.7, T_SLIP = 4.75, T_HEART = 6.2, T_LEAN = 6.8;
-        const T_T1 = 7.7, T_T2 = 8.4, T_Q = 9.6, T_CTA = 13.4, T_PILL = T_CTA + 1.2, T_TAP = T_PILL + 2.0;
+        const GU = [0.6, 1.9, 3.1];          // wind gusts (from the right, pull the kite away)
+        const GD = 0.9;
+        const T_LET = 0.4, T_SLIP = 3.6, T_HEART = 4.8, T_LEAN = 5.3;
+        const T_T1 = 5.6, T_T2 = 6.1, T_Q = 7.0, T_CTA = 9.4, T_PILL = T_CTA + 0.9, T_TAP = T_PILL + 1.3;   // 15 s cut (stats 2026-11-10)
         // camera push-in on the top couple for the FOLLOW part
         const CF = [520, 430], CS = [540, 1020], ZK = 1.55, PILL = [660, 370];
         const zoomK = (t) => sm(t, T_CTA - 0.1, T_CTA + 1.0);
@@ -145,9 +145,9 @@
         topT.textContent = "BOTH HOLD ON"; botT.textContent = "ONE HOLDS ON";
         topT.style.textShadow = "0 0 12px rgba(255,255,255,0.35)";
         const typed = (seq, t, cps = 16) => { let cur = null; for (const s of seq) if (t >= s[0]) cur = s; if (!cur) return ["", "#c8c8c8"]; const n = Math.floor((t - cur[0]) * cps); return [cur[1].slice(0, n), cur[2] || null]; };
-        const TOPSEQ = [[0.4, "THEY FLY IT TOGETHER"], [GU[0], "WIND! THEY HOLD ON"], [GU[1] + 0.4, "HIGHER"], [GU[2] + 0.4, "HIGHER STILL"], [T_HEART, "IT FLIES", "#ff6a60"]];
-        const BOTSEQ = [[0.4, "THEY FLY IT TOGETHER"], [T_LET, "SHE LETS GO"], [GU[1] + 0.2, "WIND! HE HOLDS ALONE"], [GU[2] + 0.2, "TOO STRONG"], [T_SLIP + 0.1, "IT FLEW AWAY", "#ff3b30"]];
-        const HEAD = [[0, "LOVE IS A KITE."], [T_T1, "IT ONLY FLIES"], [T_T2, "WHEN BOTH HOLD ON."]];
+        const TOPSEQ = [[0.05, "WIND! THEY HOLD ON"], [GU[1] + 0.4, "HIGHER"], [GU[2] + 0.4, "HIGHER STILL"], [T_HEART, "IT FLIES", "#ff6a60"]];
+        const BOTSEQ = [[0.05, "SHE LETS GO"], [GU[1] + 0.2, "WIND! HE HOLDS ALONE"], [GU[2] + 0.2, "TOO STRONG"], [T_SLIP + 0.1, "IT FLEW AWAY", "#ff3b30"]];
+        const HEAD = [[0, "LOVE IS A KITE. #11"], [T_T1, "IT ONLY FLIES"], [T_T2, "WHEN BOTH HOLD ON."]];
         E("head").style.top = "236px";
         E("head").style.fontSize = "30px";
         E("head").style.letterSpacing = "0.16em";
@@ -157,13 +157,13 @@
         const dim = document.createElement("div");
         dim.style.cssText = "position:absolute;inset:0;background:#000;opacity:0";
         E("stage").appendChild(dim);
-        const QW = ["LOVE", "IS", "NOT", "LOOKING", "|", "AT", "EACH", "OTHER.", "|", "IT", "IS", "LOOKING", "|", "IN", "THE", "SAME", "DIRECTION."];
+        const QW = ["HE", "WASN'T", "TOO", "WEAK.", "|", "HE", "WAS", "HOLDING", "IT", "|", "ALONE."];
         const quote = document.createElement("div");
         quote.style.cssText = "position:absolute;left:120px;right:120px;top:600px;text-align:center;font-family:HFMono,monospace;font-weight:700;color:#fff;font-size:46px;line-height:1.35;letter-spacing:0.06em;text-shadow:0 0 18px rgba(255,255,255,0.35)";
         E("stage").appendChild(quote);
         const qName = document.createElement("div");
         qName.style.cssText = "position:absolute;left:120px;right:120px;top:880px;text-align:center;font-family:HFMono,monospace;font-weight:700;font-size:24px;color:#9a9a9a;letter-spacing:0.22em;opacity:0";
-        qName.textContent = "ANTOINE DE SAINT-EXUPÉRY";
+        qName.textContent = "";
         E("stage").appendChild(qName);
 
         const ctaSvg = svgEl("svg", { viewBox: "0 0 1080 1920", width: 1080, height: 1920, style: "position:absolute;left:0;top:0;overflow:visible" });
@@ -270,7 +270,7 @@
           const qOut = win(t, T_CTA - 0.35, T_CTA);
           dim.style.opacity = (0.62 * win(t, T_Q - 0.4, T_Q) * (1 - win(t, T_CTA - 0.3, T_CTA + 0.5))).toFixed(3);
           let wi = 0;
-          quote.innerHTML = QW.map((w) => { if (w === "|") return "<br/>"; const t0 = T_Q + 0.065 * wi++; const q = clamp((t - t0) / 0.18, 0, 1); return `<span style="display:inline-block;margin:0 0.14em;opacity:${q.toFixed(2)};transform:translateY(${r1(12 * (1 - q))}px);${["SAME", "DIRECTION."].includes(w) ? "color:#ff6a60;" : ""}">${w}</span>`; }).join("");
+          quote.innerHTML = QW.map((w) => { if (w === "|") return "<br/>"; const t0 = T_Q + 0.065 * wi++; const q = clamp((t - t0) / 0.18, 0, 1); return `<span style="display:inline-block;margin:0 0.14em;opacity:${q.toFixed(2)};transform:translateY(${r1(12 * (1 - q))}px);${["ALONE."].includes(w) ? "color:#ff6a60;" : ""}">${w}</span>`; }).join("");
           quote.style.opacity = (1 - qOut).toFixed(3);
           qName.style.opacity = (win(t, T_Q + 1.1, T_Q + 1.4) * (1 - qOut)).toFixed(3);
           const PS = camPt(t, PILL[0], PILL[1]);
@@ -286,7 +286,7 @@
           pill.style.color = tapped ? "#000" : "#fff";
           pill.style.boxShadow = tapped ? "0 0 40px rgba(255,255,255,0.5)" : "0 0 40px rgba(255,59,48,0.6)";
           pill.innerHTML = pq < 0.5 ? "" : tapped ? "FOLLOWING ✓" : "+ FOLLOW";
-          const sq = t - (T_PILL + 0.5), line1 = "A NEW 'LOVE IS A ___'", line2 = "EVERY DAY.";
+          const sq = t - (T_PILL + 0.5), line1 = "LOVE IS A ... #12", line2 = "TOMORROW.";
           sub.innerHTML = sq > 0 ? `${line1.slice(0, Math.floor(sq * 34))}&nbsp;<br/>${line2.slice(0, Math.max(0, Math.floor((sq - 0.65) * 34)))}&nbsp;` : "";
           const rq = clamp((t - T_TAP) / 0.5, 0, 1);
           ring.setAttribute("opacity", tapped && rq < 1 ? (1 - rq).toFixed(3) : 0); ring.setAttribute("r", r1(30 + 300 * rq)); ring.setAttribute("cx", r1(PS[0])); ring.setAttribute("cy", r1(PS[1]));

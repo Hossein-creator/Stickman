@@ -1,6 +1,6 @@
 // ---- "one-sided love": quiet room tone + sad slow piano (bells) that thins out each chapter; whoosh + low hit on every chapter cut; his heart cracks (glass tick + low crack), shatter on DAY 365; bubble pops; candle blown out; footsteps away; phone drop; quote bells; FOLLOW: dive whoosh, UI pop, typing, tap click + healing chime + happy arpeggio ----
-const C = [0, 4.9, 8.7, 13.2], T_FLOW = 1.0, T_PUSH = 2.9, T_C1 = 3.5, T_ARMS = 6.0, T_TURN = 6.7, T_C2 = 7.5, T_LOVE = 9.6, T_MHM = 11.2, T_C3 = 12.0;
-const T_CAKE = 14.0, T_NOT = 15.3, T_BLOW = 15.9, T_SHAT = 16.4, T_DOWNC = 16.9, T_GO = 17.6, T_OUT = 20.0, T_LOOK = 19.6, T_BABE = 20.0, T_DROP = 21.0, T_L2 = 20.3, T_L3 = 21.0, T_Q = 22.2, T_PH = 25.8, T_WALK = 27.0, T_TAP = 28.6;
+const C = [0, 2.5, 5.0, 7.5], T_FLOW = 0.0, T_PUSH = 1.1, T_C1 = 1.5, T_ARMS = 2.8, T_TURN = 3.5, T_C2 = 4.0, T_LOVE = 5.2, T_MHM = 6.0, T_C3 = 6.5;
+const T_CAKE = 7.55, T_NOT = 8.5, T_BLOW = 8.9, T_SHAT = 9.2, T_DOWNC = 9.5, T_GO = 9.9, T_OUT = 11.3, T_LOOK = 11.0, T_BABE = 11.2, T_DROP = 11.7, T_L2 = 10.0, T_L3 = 10.7, T_Q = 99, T_PH = 12.0, T_WALK = 12.4, T_TAP = 13.8;
 { let lp = 0; for (let i = 0; i < N; i++) { const t = i / SR; lp += (rnd() - lp) * 0.01; add(i, lp * 0.07 * Math.min(1, t / 0.6) * (1 - smooth(t, DUR - 0.8, DUR)), 0); } }
 // sad piano: A minor line, one note per ~0.75 s, gets sparser
 const MEL = [69, 72, 76, 74, 72, 71, 69, 64, 65, 69, 72, 71, 69, 67, 64, 62];
@@ -15,7 +15,7 @@ noise(T_PUSH + 0.6, 0.06, 0.04, 0.2, 0.3, (p) => 1 - p);
 thump(T_DOWNC + 0.4, 0.04, 90, 0.1);
 for (let t = T_GO + 0.2; t < T_OUT; t += 0.5) step(t, 0.035, 0.4);
 thump(T_DROP + 0.38, 0.08, 120, -0.1); click(T_DROP + 0.38, 0.05, -0.1);
-typing(T_L2, 12, 26); typing(T_L3, 20, 26);
+typing(T_L2, 26, 30); typing(T_L3, 29, 30);
 { const s0 = Math.floor((T_GO) * SR), n = Math.floor((T_PH - T_GO) * SR); for (let i = 0; i < n; i++) { const tt = i / SR, e = Math.min(1, tt / 1.0) * Math.min(1, (n / SR - tt) / 1.0); add(s0 + i, (Math.sin(2 * Math.PI * 44 * tt) + 0.3 * Math.sin(2 * Math.PI * 88 * tt)) * 0.02 * e, 0); } }
 bell(T_Q, 57, 0.02, 0, 0.9); bell(T_Q + 0.5, 60, 0.018, 0, 0.9); bell(T_Q + 1.0, 64, 0.018, 0, 0.9); bell(T_Q + 1.6, 69, 0.016, 0, 0.7);
 sweep(T_PH - 0.1, 1.0, 0.09, 0, 0.04, 0.5); tone(T_PH + 0.9, 880, 0.12, 0.03, 0, 0.002, 20);

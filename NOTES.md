@@ -2,6 +2,11 @@
 
 Claude's running notes. Newest on top. Everything Claude wants to remember goes here (or in the matching file), not on the computer.
 
+## 2026-11-10 (stats applied)
+- User: "pass es genau so an" → decisions written in REFERENCE-ANALYSIS.md (≤15 s everything, own honest line instead of a famous quote, conflict in frame 1, numbered LOVE IS A #N, question at the end of the caption).
+- Re-cut the unposted 81 (19 → 15 s, "#11", honest line "HE WASN'T TOO WEAK. HE WAS HOLDING IT ALONE.", "#12 TOMORROW"), 82 (31 → 15 s, 4 fast chapters, honest line "HE DIDN'T STOP LOVING HER. / HE GOT TIRED OF LOVING ALONE.") and 83 (33 → 15 s via a story-time warp in body.js + M() in sfx.mjs; honest line "THEY DIDN'T FALL OUT OF LOVE. / THEY FELL INTO DEBT."). New captions end with a question. Re-sent as Telegram 91-93.
+- Trick for cutting an existing reel: warp(v) maps video time to story time; use own liveS/blendS (kit blend clamps to DUR).
+
 ## 2026-11-10 (stats)
 - User sent the analysis (artifact MxJf1BA9dey8ZwQGfvZJW2). Main facts + new rules written in REFERENCE-ANALYSIS.md → "STATS 2026-11-10". Open questions to the user: keep the quote even though it makes reels longer and the analysis says foreign quotes look like a repost page? Keep ONE-SIDED LOVE at 31 s or cut to ~15 s?
 

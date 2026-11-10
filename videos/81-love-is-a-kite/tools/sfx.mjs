@@ -1,5 +1,5 @@
 // ---- "love is a kite": night wind bed; a gust whoosh (from the right) per gust; kite flutter; top: rising chime as it climbs, heart pop + warm chord + bells; bottom: phone taps, string slip (zip) + low drop, drone; typing; quote: soft bells per line; FOLLOW: whoosh as the heart flies, pop when it becomes the button, tap click + bright "followed" chime ----
-const GU = [0.9, 2.6, 4.2], GD = 1.1, T_LET = 1.7, T_SLIP = 4.75, T_HEART = 6.2, T_T1 = 7.7, T_T2 = 8.4, T_Q = 9.6, T_CTA = 13.4, T_PILL = T_CTA + 1.2, T_TAP = T_PILL + 2.0;
+const GU = [0.6, 1.9, 3.1], GD = 0.9, T_LET = 0.4, T_SLIP = 3.6, T_HEART = 4.8, T_T1 = 5.6, T_T2 = 6.1, T_Q = 7.0, T_CTA = 9.4, T_PILL = T_CTA + 0.9, T_TAP = T_PILL + 1.3;
 { let lp = 0; for (let i = 0; i < N; i++) { const t = i / SR; lp += (rnd() - lp) * 0.01; add(i, lp * 0.09 * Math.min(1, t / 0.6) * (1 - smooth(t, DUR - 0.8, DUR)), 0); } }
 for (let t = 0.3; t < T_PILL; t += 0.09 + 0.05 * Math.abs(rnd())) noise(t, 0.03, 0.006, 0.35, 0.5, (p) => 1 - p);
 GU.forEach((a) => sweep(a, GD + 0.3, 0.12, 0.5, 0.03, 0.35));

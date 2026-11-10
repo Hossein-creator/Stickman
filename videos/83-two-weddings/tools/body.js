@@ -16,7 +16,7 @@
         const T_ARG1 = 14.4, T_ARG2 = 15.9, T_BACK = 17.4, T_PHOTO = 18.0;
         const COINS = [9.8, 10.5, 11.2, 11.9, 12.6, 13.3];
         const T_WALK = 13.8, T_BUILD = 14.0, T_ROOF = 15.6, T_LIGHT = 16.8, T_HUG = 17.3;
-        const T_H2 = 19.4, T_H3 = 20.4, T_Q = 21.8, T_CTA = 25.6, T_NAIL = 26.8, T_WRITE = 27.9, T_TAG = 28.6, T_TAP = 30.0;
+        const T_H2 = 19.4, T_H3 = 20.4, T_Q = 99, T_CTA = 25.6, T_NAIL = 26.8, T_WRITE = 27.9, T_TAG = 28.6, T_TAP = 30.0;
 
         const PW = 1233, PY0 = 98, PY1 = 815, PK = 535 / 717, PX = 81;
         function makePanel(y0, id) {
@@ -261,12 +261,18 @@
         const veilD = (h, f) => `M${r1(h[0] - f * 10)} ${r1(h[1] - 28)} Q${r1(h[0] - f * 60)} ${r1(h[1] + 10)} ${r1(h[0] - f * 52)} ${r1(h[1] + 110)} L${r1(h[0] - f * 20)} ${r1(h[1] + 60)} Z`;
         const money = (v) => (v < 0 ? `<span style="color:#ff3b30">-$${Math.abs(v)}K</span>` : `$${v}K`);
 
-        function render(t) {
+        // 15 s cut (stats 2026-11-10): the story runs in story time s, the video time v is warped onto it (acts 2x faster, the old quote part skipped)
+        const blendS = (raw, t) => { const out = {}; let ws = 0; for (const [dt, w] of KER) { const p = raw(clamp(t + dt, 0, 40)); for (const k in p) out[k] = (out[k] || 0) + p[k] * w; ws += w; } for (const k in out) out[k] /= ws; return out; };
+        function liveS(raw, t, phase) { const s = blendS(raw, t), lag = blendS(raw, t - 0.05); for (const k of LAGGED) s[k] = lag[k]; const br = Math.sin(t * 1.9 + phase); s.hy += br * 1.3; s.torso += br * 0.8; s.head += Math.sin(t * 1.2 + phase * 2) * 1.6; return s; }
+        const WV = [0, 4.5, 9.7, 11.2], WS = [0, 9.0, 19.4, 21.8];
+        function warp(v) { if (v >= 11.2) return 25.6 + (v - 11.2) * (33.0 - 25.6) / (DUR - 11.2); for (let i = 0; i < 3; i++) if (v < WV[i + 1]) return lerp(WS[i], WS[i + 1], (v - WV[i]) / (WV[i + 1] - WV[i])); return 21.8; }
+        function render(v) { renderS(warp(v)); fade.style.opacity = win(v, DUR - 0.4, DUR - 0.02).toFixed(3); }
+        function renderS(t) {
           const act2 = t >= T_CUT;
           [top, bot].forEach((P2) => { P2.A.setAttribute("opacity", act2 ? 0 : 1); P2.B.setAttribute("opacity", act2 ? 1 : 0); });
           // ---- top figures
-          const hp = drawFig(TF.her, livePose(topHer, t, 0.4), topDir(1, t));
-          const mp = drawFig(TF.him, livePose(topHim, t, 1.3), topDir(0, t));
+          const hp = drawFig(TF.her, liveS(topHer, t, 0.4), topDir(1, t));
+          const mp = drawFig(TF.him, liveS(topHim, t, 1.3), topDir(0, t));
           TF.bun.setAttribute("cx", r1(hp.head[0] - 25 * topDir(1, t))); TF.bun.setAttribute("cy", r1(hp.head[1] - 16));
           TF.veil.setAttribute("d", act2 ? "" : veilD(hp.head, topDir(1, t)));
           guests.forEach((gu, i) => { const st = standOn(gu.x, i ? -1 : 1, FL); st.head = -6; hop(st, t, i * 1.3); const ch = win(t, 3.8, 4.2); reachTo(st, ch, [gu.x - 20, stand - 230 + 10 * Math.sin(t * 8 + i)]); reachTo(st, ch, [gu.x + 20, stand - 230], "b"); drawFig(gu.f, st, i ? -1 : 1); gu.f.g.style.opacity = act2 ? 0 : 1; });
@@ -286,8 +292,8 @@
           top.dark.setAttribute("opacity", (0.35 * win(t, T_BACK, T_BACK + 1)).toFixed(3));
           // ---- bottom figures (+ CTA overrides)
           const herRaw = (s) => ctaHer(botFig(1, s), s), himRaw = (s) => ctaHim(botFig(0, s), s);
-          const bhp = drawFig(BF.her, livePose(herRaw, t, 0.9), t > T_CTA + 0.2 ? 1 : botDir(1, t));
-          const bmp = drawFig(BF.him, livePose(himRaw, t, 2.0), t > T_CTA + 0.9 ? -1 : t > T_CTA + 0.2 ? 1 : botDir(0, t));
+          const bhp = drawFig(BF.her, liveS(herRaw, t, 0.9), t > T_CTA + 0.2 ? 1 : botDir(1, t));
+          const bmp = drawFig(BF.him, liveS(himRaw, t, 2.0), t > T_CTA + 0.9 ? -1 : t > T_CTA + 0.2 ? 1 : botDir(0, t));
           const bdir = t > T_CTA + 0.2 ? 1 : botDir(1, t);
           BF.bun.setAttribute("cx", r1(bhp.head[0] - 25 * bdir)); BF.bun.setAttribute("cy", r1(bhp.head[1] - 16));
           BF.veil.setAttribute("d", act2 ? "" : veilD(bhp.head, bdir));
@@ -339,8 +345,8 @@
           const ck = hold(t, T_CUT - 0.25, T_CUT + 0.55, 0.25);
           cutDark.style.opacity = (0.92 * ck).toFixed(3); yearCard.style.opacity = hold(t, T_CUT - 0.15, T_CUT + 0.5, 0.15).toFixed(3);
           // ---- headline
-          const L2 = "THE PARTY LASTED ONE NIGHT.", L3 = "THE DEBT LASTED YEARS.";
-          E("head").innerHTML = `<div>SAME LOVE. TWO WEDDINGS.</div><div>${L2.slice(0, Math.max(0, Math.floor((t - T_H2) * 30)))}&nbsp;</div><div style="color:#ff6a60">${L3.slice(0, Math.max(0, Math.floor((t - T_H3) * 30)))}&nbsp;</div>`;
+          const L2 = "THEY DIDN'T FALL OUT OF LOVE.", L3 = "THEY FELL INTO DEBT.";
+          E("head").innerHTML = `<div>SAME LOVE. TWO WEDDINGS.</div><div>${L2.slice(0, Math.max(0, Math.floor((t - T_H2) * 26)))}&nbsp;</div><div style="color:#ff6a60">${L3.slice(0, Math.max(0, Math.floor((t - T_H3) * 26)))}&nbsp;</div>`;
           E("head").style.opacity = (1 - 0.6 * win(t, T_Q - 0.5, T_Q) - 0.4 * win(t, T_CTA, T_CTA + 0.4)).toFixed(3);
           // ---- quote over the moving scene
           const qOut = win(t, T_CTA - 0.4, T_CTA);
@@ -351,7 +357,6 @@
           qName.style.opacity = (win(t, T_Q + 1.2, T_Q + 1.5) * (1 - qOut)).toFixed(3);
           const s2 = t - (T_TAG + 0.3), a1 = "LOVE THAT LASTS,", a2 = "NOT A PARTY THAT ENDS.";
           sub.innerHTML = s2 > 0 ? `${a1.slice(0, Math.floor(s2 * 30))}&nbsp;<br/><span style="color:#ffd25a">${a2.slice(0, Math.max(0, Math.floor((s2 - 0.55) * 30)))}</span>&nbsp;` : "";
-          fade.style.opacity = win(t, DUR - 0.4, DUR - 0.02).toFixed(3);
         }
         window.__timelines = window.__timelines || {};
         const tl = gsap.timeline({ paused: true });

@@ -18,13 +18,13 @@
         const hold = (s, a, b, r = 0.2) => win(s, a, a + r) * (1 - win(s, b - r, b));
 
         // ---------- beats ----------
-        const C = [0, 4.9, 8.7, 13.2];                       // chapter starts: DAY 1 / 30 / 90 / 365 (max 2 s after each rejection, user 2026-11-10)
-        const T_FLOW = 1.0, T_PUSH = 2.9, T_C1 = 3.5;
-        const T_STEP = 5.4, T_ARMS = 6.0, T_TURN = 6.7, T_C2 = 7.5;
-        const T_LOVE = 9.6, T_MHM = 11.2, T_C3 = 12.0;
-        const T_CAKE = 14.0, T_NOT = 15.3, T_BLOW = 15.9, T_SHAT = 16.4, T_DOWNC = 16.9, T_GO = 17.6, T_OUT = 20.0;
-        const T_LOOK = 19.6, T_BABE = 20.0, T_DROP = 21.0, T_L2 = 20.3, T_L3 = 21.0;
-        const T_Q = 22.2, T_PH = 25.8, T_WALK = 27.0, T_TAP = 28.6;
+        const C = [0, 2.5, 5.0, 7.5];                        // 15 s cut (stats 2026-11-10): DAY 1 / 30 / 90 / 365, rejection within ~1 s of each chapter
+        const T_FLOW = 0.0, T_PUSH = 1.1, T_C1 = 1.5;
+        const T_STEP = 2.6, T_ARMS = 2.8, T_TURN = 3.5, T_C2 = 4.0;
+        const T_LOVE = 5.2, T_MHM = 6.0, T_C3 = 6.5;
+        const T_CAKE = 7.55, T_NOT = 8.5, T_BLOW = 8.9, T_SHAT = 9.2, T_DOWNC = 9.5, T_GO = 9.9, T_OUT = 11.3;
+        const T_LOOK = 11.0, T_BABE = 11.2, T_DROP = 11.7, T_L2 = 10.0, T_L3 = 10.7;
+        const T_Q = 99, T_PH = 12.0, T_WALK = 12.4, T_TAP = 13.8;
         const SHE = 470, HE = 640;
         const chap = (s) => (s < C[1] ? 0 : s < C[2] ? 1 : s < C[3] ? 2 : 3);
 
@@ -305,12 +305,12 @@
           const ch = chap(s);
           tag.textContent = s < T_LOOK ? TAGS[ch].slice(0, Math.floor((s - C[ch]) * 20) + 1) : "";
           let ci = -1; for (let i = 0; i < CAPS.length; i++) if (s >= CAPS[i][0]) ci = i;
-          cap.innerHTML = ci >= 0 && s < T_LOOK - 0.2 ? slamHTML(CAPS[ci][1], CAPS[ci][0], s, CAPS[ci][2]) : "";
+          cap.innerHTML = ci >= 0 && s < T_L2 - 0.05 ? slamHTML(CAPS[ci][1], CAPS[ci][0], s, CAPS[ci][2]) : "";
           cap.style.opacity = (1 - win(s, T_LOOK - 0.5, T_LOOK - 0.2)).toFixed(3);
           let cf = 0; for (const cc of [C[1], C[2], C[3]]) cf = Math.max(cf, 1 - Math.abs(s - cc) / 0.14);
           cut.style.opacity = clamp(cf, 0, 1).toFixed(3);
-          const L2 = "SHE LOST HIM", L3 = "LONG BEFORE HE LEFT.";
-          E("head").innerHTML = `<div>ONE-SIDED LOVE.</div><div>${L2.slice(0, Math.max(0, Math.floor((s - T_L2) * 26)))}&nbsp;</div><div style="color:#ff6a60">${L3.slice(0, Math.max(0, Math.floor((s - T_L3) * 26)))}&nbsp;</div>`;
+          const L2 = "HE DIDN'T STOP LOVING HER.", L3 = "HE GOT TIRED OF LOVING ALONE.";
+          E("head").innerHTML = `<div>ONE-SIDED LOVE.</div><div>${L2.slice(0, Math.max(0, Math.floor((s - T_L2) * 40)))}&nbsp;</div><div style="color:#ff6a60">${L3.slice(0, Math.max(0, Math.floor((s - T_L3) * 40)))}&nbsp;</div>`;
 
           // quote over the still-moving scene (she stands alone, the cold creeps in)
           const qOut = win(s, T_PH - 0.4, T_PH);
@@ -319,7 +319,7 @@
           quote.innerHTML = QL.map((line) => line.map((w) => { const q = clamp((s - T_Q - 0.1 * wi++) / 0.2, 0, 1); return `<span class="w" style="opacity:${q.toFixed(2)};transform:translateY(${r1(14 * (1 - q))}px);${w === "INDIFFERENCE." ? "color:#ff6a60;" : ""}">${w}</span>`; }).join("")).join("<br/>");
           quote.style.opacity = (1 - qOut).toFixed(3);
           qName.style.opacity = (win(s, T_Q + 1.2, T_Q + 1.5) * (1 - qOut)).toFixed(3);
-          E("head").style.opacity = (1 - 0.6 * win(s, T_Q - 0.5, T_Q) + 0.6 * win(s, T_PH, T_PH + 0.4) - win(s, T_PH, T_PH + 0.3)).toFixed(3);
+          E("head").style.opacity = (1 - win(s, T_PH, T_PH + 0.3)).toFixed(3);
 
           // FOLLOW: dive into her dropped phone
           const zq = sm(s, T_PH, T_PH + 0.9);
