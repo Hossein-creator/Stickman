@@ -144,3 +144,4 @@ Lines up to 17 were scheduled in Metricool. 2026-10-25 ~10:42: all still-pending
 - 2026-11-15 16:00: 85 Love Is A Phone Call #12 (relationship, winner format, 18 s), sent to Telegram
 - 2026-11-16 18:00: 86 Player Two (relationship, format 2 one-sided love, roles flipped, 29 s), sent to Telegram
 - 2026-11-17 16:00: 87 Ignored All Day (relationship, viral remake 1.53M, 23 s), sent to Telegram
+- 2026-11-11: run 11 sent as Telegram msgs 97 (84), 98 (85), 99 (86), 100 (87).
