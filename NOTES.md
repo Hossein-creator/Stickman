@@ -84,3 +84,5 @@ Claude's running notes. Newest on top. Everything Claude wants to remember goes 
 - YouTube video pages + plot articles are blocked here; the source story could only be judged by title + views.
 - User feedback on series 1 (2026-11-09): good, but clearer sentences/movement/message, smoother, more effects, professional cuts, more curiosity → saved as "Quality rules" in `SERIES.md`.
 - Series 1 v2 (2026-11-09): all 4 parts re-made with the quality rules. New in `series/yellow-umbrella/lib.js`: `MAPDEF` time map (teaser flash-forward "LATER...", rewind, slow motion, freeze; `photo` freeze for happy endings), whip-pan blur cuts, `shots()` hard-cut shot lists, color grades + light leak, letterbox bars, punch-ins; `sfx-remap.mjs` remaps the story-time audio to video time. Parts are now 40-46 s; 60 fps renders take ~9 min, so render them in the background (run_in_background), one after another.
+
+- 2026-11-11: User: the 15 s re-cuts of 81-83 were "viel zu schnell". Back to the old tempo (81 19 s, 82 29 s, 83 30 s; only the quote slot left out), own lines + question captions kept. Rule saved in REFERENCE-ANALYSIS (TEMPO). Sent to Telegram again.

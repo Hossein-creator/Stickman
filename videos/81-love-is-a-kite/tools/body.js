@@ -44,10 +44,10 @@
         const hold = (s, a, b, r = 0.2) => win(s, a, a + r) * (1 - win(s, b - r, b));
 
         // ---------- beats ----------
-        const GU = [0.6, 1.9, 3.1];          // wind gusts (from the right, pull the kite away)
-        const GD = 0.9;
-        const T_LET = 0.4, T_SLIP = 3.6, T_HEART = 4.8, T_LEAN = 5.3;
-        const T_T1 = 5.6, T_T2 = 6.1, T_Q = 7.0, T_CTA = 9.4, T_PILL = T_CTA + 0.9, T_TAP = T_PILL + 1.3;   // 15 s cut (stats 2026-11-10)
+        const GU = [0.9, 2.6, 4.2];          // wind gusts (from the right, pull the kite away)
+        const GD = 1.1;
+        const T_LET = 1.7, T_SLIP = 4.75, T_HEART = 6.2, T_LEAN = 6.8;
+        const T_T1 = 7.7, T_T2 = 8.4, T_Q = 9.6, T_CTA = 13.4, T_PILL = T_CTA + 1.2, T_TAP = T_PILL + 2.0;   // old tempo (user 2026-11-11: 15 s cut was too fast)
         // camera push-in on the top couple for the FOLLOW part
         const CF = [520, 430], CS = [540, 1020], ZK = 1.55, PILL = [660, 370];
         const zoomK = (t) => sm(t, T_CTA - 0.1, T_CTA + 1.0);
@@ -145,8 +145,8 @@
         topT.textContent = "BOTH HOLD ON"; botT.textContent = "ONE HOLDS ON";
         topT.style.textShadow = "0 0 12px rgba(255,255,255,0.35)";
         const typed = (seq, t, cps = 16) => { let cur = null; for (const s of seq) if (t >= s[0]) cur = s; if (!cur) return ["", "#c8c8c8"]; const n = Math.floor((t - cur[0]) * cps); return [cur[1].slice(0, n), cur[2] || null]; };
-        const TOPSEQ = [[0.05, "WIND! THEY HOLD ON"], [GU[1] + 0.4, "HIGHER"], [GU[2] + 0.4, "HIGHER STILL"], [T_HEART, "IT FLIES", "#ff6a60"]];
-        const BOTSEQ = [[0.05, "SHE LETS GO"], [GU[1] + 0.2, "WIND! HE HOLDS ALONE"], [GU[2] + 0.2, "TOO STRONG"], [T_SLIP + 0.1, "IT FLEW AWAY", "#ff3b30"]];
+        const TOPSEQ = [[0.05, "THEY FLY IT TOGETHER"], [GU[0], "WIND! THEY HOLD ON"], [GU[1] + 0.4, "HIGHER"], [GU[2] + 0.4, "HIGHER STILL"], [T_HEART, "IT FLIES", "#ff6a60"]];
+        const BOTSEQ = [[0.05, "THEY FLY IT TOGETHER"], [T_LET, "SHE LETS GO"], [GU[1] + 0.2, "WIND! HE HOLDS ALONE"], [GU[2] + 0.2, "TOO STRONG"], [T_SLIP + 0.1, "IT FLEW AWAY", "#ff3b30"]];
         const HEAD = [[0, "LOVE IS A KITE. #11"], [T_T1, "IT ONLY FLIES"], [T_T2, "WHEN BOTH HOLD ON."]];
         E("head").style.top = "236px";
         E("head").style.fontSize = "30px";

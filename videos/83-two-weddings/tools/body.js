@@ -261,11 +261,10 @@
         const veilD = (h, f) => `M${r1(h[0] - f * 10)} ${r1(h[1] - 28)} Q${r1(h[0] - f * 60)} ${r1(h[1] + 10)} ${r1(h[0] - f * 52)} ${r1(h[1] + 110)} L${r1(h[0] - f * 20)} ${r1(h[1] + 60)} Z`;
         const money = (v) => (v < 0 ? `<span style="color:#ff3b30">-$${Math.abs(v)}K</span>` : `$${v}K`);
 
-        // 15 s cut (stats 2026-11-10): the story runs in story time s, the video time v is warped onto it (acts 2x faster, the old quote part skipped)
+        // story time s vs video time v
         const blendS = (raw, t) => { const out = {}; let ws = 0; for (const [dt, w] of KER) { const p = raw(clamp(t + dt, 0, 40)); for (const k in p) out[k] = (out[k] || 0) + p[k] * w; ws += w; } for (const k in out) out[k] /= ws; return out; };
         function liveS(raw, t, phase) { const s = blendS(raw, t), lag = blendS(raw, t - 0.05); for (const k of LAGGED) s[k] = lag[k]; const br = Math.sin(t * 1.9 + phase); s.hy += br * 1.3; s.torso += br * 0.8; s.head += Math.sin(t * 1.2 + phase * 2) * 1.6; return s; }
-        const WV = [0, 4.5, 9.7, 11.2], WS = [0, 9.0, 19.4, 21.8];
-        function warp(v) { if (v >= 11.2) return 25.6 + (v - 11.2) * (33.0 - 25.6) / (DUR - 11.2); for (let i = 0; i < 3; i++) if (v < WV[i + 1]) return lerp(WS[i], WS[i + 1], (v - WV[i]) / (WV[i + 1] - WV[i])); return 21.8; }
+        function warp(v) { return v < 22.8 ? v : v + 2.8; }   // old tempo (user 2026-11-11), only the empty old quote slot 22.8-25.6 is cut
         function render(v) { renderS(warp(v)); fade.style.opacity = win(v, DUR - 0.4, DUR - 0.02).toFixed(3); }
         function renderS(t) {
           const act2 = t >= T_CUT;
@@ -346,7 +345,7 @@
           cutDark.style.opacity = (0.92 * ck).toFixed(3); yearCard.style.opacity = hold(t, T_CUT - 0.15, T_CUT + 0.5, 0.15).toFixed(3);
           // ---- headline
           const L2 = "THEY DIDN'T FALL OUT OF LOVE.", L3 = "THEY FELL INTO DEBT.";
-          E("head").innerHTML = `<div>SAME LOVE. TWO WEDDINGS.</div><div>${L2.slice(0, Math.max(0, Math.floor((t - T_H2) * 26)))}&nbsp;</div><div style="color:#ff6a60">${L3.slice(0, Math.max(0, Math.floor((t - T_H3) * 26)))}&nbsp;</div>`;
+          E("head").innerHTML = `<div>SAME LOVE. TWO WEDDINGS.</div><div>${L2.slice(0, Math.max(0, Math.floor((t - T_H2) * 30)))}&nbsp;</div><div style="color:#ff6a60">${L3.slice(0, Math.max(0, Math.floor((t - T_H3) * 30)))}&nbsp;</div>`;
           E("head").style.opacity = (1 - 0.6 * win(t, T_Q - 0.5, T_Q) - 0.4 * win(t, T_CTA, T_CTA + 0.4)).toFixed(3);
           // ---- quote over the moving scene
           const qOut = win(t, T_CTA - 0.4, T_CTA);

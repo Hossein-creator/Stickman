@@ -21,7 +21,8 @@
 6. No motivation, no tag memes, never repost a reel.
 
 **Decisions (user, 2026-11-10: "du hast meine Analyse und du weißt was mein Ziel ist, dann pass es genau so an"). These OVERRIDE older rules below where they conflict:**
-- **Every reel ≤ 15 s** (all formats, also ONE-SIDED LOVE; series parts the only exception). Older rules "quote held ~2.5-3 s", "FOLLOW part ~5.5 s", "19 s / 31 s / 37 s" are replaced.
+- **TEMPO (user 2026-11-11, overrides the 15 s rule): "die sind viel zu schnell mach in alte tempo".** Never speed up the action to reach 15 s. Keep the old calm tempo (81: 19 s, 82: 29 s, 83: 30 s). Shorten only by leaving things out (no quote card, short reading holds), never by faster motion or faster typing. Length follows the story, roughly 18-30 s.
+- ~~**Every reel ≤ 15 s**~~ (replaced by the TEMPO rule above) (all formats, also ONE-SIDED LOVE; series parts the only exception). Older rules "quote held ~2.5-3 s", "FOLLOW part ~5.5 s", "19 s / 31 s / 37 s" are replaced.
 - **No famous quote any more.** In its place: our OWN honest one-liner that explains the behavior (the follower driver, like "She's not cold. She's exhausted."), as the 2nd/3rd headline line, ~1.5 s readable over the moving scene. Never a quote in the caption either.
 - **Conflict in frame 1:** headline + both sides + the imbalance visible at 0.0 s, the first ignore/letting go within 0.5-1 s.
 - **Follow moment ~2-2.5 s**, still different every reel, figures involved; LOVE IS A reels say "#N+1 TOMORROW".
