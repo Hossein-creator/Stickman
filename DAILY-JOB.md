@@ -140,3 +140,7 @@ Lines up to 17 were scheduled in Metricool. 2026-10-25 ~10:42: all still-pending
 - 2026-11-12 18:00: 82 One-Sided Love (relationship, NEW FORMAT 2 example, 37 s), sent to Telegram
 - 2026-11-13 16:00: 83 Two Weddings (relationship, idea remake of user upload, 33 s), sent to Telegram
 - 2026-11-11: 81/82/83 back to old tempo, sent again as Telegram msgs 94/95/96 (post these, not 91-93).
+- 2026-11-14 16:00: 84 Love Is A Boat. Part 2 (relationship, winner format sequel, 19 s), sent to Telegram
+- 2026-11-15 16:00: 85 Love Is A Phone Call #12 (relationship, winner format, 18 s), sent to Telegram
+- 2026-11-16 18:00: 86 Player Two (relationship, format 2 one-sided love, roles flipped, 29 s), sent to Telegram
+- 2026-11-17 16:00: 87 Ignored All Day (relationship, viral remake 1.53M, 23 s), sent to Telegram
