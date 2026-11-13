@@ -366,12 +366,6 @@ Reels 07-17 were scheduled in Metricool. From 2026-10-25 on, new reels go to the
 - 72 Private (viral remake, 6.5x FIASCO 4 "Girlfriend Demanded His Bank Balance, Then Refused to Show Hers"): "SHOW ME." she checks his phone with a magnifier while he whistles, "OK. CLEAN.", "CAN I SEE YOURS?", padlock + "THAT'S PRIVATE!", "...", then the twist: her phone is full of pictures of him, hug ("SHE CHECKED HIS PHONE. / HERS WAS FULL OF HIM." + card "NOTHING TO HIDE. / EVERYTHING TO SHARE." + Hemingway) — `ready/72-private.mp4`
 
 
-### Series 1 "THE YELLOW UMBRELLA" (reels 73-76, job `SERIES.md`, 2026-11-09)
-Source shape: animated love stories with rain + a family between the couple (Banjaare "Bairan – Animated Love Story" 377M views, "Barsaat" 175M), see `viral/2026-11-09-series.md`. Code: `series/yellow-umbrella/` (shared `lib.js` + `partN.js`, built with `make.sh`).
-- 73 Part 1/4 (36 s): storm, he gives her his umbrella; one umbrella, two people; cliffhanger: her dad sees them.
-- 74 Part 2/4 (36 s): dad drags her away, "YOU HAVE NOTHING!"; window + paper plane "I WILL WAIT"; dad tears the note; rich man with a ring; cliffhanger: wedding tomorrow.
-- 75 Part 3/4 (36 s): wedding; he runs through the storm, umbrella breaks, he falls; bursts in, thrown out; ring almost on; cliffhanger: did she say yes?
-- 76 Part 4/4 (40 s): "NO.", she runs out; bus leaves, she's too late; he got off and holds the broken umbrella over her; dad: "TAKE CARE OF HER."; 5 years later with a kid.
 - 77 Love Is A Candle (WINNER FORMAT, backlog): wind gusts; BOTH SHIELD (each covers the flame from their side, it grows into a heart) vs ONE SHIELDS (she scrolls, the wind from her side blows it out) ("LOVE IS A CANDLE. / ONE PAIR OF HANDS / CAN'T STOP EVERY WIND." + "SHIELD IT TOGETHER.") — `ready/77-love-is-a-candle.mp4`
 - 78 Can't Reach ← Nomi Femi 5.15M views: she jumps for the cookie jar, "NEED HELP?" "NO.", he lifts her; first cookie for him ("SHE COULDN'T REACH IT. / SO HE BECAME HER LADDER.") — `ready/78-cant-reach.mp4`
 - 79 That Time Of The Month ← Aesthetic Asmr 3.08M: cramps on the sofa; he brings hot water bottle, blanket, tea, chocolate, rubs her back ("SHE HAD CRAMPS. / HE DIDN'T ASK. HE JUST CARED.") — `ready/79-that-time-of-the-month.mp4`

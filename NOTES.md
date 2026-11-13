@@ -18,7 +18,7 @@ Claude's running notes. Newest on top. Everything Claude wants to remember goes 
 
 ## 2026-11-10 (strategy change)
 - User: views are not like before and no new followers. Change the strategy, use what worked (WINNER FORMAT, reel 36), and end every video with a follow ask that isn't boring.
-- New: 3 winner-format reels + 1 remake per run; quote stays (user wants it) but runs over the still-moving payoff instead of a static black card; follow ask built into the payoff (heart → FOLLOW button, characters point, next-story tease); last frame loops to the first. Written in REFERENCE-ANALYSIS.md, GENERATE.md, DAILY-JOB.md, SERIES.md.
+- New: 3 winner-format reels + 1 remake per run; quote stays (user wants it) but runs over the still-moving payoff instead of a static black card; follow ask built into the payoff (heart → FOLLOW button, characters point, next-story tease); last frame loops to the first. Written in REFERENCE-ANALYSIS.md, GENERATE.md, DAILY-JOB.md.
 
 ## 2026-11-07 (rule change)
 - User: our videos no longer get much attention. From now on only remake videos that get **very much attention** on social media. Rule written in `GENERATE.md`: pass = ≥ 1M views, rank by views (outlier score only as tie-breaker). Runs 7-9 used small-channel outliers (37k-320k views): that is the likely reason.
@@ -74,24 +74,10 @@ Claude's running notes. Newest on top. Everything Claude wants to remember goes 
 - User: "generiere" = find the most viral videos (YT Shorts, IG Reels, TikTok, any niche) with ig-viral, check virality first (skill, else external tool/plugin), remake one to one in our style, mostly relationship. Written in `GENERATE.md`. Defaults until the user says otherwise: 3 relationship + 1 other per run, delivery via Telegram.
 - User: this repo is my folder. Save and note nothing on the computer. Rule written in `CLAUDE.md`.
 
-## 2026-11-09: numbered series
-- User: accounts get almost no new followers or views. Idea: longer, numbered videos as a series so people follow for the next part; must be a gripping story watched to the end.
-- Separate job `SERIES.md`, trigger "serie" ("generiere" stays as before): one 4-part series (30-60 s each), same couple, "PART N/4" on top, hook in 2 s, cliffhanger + "FOLLOW" end card, recap at the start of parts 2-4. Story idea from a ≥1M-view relationship video.
-
-## 2026-11-09: first series built
-- "serie" run 1 = The Yellow Umbrella, reels 73-76 (36-40 s each). Reusable setup: `series/yellow-umbrella/lib.js` (scenes, sets: stop/road/house/hall, actors him/her/dad/rich/kid, umbrella open/closed/broken, rain with umbrella shields, captions, PART tag, FOLLOW card) + `make.sh <part> <videos/NN-slug>`. Copy the folder for the next series.
-- Render time at 60 fps: ~5-6.5 min per 36-40 s part, in the foreground (timeout 600 s). Longer parts would need 30 fps or splitting.
-- YouTube video pages + plot articles are blocked here; the source story could only be judged by title + views.
-- User feedback on series 1 (2026-11-09): good, but clearer sentences/movement/message, smoother, more effects, professional cuts, more curiosity → saved as "Quality rules" in `SERIES.md`.
-- Series 1 v2 (2026-11-09): all 4 parts re-made with the quality rules. New in `series/yellow-umbrella/lib.js`: `MAPDEF` time map (teaser flash-forward "LATER...", rewind, slow motion, freeze; `photo` freeze for happy endings), whip-pan blur cuts, `shots()` hard-cut shot lists, color grades + light leak, letterbox bars, punch-ins; `sfx-remap.mjs` remaps the story-time audio to video time. Parts are now 40-46 s; 60 fps renders take ~9 min, so render them in the background (run_in_background), one after another.
-
 - 2026-11-11: User: the 15 s re-cuts of 81-83 were "viel zu schnell". Back to the old tempo (81 19 s, 82 29 s, 83 30 s; only the quote slot left out), own lines + question captions kept. Rule saved in REFERENCE-ANALYSIS (TEMPO). Sent to Telegram again.
 - 2026-11-11 "generiere" run 11: 84 Boat Part 2, 85 Phone Call #12, 86 Player Two, 87 Ignored All Day (old calm tempo, own honest lines, question captions, 4 new CTAs). Check: viral/2026-11-11-check.md.
 - 2026-11-13 "generate" run 12: user wanted only 2 videos, both LOVE IS A ("ich will dieses mal 2 videos Love is haben"). Made 88 Tent #13 + 89 Tandem #14 (old calm tempo, own honest lines, question captions, new CTAs). No viral search needed (backlog/stats ideas: tent, tandem).
 
-## 2026-11-13: series move to Google Flow / Veo
-User: "die serien die du mit code generiest die haben keine qualität und geben keine sinn ich will dass du mit google flow erstellst".
-- Google Flow has no public API. Flow runs on Veo, so we use Veo through the Gemini API (`generativelanguage.googleapis.com`, header `x-goog-api-key`).
-- The key goes ONLY into the environment settings: a network secret for that host + header, or the env var `GEMINI_API_KEY`. Never put it in the repo or the chat.
-- Status: waiting for the key. Once it is connected, tell the user, then wait for their next steps.
-- Update 2026-11-13: the user gave a Gemini key (stored only in `~/.stickman/google.json`, never in the repo). It connects: 64 models are listed, but there is no Veo model, and the video test with `gemini-omni-1.2-flash` returns 429 quota (free tier). Billing has to be turned on in AI Studio, then Veo appears.
+## 2026-11-13: series with Google Flow (by hand)
+- User: the code series had no quality and made no sense. Everything about the old series was deleted from the repo (user's wish).
+- Flow has no API, and the Veo API needs extra billing (the Pro plan only covers the browser). So: Claude writes the scene prompts, the user generates the clips in Flow and uploads them, and Claude cuts them and sends the result to Telegram. The user will say how to continue.
