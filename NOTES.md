@@ -94,3 +94,4 @@ User: "die serien die du mit code generiest die haben keine qualität und geben 
 - Google Flow has no public API. Flow runs on Veo, so we use Veo through the Gemini API (`generativelanguage.googleapis.com`, header `x-goog-api-key`).
 - The key goes ONLY into the environment settings: a network secret for that host + header, or the env var `GEMINI_API_KEY`. Never put it in the repo or the chat.
 - Status: waiting for the key. Once it is connected, tell the user, then wait for their next steps.
+- Update 2026-11-13: the user gave a Gemini key (stored only in `~/.stickman/google.json`, never in the repo). It connects: 64 models are listed, but there is no Veo model, and the video test with `gemini-omni-1.2-flash` returns 429 quota (free tier). Billing has to be turned on in AI Studio, then Veo appears.
