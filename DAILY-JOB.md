@@ -145,3 +145,5 @@ Lines up to 17 were scheduled in Metricool. 2026-10-25 ~10:42: all still-pending
 - 2026-11-16 18:00: 86 Player Two (relationship, format 2 one-sided love, roles flipped, 29 s), sent to Telegram
 - 2026-11-17 16:00: 87 Ignored All Day (relationship, viral remake 1.53M, 23 s), sent to Telegram
 - 2026-11-11: run 11 sent as Telegram msgs 97 (84), 98 (85), 99 (86), 100 (87).
+- 2026-11-18 16:00: 88 Love Is A Tent #13 (relationship, winner format, 18 s), sent to Telegram (msg 101)
+- 2026-11-19 16:00: 89 Love Is A Tandem #14 (relationship, winner format, 18 s), sent to Telegram (msg 102)

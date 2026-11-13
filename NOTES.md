@@ -87,3 +87,4 @@ Claude's running notes. Newest on top. Everything Claude wants to remember goes 
 
 - 2026-11-11: User: the 15 s re-cuts of 81-83 were "viel zu schnell". Back to the old tempo (81 19 s, 82 29 s, 83 30 s; only the quote slot left out), own lines + question captions kept. Rule saved in REFERENCE-ANALYSIS (TEMPO). Sent to Telegram again.
 - 2026-11-11 "generiere" run 11: 84 Boat Part 2, 85 Phone Call #12, 86 Player Two, 87 Ignored All Day (old calm tempo, own honest lines, question captions, 4 new CTAs). Check: viral/2026-11-11-check.md.
+- 2026-11-13 "generate" run 12: user wanted only 2 videos, both LOVE IS A ("ich will dieses mal 2 videos Love is haben"). Made 88 Tent #13 + 89 Tandem #14 (old calm tempo, own honest lines, question captions, new CTAs). No viral search needed (backlog/stats ideas: tent, tandem).
