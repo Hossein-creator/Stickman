@@ -81,3 +81,4 @@ Claude's running notes. Newest on top. Everything Claude wants to remember goes 
 ## 2026-11-13: series with Google Flow (by hand)
 - User: the code series had no quality and made no sense. Everything about the old series was deleted from the repo (user's wish).
 - Flow has no API, and the Veo API needs extra billing (the Pro plan only covers the browser). So: Claude writes the scene prompts, the user generates the clips in Flow and uploads them, and Claude cuts them and sends the result to Telegram. The user will say how to continue.
+- 2026-11-14: The user uploaded a TikTok (a wall grows between a couple while he shouts; he tears it down and she is gone) and asked for the same video in our style. Built 90 The Wall: same idea, but our own stickman figures, lines, shots and ending (no copy of their drawings). Sent to Telegram (msg 103).
