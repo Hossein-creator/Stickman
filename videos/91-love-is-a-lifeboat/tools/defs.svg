@@ -34,3 +34,24 @@
               <stop offset="0.4" stop-color="#ff7a1a" stop-opacity="0.28" />
               <stop offset="1" stop-color="#ff5a00" stop-opacity="0" />
             </radialGradient>
+            <linearGradient id="seaF" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0" stop-color="#1d3550" stop-opacity="0.93" />
+              <stop offset="1" stop-color="#05090f" stop-opacity="0.98" />
+            </linearGradient>
+            <linearGradient id="seaB" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0" stop-color="#16263a" />
+              <stop offset="1" stop-color="#070b12" />
+            </linearGradient>
+            <linearGradient id="dawn" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0" stop-color="#ff9a4a" stop-opacity="0" />
+              <stop offset="0.75" stop-color="#ff8a3a" stop-opacity="0.35" />
+              <stop offset="1" stop-color="#ffc06a" stop-opacity="0.75" />
+            </linearGradient>
+            <linearGradient id="woodT" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0" stop-color="#b07a48" />
+              <stop offset="1" stop-color="#5e3c22" />
+            </linearGradient>
+            <linearGradient id="woodB" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0" stop-color="#7a7068" />
+              <stop offset="1" stop-color="#3c3632" />
+            </linearGradient>
