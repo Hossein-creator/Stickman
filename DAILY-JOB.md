@@ -148,3 +148,7 @@ Lines up to 17 were scheduled in Metricool. 2026-10-25 ~10:42: all still-pending
 - 2026-11-18 16:00: 88 Love Is A Tent #13 (relationship, winner format, 18 s), sent to Telegram (msg 101)
 - 2026-11-19 16:00: 89 Love Is A Tandem #14 (relationship, winner format, 18 s), sent to Telegram (msg 102)
 - 2026-11-20 16:00: 90 The Wall (relationship, idea remake of user upload, 24 s), sent to Telegram (msg 103)
+- 2026-11-21 16:00: 91 Love Is A Lifeboat #15 (relationship, winner format, 19 s), sent to Telegram (msg 104)
+- 2026-11-22 16:00: 92 Love Is A House #16 (relationship, winner format, 19 s), sent to Telegram (msg 105)
+- 2026-11-23 18:00: 93 Seen (relationship, format 2 one-sided love, he loves, 28 s), sent to Telegram (msg 106)
+- 2026-11-24 18:00: 94 Surprise Visit (relationship, viral remake 18M, 24 s), sent to Telegram (msg 107)
