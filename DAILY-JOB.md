@@ -152,3 +152,7 @@ Lines up to 17 were scheduled in Metricool. 2026-10-25 ~10:42: all still-pending
 - 2026-11-22 16:00: 92 Love Is A House #16 (relationship, winner format, 19 s), sent to Telegram (msg 105)
 - 2026-11-23 18:00: 93 Seen (relationship, format 2 one-sided love, he loves, 28 s), sent to Telegram (msg 106)
 - 2026-11-24 18:00: 94 Surprise Visit (relationship, viral remake 18M, 24 s), sent to Telegram (msg 107)
+- 2026-11-25 16:00: 95 Love Is A Bridge. Part 2 #17 (relationship, winner format sequel of 36, 19 s), sent to Telegram (msg 108)
+- 2026-11-26 16:00: 96 Love Is A Blanket #18 (relationship, winner format, 18 s), sent to Telegram (msg 109)
+- 2026-11-27 18:00: 97 She Waited Up (relationship, format 2 one-sided love, she loves, 24 s), sent to Telegram (msg 110)
+- 2026-11-28 18:00: 98 Small Box (relationship, viral remake 8.3M, 22 s), sent to Telegram (msg 111)
