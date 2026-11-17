@@ -156,3 +156,4 @@ Lines up to 17 were scheduled in Metricool. 2026-10-25 ~10:42: all still-pending
 - 2026-11-26 16:00: 96 Love Is A Blanket #18 (relationship, winner format, 18 s), sent to Telegram (msg 109)
 - 2026-11-27 18:00: 97 She Waited Up (relationship, format 2 one-sided love, she loves, 24 s), sent to Telegram (msg 110)
 - 2026-11-28 18:00: 98 Small Box (relationship, viral remake 8.3M, 22 s), sent to Telegram (msg 111)
+- 2026-11-17: run 14 (95-98) sent to Telegram again on request as msgs 113-116 (same post times).
