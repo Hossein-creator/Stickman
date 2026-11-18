@@ -157,3 +157,7 @@ Lines up to 17 were scheduled in Metricool. 2026-10-25 ~10:42: all still-pending
 - 2026-11-27 18:00: 97 She Waited Up (relationship, format 2 one-sided love, she loves, 24 s), sent to Telegram (msg 110)
 - 2026-11-28 18:00: 98 Small Box (relationship, viral remake 8.3M, 22 s), sent to Telegram (msg 111)
 - 2026-11-17: run 14 (95-98) sent to Telegram again on request as msgs 113-116 (same post times).
+- 2026-11-29 16:00: 99 Love Is A Ladder #19 (relationship, winner format, 19 s), sent to Telegram (msg 117)
+- 2026-11-30 16:00: 100 Love Is A Tin Can Phone #20 (relationship, winner format, 19 s), sent to Telegram (msg 118)
+- 2026-12-01 18:00: 101 Next Time (relationship, format 2 one-sided love, he loves, 27 s), sent to Telegram (msg 119)
+- 2026-12-02 18:00: 102 Heart Problem (relationship, viral remake 6.4M, 22 s), sent to Telegram (msg 120)
