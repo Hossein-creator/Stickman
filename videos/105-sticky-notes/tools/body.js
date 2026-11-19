@@ -1,0 +1,277 @@
+        // ---------- "sticky notes" (ONE-SIDED LOVE, format 2, she loves, he ignores): a kitchen with a fridge, a table, a trash can. DAY 1 she sticks "HAVE A GOOD DAY ♥" on the fridge, he takes the juice and never looks. DAY 30 a note on his lunch, he crumples it into the trash. DAY 90 a note on his laptop, he peels it off unread. DAY 365 the fridge is full of notes; she sticks a red one and leaves with a suitcase. He finds it: "GOODBYE." - the first note he ever read. FOLLOW: he writes a new note "+ FOLLOW" and sticks it on the fridge, taps it: "FOLLOWING". ----------
+        const cam = E("svg").children[1];
+        for (const el of Array.from(cam.children)) {
+          const fill = el.getAttribute("fill") || "";
+          if (fill.includes("floorFade") || fill === "#2a2a2a") { el.setAttribute("x", -1400); el.setAttribute("width", 3400); }
+        }
+        const W = E("world");
+        const backG = E("back");
+        const beams = E("beams");
+        const roomG = svgEl("g", {}, W);
+        const propG = svgEl("g", {}, W);
+        const figG = svgEl("g", {}, W);
+        const fxG = svgEl("g", {}, W);
+        const frac = (v) => v - Math.floor(v);
+        const sm = (t, a, b) => { const p = clamp((t - a) / (b - a), 0, 1); return p * p * (3 - 2 * p); };
+        const stand = FL - Math.sqrt(LEG * LEG - 15 * 15);
+        const reachTo = (s, k, p, hand = "a") => { if (s[hand + "w"] < 1e-6) { s[hand + "tx"] = p[0]; s[hand + "ty"] = p[1]; s[hand + "w"] = k; return s; } s[hand + "w"] = Math.max(s[hand + "w"], k); s[hand + "tx"] = lerp(s[hand + "tx"], p[0], k); s[hand + "ty"] = lerp(s[hand + "ty"], p[1], k); return s; };
+        const hold = (s, a, b, r = 0.2) => win(s, a, a + r) * (1 - win(s, b - r, b));
+
+        // ---------- beats ----------
+        const C = [0, 4.4, 8.4, 12.0];                          // DAY 1 / 30 / 90 / 365
+        const T_ST1 = 0.5, T_IN1 = 1.1, T_FR1 = 1.9, IG1 = 2.5, T_C1 = 2.7;
+        const T_IN2 = 4.8, T_LUNCH = 5.6, IG2 = 6.3, T_C2 = 6.5;
+        const T_ST3 = 9.2, IG3 = 10.1, T_C3 = 10.3;
+        const T_RED = 12.4, T_SHAT = 12.9, T_LEAVE = 13.2, T_OUT = 14.6, T_IN4 = 15.0, T_READ = 16.0, T_LOOK = 17.0;
+        const T_L2 = 18.0, T_L3 = 19.0;
+        const T_CTA = 21.2, T_WRITE = 21.6, T_STICK = 22.7, T_TAP = 23.5;
+        const FX = 300, FY0 = FL - 330, TBX = 660, TRX = 500, SHEX = 860, DOORX = 90;
+        const chap = (s) => (s < C[1] ? 0 : s < C[2] ? 1 : s < C[3] ? 2 : 3);
+
+        // ---------- kitchen ----------
+        const warm = svgEl("circle", { cx: 600, cy: FL - 220, r: 440, fill: "url(#fireGlow)", opacity: 0.2 }, backG);
+        svgEl("polygon", { points: `220,${FL - 520} 400,${FL - 520} 500,${FL} 120,${FL}`, fill: "url(#beam)", filter: "url(#soft)", opacity: 0.16 }, beams);
+        const cold = svgEl("rect", { x: -1400, y: -1400, width: 3400, height: 3400, fill: "#0c1428", opacity: 0 }, backG);
+        const doorLight = svgEl("rect", { x: DOORX - 60, y: FL - 300, width: 120, height: 300, fill: "#3a4258", opacity: 0 }, roomG);
+        svgEl("rect", { x: DOORX - 70, y: FL - 310, width: 140, height: 310, fill: "none", stroke: "#3a3a42", "stroke-width": 10 }, roomG);
+        const doorP = svgEl("rect", { x: DOORX - 60, y: FL - 300, width: 120, height: 300, fill: "#2a2018", stroke: "#000", "stroke-width": 5 }, roomG);
+        // fridge
+        svgEl("rect", { x: FX - 75, y: FY0, width: 150, height: 330, rx: 10, fill: "#d8dce4", stroke: "#000", "stroke-width": 6 }, roomG);
+        const fdoor = svgEl("g", {}, roomG);
+        svgEl("rect", { x: FX - 75, y: FY0, width: 150, height: 330, rx: 10, fill: "#e8ebf0", stroke: "#000", "stroke-width": 6 }, fdoor);
+        svgEl("line", { x1: FX - 75, y1: FY0 + 110, x2: FX + 75, y2: FY0 + 110, stroke: "#000", "stroke-width": 4 }, fdoor);
+        svgEl("rect", { x: FX + 52, y: FY0 + 130, width: 10, height: 70, rx: 4, fill: "#888", stroke: "#000", "stroke-width": 3 }, fdoor);
+        const NOTES = [];
+        for (let i = 0; i < 28; i++) { const col = i % 4, row = Math.floor(i / 4); const x = FX - 60 + col * 32 + ((i * 7) % 6), y = FY0 + 16 + row * 44 + ((i * 11) % 8); const g = svgEl("g", { transform: `translate(${x} ${y}) rotate(${((i * 37) % 14) - 7})`, opacity: 0 }, fdoor); svgEl("rect", { x: 0, y: 0, width: 26, height: 26, fill: i % 5 === 3 ? "#ffb0c0" : "#ffe46a", stroke: "#000", "stroke-width": 2 }, g); svgEl("path", { d: "M5 9 L21 9 M5 15 L18 15", stroke: "#a08a2a", "stroke-width": 2 }, g); NOTES.push(g); }
+        const redN = svgEl("g", { opacity: 0 }, fdoor);
+        svgEl("rect", { x: -18, y: -18, width: 36, height: 36, fill: "#ff5a5a", stroke: "#000", "stroke-width": 3 }, redN);
+        const newN = svgEl("g", { opacity: 0 }, fdoor);
+        const newR = svgEl("rect", { x: -44, y: -26, width: 88, height: 52, fill: "#ffe46a", stroke: "#000", "stroke-width": 3 }, newN);
+        const newT = svgEl("text", { x: 0, y: 6, "font-family": "HFMono, monospace", "font-weight": 700, "font-size": 15, fill: "#c0282a", "text-anchor": "middle" }, newN);
+        // table + chair + trash
+        svgEl("rect", { x: TBX - 90, y: FL - 150, width: 180, height: 14, rx: 4, fill: "#6a5240", stroke: "#000", "stroke-width": 4 }, roomG);
+        svgEl("rect", { x: TBX - 8, y: FL - 136, width: 16, height: 136, fill: "#4a3a2e", stroke: "#000", "stroke-width": 3 }, roomG);
+        svgEl("rect", { x: 730, y: FL - 104, width: 60, height: 12, fill: "#5a4636", stroke: "#000", "stroke-width": 4 }, roomG);
+        svgEl("rect", { x: 778, y: FL - 220, width: 12, height: 220, fill: "#4a3a2e", stroke: "#000", "stroke-width": 4 }, roomG);
+        svgEl("path", { d: `M${TRX - 26} ${FL - 70} L${TRX + 26} ${FL - 70} L${TRX + 20} ${FL} L${TRX - 20} ${FL} Z`, fill: "#5a5e66", stroke: "#000", "stroke-width": 4 }, roomG);
+        // props
+        const juice = svgEl("rect", { x: -9, y: -16, width: 18, height: 32, rx: 3, fill: "#ffa040", stroke: "#000", "stroke-width": 3, opacity: 0 }, propG);
+        const lunch = svgEl("g", { opacity: 0 }, propG);
+        svgEl("rect", { x: -30, y: -26, width: 60, height: 26, rx: 5, fill: "#5aa0ff", stroke: "#000", "stroke-width": 4 }, lunch);
+        const lunchN = svgEl("rect", { x: -10, y: -38, width: 20, height: 20, fill: "#ffe46a", stroke: "#000", "stroke-width": 2 }, lunch);
+        const ball = svgEl("circle", { r: 9, fill: "#ffe46a", stroke: "#000", "stroke-width": 2, opacity: 0 }, propG);
+        const laptop = svgEl("g", { opacity: 0 }, propG);
+        svgEl("path", { d: "M-40 0 L40 0 L44 6 L-44 6 Z", fill: "#8a8e96", stroke: "#000", "stroke-width": 3 }, laptop);
+        svgEl("path", { d: "M-34 0 L-40 -50 L30 -50 L36 0 Z", fill: "#3a3e46", stroke: "#000", "stroke-width": 3 }, laptop);
+        const lapN = svgEl("rect", { width: 20, height: 20, fill: "#ffe46a", stroke: "#000", "stroke-width": 2, opacity: 0 }, propG);
+        const suit = svgEl("g", { opacity: 0 }, propG);
+        svgEl("rect", { x: -26, y: -64, width: 52, height: 64, rx: 6, fill: "#8a4a6a", stroke: "#000", "stroke-width": 4 }, suit);
+        const handN = svgEl("rect", { x: -12, y: -12, width: 24, height: 24, fill: "#ffe46a", stroke: "#000", "stroke-width": 2, opacity: 0 }, propG);
+
+        // ---------- figures ----------
+        const him = makeFig(figG, "#ffffff", "#dedede", true, "him");
+        const bun = svgEl("circle", { r: 15, fill: "#ffffff", stroke: "#000", "stroke-width": 6 }, figG);
+        const her = makeFig(figG, "#ffffff", "#e2e2e2", true, "her");
+        figG.insertBefore(bun, her.g.previousSibling);
+        const HEART = "M0 30 C-66 -14 -50 -66 0 -36 C50 -66 66 -14 0 30 Z";
+        const hm = svgEl("g", { opacity: 0 }, fxG);
+        svgEl("circle", { r: 60, fill: "url(#fireGlow)", opacity: 0.5 }, hm);
+        const hmH = svgEl("path", { d: HEART, fill: "#ff3b30", stroke: "#000", "stroke-width": 5 }, hm);
+        const cracks = ["M-2 -34 L6 -20 L-4 -8", "M-4 -8 L8 4 L-2 16", "M-2 16 L4 28 M-30 -30 L-18 -18 L-26 -6 M28 -28 L18 -14 L26 -2"].map((d) => svgEl("path", { d, fill: "none", stroke: "#000", "stroke-width": 5, "stroke-linejoin": "round", opacity: 0 }, hm));
+        const shards = Array.from({ length: 6 }, (_, i) => svgEl("path", { d: ["M0 0 L-20 -16 L-6 -24 Z", "M0 0 L18 -18 L6 -26 Z", "M0 0 L-22 8 L-12 18 Z", "M0 0 L20 8 L10 20 Z", "M0 0 L-8 18 L6 22 Z", "M0 0 L-4 -20 L12 -14 Z"][i], fill: "#ff3b30", stroke: "#000", "stroke-width": 3, opacity: 0 }, fxG));
+        const bigNote = (lines, bg) => { const g = svgEl("g", { opacity: 0 }, fxG); svgEl("rect", { x: -120, y: -70, width: 240, height: 140, fill: bg, stroke: "#000", "stroke-width": 5 }, g); lines.forEach((l, i) => { const tx = svgEl("text", { x: 0, y: -14 + i * 38, "font-family": "HFMono, monospace", "font-weight": 700, "font-size": 26, fill: "#222", "text-anchor": "middle" }, g); tx.textContent = l; }); return g; };
+        const n1 = bigNote(["HAVE A GOOD", "DAY ♥"], "#ffe46a"), nBye = bigNote(["GOODBYE.", "- ME"], "#ff7a7a");
+        const burst = Array.from({ length: 10 }, () => svgEl("path", { d: "M0 10 C-22 -3 -16 -22 0 -12 C16 -22 22 -3 0 10 Z", fill: "#ff3b30", stroke: "#000", "stroke-width": 3, opacity: 0 }, fxG));
+
+        function feetOn(x0, hx, STR, lift) {
+          const p = (hx - x0) / STR;
+          return [0, 0.5].map((o) => {
+            const q = frac(Math.abs(p) + o + 1e-6), d = Math.sign(hx - x0) || 1;
+            if (q < 0.5) return [hx + d * STR * (0.25 - q), FL];
+            const ss = (q - 0.5) / 0.5;
+            return [hx + d * STR * (-0.25 + 0.5 * ease(ss)), FL - Math.sin(Math.PI * ss) * lift];
+          });
+        }
+        const walking = (x0, x, head = 22) => { const ft = feetOn(x0, x, 100, 10), sw = Math.sin((Math.PI * 2 * (x - x0)) / 100); return base({ hx: x, hy: stand + 3 + 3 * Math.abs(sw), torso: 10, head, ax: ft[0][0], ay: ft[0][1], bx: ft[1][0], by: ft[1][1], ash: 4 + 14 * sw, ael: 14, bsh: -4 - 14 * sw, bel: 14 }); };
+        const sitAt = (x, f, o) => base({ hx: x, hy: FL - 112, torso: 6, head: 6, ax: x + f * 60, ay: FL, bx: x + f * 44, by: FL, ...o });
+
+        // ---- him: [x, facing, moving] per time
+        function himState(s) {
+          const ch = chap(s);
+          if (ch === 0) { if (s < T_IN1) return null; if (s < T_FR1) return [lerp(1150, FX + 110, sm(s, T_IN1, T_FR1)), -1, 1]; if (s < IG1 + 0.2) return [FX + 110, -1, 0]; return [lerp(FX + 110, -150, sm(s, IG1 + 0.2, C[1] - 0.2)), -1, 1]; }
+          if (ch === 1) { if (s < T_IN2) return null; if (s < T_LUNCH) return [lerp(1150, TBX + 60, sm(s, T_IN2, T_LUNCH)), -1, 1]; if (s < IG2 + 0.3) return [TBX + 60 - 120 * sm(s, IG2 - 0.4, IG2), -1, 0]; return [lerp(TBX - 60, -150, sm(s, IG2 + 0.3, C[2] - 0.1)), -1, 1]; }
+          if (ch === 2) return [760, -1, 0, "sit"];
+          if (s < T_IN4) return null;
+          if (s < T_READ - 0.3) return [lerp(1150, FX + 110, sm(s, T_IN4, T_READ - 0.3)), -1, 1];
+          return [FX + 110, -1, 0];
+        }
+        function himRaw(s) {
+          const hs = himState(s) || [-400, -1, 0], [x, f, mv] = hs, ch = chap(s);
+          if (hs[3] === "sit") {
+            const st = sitAt(760, -1, { torso: 14, head: 24 });
+            const ty = 4 * Math.sin(s * 30);
+            reachTo(st, 1, [TBX + 30, FL - 160 + ty]); reachTo(st, 1, [TBX + 10, FL - 160 - ty], "b");
+            const peel = hold(s, IG3 - 0.5, IG3 + 0.2, 0.2); reachTo(st, peel, [lerp(TBX + 10, TBX + 80, win(s, IG3 - 0.2, IG3)), lerp(FL - 196, FL - 156, win(s, IG3 - 0.2, IG3))], "b");
+            return st;
+          }
+          const st = mv ? walking(f < 0 ? 1150 : DOORX, x, ch === 3 ? 10 : 24) : standOn(x, f, FL);
+          if (ch === 0 && !mv) { const op = hold(s, T_FR1, IG1, 0.2); reachTo(st, op, [FX + 60, FY0 + 170]); st.head = 6; }
+          if (ch === 0 && s > T_FR1 + 0.3) reachTo(st, 1, [x - 34, stand - 110], "b");
+          if (ch === 1 && s > T_LUNCH - 0.2) { const gr = hold(s, T_LUNCH - 0.2, T_LUNCH + 0.4, 0.15); reachTo(st, gr, [TBX + 10, FL - 170]); const th = hold(s, IG2 - 0.5, IG2 + 0.2, 0.15); reachTo(st, th, [TRX + 40, FL - 150]); reachTo(st, 1, [x - 30, stand - 90], "b"); }
+          if (ch === 3 && s > T_READ - 0.3) {
+            const rd = hold(s, T_READ - 0.3, T_CTA, 0.3); reachTo(st, rd, [FX + 50, stand - 150]); st.head = lerp(st.head, 12, rd);
+            st.head = lerp(st.head, -10, win(s, T_LOOK, T_LOOK + 0.4) * (1 - win(s, T_WRITE, T_WRITE + 0.3)));
+            const wr = hold(s, T_WRITE, T_STICK + 0.2, 0.2); reachTo(st, wr, [x - 40, stand - 120 + 4 * Math.sin(s * 30)]); reachTo(st, wr, [x - 30, stand - 110], "b"); st.head = lerp(st.head, 24, wr);
+            const sk = hold(s, T_STICK - 0.2, T_STICK + 0.4, 0.2); reachTo(st, sk, [FX + 10, FY0 + 160]);
+            const tp = hold(s, T_TAP - 0.4, T_TAP + 0.4, 0.2); reachTo(st, tp, [FX + 18, FY0 + 168 + (Math.abs(s - T_TAP) < 0.1 ? 4 : 0)]);
+          }
+          return st;
+        }
+        // ---- her ----
+        function herState(s) {
+          const ch = chap(s);
+          if (ch === 0) { if (s < T_ST1 + 0.6) return [FX + 110, -1, 0]; if (s < T_IN1 + 0.4) return [lerp(FX + 110, SHEX, sm(s, T_ST1 + 0.6, T_IN1 + 0.4)), 1, 1]; return [SHEX, -1, 0]; }
+          if (ch === 1 || ch === 2) { if (ch === 2 && s > T_ST3 - 0.8 && s < IG3 + 1.0) { if (s < T_ST3) return [lerp(SHEX, 860 - 30, sm(s, T_ST3 - 0.8, T_ST3)), -1, 1]; return [830, -1, 0]; } return [SHEX + 20, -1, 0]; }
+          if (s < T_LEAVE) return [FX + 110, -1, 0];
+          if (s < T_OUT) return [lerp(FX + 110, -150, sm(s, T_LEAVE, T_OUT)), -1, 1];
+          return null;
+        }
+        function herRaw(s) {
+          const hs = herState(s) || [-400, -1, 0], [x, f, mv] = hs, ch = chap(s);
+          const st = mv ? walking(f > 0 ? FX + 110 : SHEX, x, 6) : standOn(x, f, FL);
+          if (ch === 0 && s < T_ST1 + 0.6) { reachTo(st, hold(s, T_ST1 - 0.3, T_ST1 + 0.4, 0.2), [FX + 10, FY0 + 50]); }
+          if (!mv && ch < 3) { const hope = [T_IN1, T_IN2, T_ST3].some((ti) => s > ti && s < ti + 1.6); st.head = hope ? -4 : 10; reachTo(st, 0.6, [x - 26, stand - 80]); reachTo(st, 0.6, [x - 20, stand - 76], "b"); st.head = lerp(st.head, 30, [IG1, IG2, IG3].reduce((a, g) => Math.max(a, win(s, g, g + 0.5) * (s < g + 1.6 ? 1 : 0)), 0)); }
+          if (ch === 2 && s > T_ST3 - 0.2 && s < IG3) reachTo(st, hold(s, T_ST3 - 0.2, T_ST3 + 0.4, 0.15), [TBX + 20, FL - 190]);
+          if (ch === 3 && s < T_LEAVE) { reachTo(st, hold(s, T_RED - 0.3, T_RED + 0.4, 0.2), [FX, FY0 + 150]); st.head = lerp(10, 30, win(s, T_RED + 0.4, T_RED + 0.8)); }
+          if (ch === 3) reachTo(st, win(s, T_LEAVE - 0.3, T_LEAVE), [x - 40, stand - 20], "b");
+          return st;
+        }
+
+        // ---------- HTML overlays ----------
+        const capCss = document.createElement("style");
+        capCss.textContent = "#cap span.w { display: inline-block; margin: 0 0.16em; }";
+        document.head.appendChild(capCss);
+        const tag = document.createElement("div");
+        tag.style.cssText = "position:absolute;left:120px;top:1450px;font-family:HFMono,monospace;font-weight:700;font-size:30px;letter-spacing:0.18em;color:#ff6a60";
+        E("stage").appendChild(tag);
+        const cap = document.createElement("div"); cap.id = "cap";
+        cap.style.cssText = "position:absolute;left:110px;right:110px;top:320px;text-align:center;font-family:HFMono,monospace;font-weight:700;font-size:44px;color:#fff;letter-spacing:0.06em;text-shadow:0 0 14px rgba(255,255,255,0.3)";
+        E("stage").appendChild(cap);
+        const cut = document.createElement("div");
+        cut.style.cssText = "position:absolute;inset:0;background:#000;opacity:0";
+        E("stage").appendChild(cut);
+        const tom = document.createElement("div");
+        tom.style.cssText = "position:absolute;left:0;width:1080px;top:540px;text-align:center;font-family:HFMono,monospace;font-weight:700;font-size:28px;letter-spacing:0.14em;color:#ffcf7a";
+        E("stage").appendChild(tom);
+        const fade = document.createElement("div");
+        fade.style.cssText = "position:absolute;inset:0;background:#000;opacity:0";
+        E("stage").appendChild(fade);
+
+        // ---------- camera ----------
+        const SHOTS = [[0, 1.25, 560, 400, 1.3], [C[1], 1.3, 620, 400, 1.35], [C[2], 1.7, 760, 390, 1.8], [C[3], 1.6, 340, 380, 1.7], [T_LEAVE + 0.5, 1.2, 420, 400, 1.24], [T_READ - 0.1, 1.9, 360, 360, 2.0], [T_LOOK, 2.0, FX, FY0 + 150, 2.2], [T_L2 - 0.1, 1.5, 380, 380, 1.55], [T_CTA, 2.4, FX + 10, FY0 + 150, 3.0]];
+        function camAt(s) {
+          let k = 0; for (let i = 0; i < SHOTS.length; i++) if (s >= SHOTS[i][0]) k = i;
+          const [a, z0, cx, cy, z1] = SHOTS[k], b = k + 1 < SHOTS.length ? SHOTS[k + 1][0] : DUR;
+          return [lerp(z0, z1, sm(s, a, b)), cx, cy];
+        }
+        const CAPS = [[0.3, "SHE LEAVES HIM A NOTE."], [IG1, "HE DOESN'T EVEN LOOK.", 3], [C[1] + 0.3, "ANOTHER ONE IN HIS LUNCH."], [IG2, "INTO THE TRASH.", 2], [C[2] + 0.3, "ONE ON HIS LAPTOP."], [IG3, "PEELED OFF. UNREAD.", 2], [C[3] + 0.3, "ONE LAST NOTE."], [T_READ, "THE FIRST ONE HE READ.", 1], [T_LOOK, "365 NOTES. NEVER READ.", 2]];
+        const TAGS = ["DAY 1", "DAY 30", "DAY 90", "DAY 365"];
+        function slamHTML(txt, t0, t, red) {
+          return txt.split(" ").map((w, i) => {
+            const q = clamp((t - t0 - i * 0.09) / 0.2, 0, 1);
+            if (q <= 0) return `<span class="w" style="opacity:0">${w}</span>`;
+            return `<span class="w" style="transform:scale(${lerp(1.8, 1, backOut(q)).toFixed(3)});filter:blur(${((1 - q) * 5).toFixed(1)}px);${red !== undefined && i === red ? "color:#ff3b30;" : ""}">${w}</span>`;
+          }).join("");
+        }
+        const LIGHT = [1, 0.82, 0.66, 0.52, 0.38];
+        E("head").style.top = "236px";
+        E("head").style.fontSize = "30px";
+        E("head").style.letterSpacing = "0.14em";
+        E("head").style.lineHeight = "1.6";
+
+        function render(t) {
+          const s = t, c = camAt(s), ch = chap(s);
+          cam.setAttribute("transform", `translate(540 1180) scale(${c[0].toFixed(4)}) translate(${r1(-c[1])} ${r1(-c[2])})`);
+          const hs = herState(s), ms = himState(s);
+          const hp = drawFig(her, livePose(herRaw, s, 1.4), hs ? hs[1] : -1);
+          her.g.setAttribute("opacity", hs ? 1 : 0); bun.setAttribute("opacity", hs ? 1 : 0);
+          if (her.g.previousSibling) her.g.previousSibling.setAttribute("opacity", hs ? 0.45 : 0);
+          bun.setAttribute("cx", r1(hp.head[0] - 25 * (hs ? hs[1] : -1))); bun.setAttribute("cy", r1(hp.head[1] - 16));
+          const mp = drawFig(him, livePose(himRaw, s, 0.3), -1);
+          him.g.setAttribute("opacity", ms ? 1 : 0);
+          if (him.g.previousSibling) him.g.previousSibling.setAttribute("opacity", ms ? 0.45 : 0);
+          const lvl = (s > T_C1 ? 1 : 0) + (s > T_C2 ? 1 : 0) + (s > T_C3 ? 1 : 0) + (s > T_SHAT ? 1 : 0);
+          her.g.style.filter = `brightness(${LIGHT[lvl].toFixed(3)})`;
+          // door (left exit)
+          const dq = Math.max(...[C[1] - 0.6, C[2] - 0.5, T_OUT - 0.4].map((ti) => hold(s, ti - 0.3, ti + 0.6, 0.25)));
+          doorP.setAttribute("transform", `translate(${DOORX - 60} 0) scale(${(1 - 0.85 * dq).toFixed(3)} 1) translate(${-(DOORX - 60)} 0)`);
+          doorLight.setAttribute("opacity", (0.9 * dq).toFixed(3));
+          // fridge door swings on DAY 1
+          const fo = ch === 0 ? hold(s, T_FR1 + 0.1, IG1, 0.2) : 0;
+          fdoor.setAttribute("transform", `translate(${FX - 75} 0) scale(${(1 - 0.5 * fo).toFixed(3)} 1) translate(${-(FX - 75)} 0)`);
+          // notes on the fridge accumulate
+          const nShown = ch === 0 ? (s > T_ST1 ? 1 : 0) : ch === 1 ? 6 : ch === 2 ? 12 : 28;
+          NOTES.forEach((n, i) => n.setAttribute("opacity", i < nShown ? 1 : 0));
+          redN.setAttribute("opacity", ch === 3 && s > T_RED && s < T_READ - 0.1 ? 1 : 0); redN.setAttribute("transform", `translate(${FX} ${FY0 + 150}) rotate(-4)`);
+          // props
+          juice.setAttribute("opacity", ch === 0 && s > IG1 - 0.2 ? 1 : 0); juice.setAttribute("transform", `translate(${r1(mp.hands[1][0])} ${r1(mp.hands[1][1])})`);
+          const lunchInHand = ch === 1 && s > T_LUNCH;
+          lunch.setAttribute("opacity", ch === 1 ? 1 : 0);
+          lunch.setAttribute("transform", lunchInHand ? `translate(${r1(mp.hands[1][0])} ${r1(mp.hands[1][1] + 26)})` : `translate(${TBX + 10} ${FL - 150})`);
+          lunchN.setAttribute("opacity", ch === 1 && s < T_LUNCH + 0.3 ? 1 : 0);
+          const bq = clamp((s - (IG2 - 0.1)) / 0.4, 0, 1);
+          ball.setAttribute("opacity", ch === 1 && s > T_LUNCH + 0.3 && s < IG2 + 0.4 ? 1 : 0);
+          ball.setAttribute("cx", r1(s < IG2 - 0.1 ? mp.hands[0][0] : lerp(mp.hands[0][0], TRX, bq))); ball.setAttribute("cy", r1(s < IG2 - 0.1 ? mp.hands[0][1] : lerp(mp.hands[0][1], FL - 70, bq) - 60 * Math.sin(Math.PI * bq)));
+          laptop.setAttribute("opacity", ch === 2 ? 1 : 0); laptop.setAttribute("transform", `translate(${TBX + 10} ${FL - 150})`);
+          const lp = s < T_ST3 + 0.2 ? [hp.hands[0][0] - 10, hp.hands[0][1] - 10] : s < IG3 - 0.2 ? [TBX - 10, FL - 196] : s < IG3 ? [mp.hands[1][0] - 10, mp.hands[1][1] - 10] : [TBX + 70, FL - 166];
+          lapN.setAttribute("opacity", ch === 2 && s > T_ST3 - 0.2 ? 1 : 0); lapN.setAttribute("x", r1(lp[0])); lapN.setAttribute("y", r1(lp[1]));
+          suit.setAttribute("opacity", ch === 3 && s < T_OUT ? 1 : 0);
+          suit.setAttribute("transform", s > T_LEAVE - 0.3 ? `translate(${r1(hp.hands[1][0])} ${r1(hp.hands[1][1] + 60)})` : `translate(${FX + 150} ${FL})`);
+          handN.setAttribute("opacity", (ch === 3 && s > T_WRITE && s < T_STICK) || (ch === 0 && s < T_ST1 && s > 0.1) ? 1 : 0);
+          handN.setAttribute("transform", `translate(${r1((s < T_ST1 ? hp : mp).hands[0][0])} ${r1((s < T_ST1 ? hp : mp).hands[0][1])})`);
+          // big notes
+          const bn = (g, a, b, p) => { const k = hold(s, a, b, 0.2); g.setAttribute("opacity", k.toFixed(3)); g.setAttribute("transform", `translate(${r1(p[0])} ${r1(p[1])}) scale(${(0.5 + 0.5 * backOut(k)).toFixed(3)}) rotate(-3)`); };
+          bn(n1, T_ST1 + 0.3, T_IN1 + 0.6, [FX + 20, FY0 - 90]);
+          bn(nBye, T_READ, T_LOOK, [FX + 170, FY0 - 50]);
+          // FOLLOW: his note on the fridge
+          const st = s > T_STICK, tapped = s > T_TAP;
+          newN.setAttribute("opacity", st ? 1 : 0);
+          const bump = tapped ? 1 + 0.12 * Math.sin(Math.PI * clamp((s - T_TAP) / 0.25, 0, 1)) : backOut(sm(s, T_STICK, T_STICK + 0.3));
+          newN.setAttribute("transform", `translate(${FX - 22} ${FY0 + 150}) rotate(-3) scale(${bump.toFixed(3)})`);
+          newR.setAttribute("fill", tapped ? "#ffffff" : "#ffe46a"); newT.textContent = tapped ? "FOLLOWING ✓" : "+ FOLLOW"; newT.setAttribute("fill", tapped ? "#000" : "#c0282a"); newT.setAttribute("font-size", tapped ? 12 : 15);
+          burst.forEach((e, i) => { const q = clamp((s - T_TAP) / 0.9, 0, 1), a = (i / 10) * Math.PI * 2; e.setAttribute("opacity", tapped && q < 1 ? (1 - q).toFixed(3) : 0); e.setAttribute("transform", `translate(${r1(FX + Math.cos(a) * 90 * Math.sqrt(q))} ${r1(FY0 + 150 + Math.sin(a) * 70 * Math.sqrt(q))}) scale(${(0.4 - 0.2 * q).toFixed(2)})`); });
+          // heart meter above her
+          const hx = hp.head[0], hy = hp.head[1] - 120, shat = s > T_SHAT;
+          hm.setAttribute("opacity", s > 0.3 && !shat && hs ? 1 : 0);
+          const jolt = [T_C1, T_C2, T_C3].reduce((j, tc) => j + (s > tc && s < tc + 0.25 ? 6 * Math.sin((s - tc) * 80) * (1 - (s - tc) / 0.25) : 0), 0);
+          hm.setAttribute("transform", `translate(${r1(hx + jolt)} ${r1(hy)}) scale(0.75)`);
+          cracks.forEach((e, i) => e.setAttribute("opacity", s > [T_C1, T_C2, T_C3][i] ? 1 : 0));
+          hmH.setAttribute("fill", ["#ff3b30", "#e8332a", "#c42c26", "#9e2622", "#9e2622"][lvl]);
+          shards.forEach((e, i) => { const q = clamp((s - T_SHAT) / 1.2, 0, 1), a = (i / 6) * Math.PI * 2 + 0.4; const sx = FX + 110 + 70 * Math.cos(a) * q, sy = FL - 430 + (-60 * Math.sin(a) - 30) * q + 520 * q * q; e.setAttribute("opacity", shat && q < 1 ? (1 - q * q).toFixed(3) : 0); e.setAttribute("transform", `translate(${r1(sx)} ${r1(sy)}) rotate(${r1(200 * q * (i % 2 ? 1 : -1))})`); });
+          cold.setAttribute("opacity", (0.08 * ch + 0.15 * (s > T_OUT ? 1 : 0)).toFixed(3));
+          warm.setAttribute("opacity", (0.2 - 0.04 * ch).toFixed(3));
+
+          tag.textContent = s < T_L2 - 0.2 ? TAGS[ch].slice(0, Math.floor((s - C[ch]) * 20) + 1) : "";
+          let ci = -1; for (let i = 0; i < CAPS.length; i++) if (s >= CAPS[i][0]) ci = i;
+          cap.innerHTML = ci >= 0 && s < T_L2 - 0.3 ? slamHTML(CAPS[ci][1], CAPS[ci][0], s, CAPS[ci][2]) : "";
+          let cf = 0; for (const cc of [C[1], C[2], C[3]]) cf = Math.max(cf, 1 - Math.abs(s - cc) / 0.14);
+          cut.style.opacity = clamp(cf, 0, 1).toFixed(3);
+          const L2 = "HE NEVER READ HER NOTES.", L3 = "UNTIL THE LAST ONE.";
+          E("head").innerHTML = `<div>SHE LEFT HIM A NOTE EVERY DAY.</div><div>${L2.slice(0, Math.max(0, Math.floor((s - T_L2) * 26)))}&nbsp;</div><div style="color:#ff6a60">${L3.slice(0, Math.max(0, Math.floor((s - T_L3) * 26)))}&nbsp;</div>`;
+          E("head").style.opacity = (1 - 0.75 * win(s, T_STICK - 0.3, T_STICK + 0.1)).toFixed(3);
+          const TT = "READ THEIR NOTES WHILE THEY STILL WRITE THEM.";
+          tom.textContent = TT.slice(0, Math.max(0, Math.floor((s - T_TAP - 0.3) * 30)));
+          fade.style.opacity = win(s, DUR - 0.4, DUR - 0.02).toFixed(3);
+        }
+
+        window.__timelines = window.__timelines || {};
+        const tl = gsap.timeline({ paused: true });
+        const clock = { t: 0 };
+        tl.to(clock, { t: DUR, duration: DUR, ease: "none", onUpdate: () => render(clock.t) }, 0);
+        window.__timelines["main"] = tl;
+        render(0);
+        tl.seek(0);
+      })();
+    </script>
+  </body>
+</html>
