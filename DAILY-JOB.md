@@ -161,3 +161,7 @@ Lines up to 17 were scheduled in Metricool. 2026-10-25 ~10:42: all still-pending
 - 2026-11-30 16:00: 100 Love Is A Tin Can Phone #20 (relationship, winner format, 19 s), sent to Telegram (msg 118)
 - 2026-12-01 18:00: 101 Next Time (relationship, format 2 one-sided love, he loves, 27 s), sent to Telegram (msg 119)
 - 2026-12-02 18:00: 102 Heart Problem (relationship, viral remake 6.4M, 22 s), sent to Telegram (msg 120)
+- 2026-12-03 16:00: 103 Love Is A Piano Duet #21 (relationship, winner format, 18 s), sent to Telegram (msg 121)
+- 2026-12-04 16:00: 104 Love Is A Balloon #22 (relationship, winner format, 18 s), sent to Telegram (msg 122)
+- 2026-12-05 18:00: 105 Sticky Notes (relationship, format 2 one-sided love, she loves, 25 s), sent to Telegram (msg 123)
+- 2026-12-06 18:00: 106 Terrible Gift (relationship, viral remake 27M, 20 s), sent to Telegram (msg 124)
