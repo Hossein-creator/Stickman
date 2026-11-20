@@ -86,3 +86,11 @@ Claude's running notes. Newest on top. Everything Claude wants to remember goes 
 - 2026-11-16 "generiere" run 14: 95 Bridge Part 2 #17, 96 Blanket #18, 97 She Waited Up (one-sided, she loves), 98 Small Box (viral remake 8.3M). Check: viral/2026-11-16-check.md. Telegram msgs 108-111. Next remake candidate: CanaDaddd "Surprise Anniversary Gift" 6.8M.
 - 2026-11-18 "generiere" run 15: 99 Ladder #19, 100 Tin Can Phone #20, 101 Next Time (one-sided, he loves), 102 Heart Problem (viral remake 6.4M). Check: viral/2026-11-18-check.md. Telegram msgs 117-120. Kit name clash again: SX (use SHX). Tall sets (roof + figures): wrap the panel content in a scaled group (reel 99, SK 0.72).
 - 2026-11-19 "generiere" run 16: 103 Piano Duet #21 (real duet music in sfx), 104 Balloon #22, 105 Sticky Notes (one-sided, she loves), 106 Terrible Gift (viral remake 27M). Check: viral/2026-11-19-check.md. Telegram msgs 121-124. Small-scene panels: scale the content group up (103, SK 1.32).
+
+## 2026-11-20 run 17 ("generiere")
+- 107 Umbrella #23, 108 Snowman #24 (winner format), 109 Two Coffees (one-sided, he loves), 110 Breaking News (remake, NY Post 2.8M). Sent as Telegram msgs 125-128, post slots 07.12-10.12.
+- YouTube video pages now ask for a login (bot check); search results still give views/length/title, enough for the check.
+- 107 CTA first was a tag on a string (too close to 104 balloon) → changed to text on the canopy + heart rain.
+- 109: cups at 1.4x scale need a wider desk (240) and 38 px spacing, else they overlap.
+- 110: TV lower third as HTML at top 1640 px; keep zoom ≤ 2.0 so it does not cover the feet.
+- Next run: LOVE IS A #25 + #26, one-sided "she loves", a viral remake. Next slots after Do 10.12 18:00.
