@@ -94,3 +94,10 @@ Claude's running notes. Newest on top. Everything Claude wants to remember goes 
 - 109: cups at 1.4x scale need a wider desk (240) and 38 px spacing, else they overlap.
 - 110: TV lower third as HTML at top 1640 px; keep zoom ≤ 2.0 so it does not cover the feet.
 - Next run: LOVE IS A #25 + #26, one-sided "she loves", a viral remake. Next slots after Do 10.12 18:00.
+
+## 2026-11-22 run 18 ("generiere")
+- 111 Three-Legged Race #25, 112 Wall #26 (winner format), 113 Not Now (one-sided, she loves), 114 Surprise Dance (remake, Shivani Patel 14.6M). Telegram msgs 129-132, slots 11.12-14.12.
+- Kit clash again: `P` is a kit name (path builder) - used PZ in 112.
+- Winner panels with tall props (wall): put wall/figs/fx in a scaled group (0.78 around the ground) so heads stay inside the panel.
+- Dance poses: 4 keyed poses mixed on the beat (danceAt) - reusable for any dance scene.
+- Next run: LOVE IS A #27 + #28, one-sided "he loves", a viral remake (backup: military husband poses as patient 53M). Next slots after Mo 14.12 18:00.

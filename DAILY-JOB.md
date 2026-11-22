@@ -169,3 +169,7 @@ Lines up to 17 were scheduled in Metricool. 2026-10-25 ~10:42: all still-pending
 - 2026-12-08 16:00: 108 Love Is A Snowman #24 (relationship, winner format, 18 s), sent to Telegram (msg 126)
 - 2026-12-09 18:00: 109 Two Coffees (relationship, format 2 one-sided love, he loves, 25 s), sent to Telegram (msg 127)
 - 2026-12-10 18:00: 110 Breaking News (relationship, viral remake 2.8M, 21 s), sent to Telegram (msg 128)
+- 2026-12-11 16:00: 111 Love Is A Three-Legged Race #25 (relationship, winner format, 18 s), sent to Telegram (msg 129)
+- 2026-12-12 16:00: 112 Love Is A Wall #26 (relationship, winner format, 18 s), sent to Telegram (msg 130)
+- 2026-12-13 18:00: 113 Not Now (relationship, format 2 one-sided love, she loves, 25 s), sent to Telegram (msg 131)
+- 2026-12-14 18:00: 114 Surprise Dance (relationship, viral remake 14.6M, 20 s), sent to Telegram (msg 132)
