@@ -173,3 +173,7 @@ Lines up to 17 were scheduled in Metricool. 2026-10-25 ~10:42: all still-pending
 - 2026-12-12 16:00: 112 Love Is A Wall #26 (relationship, winner format, 18 s), sent to Telegram (msg 130)
 - 2026-12-13 18:00: 113 Not Now (relationship, format 2 one-sided love, she loves, 25 s), sent to Telegram (msg 131)
 - 2026-12-14 18:00: 114 Surprise Dance (relationship, viral remake 14.6M, 20 s), sent to Telegram (msg 132)
+- 2026-12-15 16:00: 115 Love Is A Sled #27 (relationship, winner format, 18 s), sent to Telegram (msg 133)
+- 2026-12-16 16:00: 116 Love Is A Padlock #28 (relationship, winner format, 18 s), sent to Telegram (msg 134)
+- 2026-12-17 18:00: 117 Her Song (relationship, format 2 one-sided love, he loves, 25 s), sent to Telegram (msg 135)
+- 2026-12-18 18:00: 118 Next Patient (relationship, viral remake 53M, 18 s), sent to Telegram (msg 136)

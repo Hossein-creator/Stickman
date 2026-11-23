@@ -101,3 +101,10 @@ Claude's running notes. Newest on top. Everything Claude wants to remember goes 
 - Winner panels with tall props (wall): put wall/figs/fx in a scaled group (0.78 around the ground) so heads stay inside the panel.
 - Dance poses: 4 keyed poses mixed on the beat (danceAt) - reusable for any dance scene.
 - Next run: LOVE IS A #27 + #28, one-sided "he loves", a viral remake (backup: military husband poses as patient 53M). Next slots after Mo 14.12 18:00.
+
+## 2026-11-23 run 19 ("generiere")
+- 115 Sled #27, 116 Padlock #28 (winner format), 117 Her Song (one-sided, he loves), 118 Next Patient (remake, T&T Creative Media 53M). Telegram msgs 133-136, slots 15.12-18.12.
+- Slopes: gy(x) ground function + gaitFoot with y = gy(x) lets figures walk up a hill.
+- Small scenes: wrap railing/deck/figs/fx in a scaled group (1.3 around the deck) - same trick as 103/112.
+- Guitar sound: pluck() = two decaying tones; arpeggio C-G-Am-F at 0.25 s.
+- Next run: LOVE IS A #29 + #30, one-sided "she loves", a viral remake (backup: Seo Ellana boyfriend surprises girlfriend at school 1.35M). Next slots after Fr 18.12 18:00.
