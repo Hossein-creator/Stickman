@@ -108,3 +108,10 @@ Claude's running notes. Newest on top. Everything Claude wants to remember goes 
 - Small scenes: wrap railing/deck/figs/fx in a scaled group (1.3 around the deck) - same trick as 103/112.
 - Guitar sound: pluck() = two decaying tones; arpeggio C-G-Am-F at 0.25 s.
 - Next run: LOVE IS A #29 + #30, one-sided "she loves", a viral remake (backup: Seo Ellana boyfriend surprises girlfriend at school 1.35M). Next slots after Fr 18.12 18:00.
+
+## 2026-11-25 run 20 ("generiere")
+- 119 Hammock #29, 120 Hot Air Balloon #30 (winner format), 121 Her Hand (one-sided, she loves), 122 Sky Proposal (remake, Dan Bogue 5.49M). Telegram msgs 137-140, slots 19.12-22.12.
+- Sound bug: sweep(t, dur, gain, pan, b0, b1) - a negative brightness (b1) blows up to NaN ("peak NaN"). Pan comes 4th.
+- Tall scenes (balloon): scaled group 0.72 in the panel; keep the basket fixed on screen and move the world down to show the rise.
+- Remake with several sets (sky / cockpit / field): one group per set, display toggled by scene(s), cut flashes between.
+- Next run: LOVE IS A #31 + #32, one-sided "he loves", a viral remake (backup: Seo Ellana boyfriend surprises girlfriend at school 1.35M). Next slots after Di 22.12 18:00.

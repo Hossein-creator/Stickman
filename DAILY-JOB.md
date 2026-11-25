@@ -177,3 +177,7 @@ Lines up to 17 were scheduled in Metricool. 2026-10-25 ~10:42: all still-pending
 - 2026-12-16 16:00: 116 Love Is A Padlock #28 (relationship, winner format, 18 s), sent to Telegram (msg 134)
 - 2026-12-17 18:00: 117 Her Song (relationship, format 2 one-sided love, he loves, 25 s), sent to Telegram (msg 135)
 - 2026-12-18 18:00: 118 Next Patient (relationship, viral remake 53M, 18 s), sent to Telegram (msg 136)
+- 2026-12-19 16:00: 119 Love Is A Hammock #29 (relationship, winner format, 18 s), sent to Telegram (msg 137)
+- 2026-12-20 16:00: 120 Love Is A Hot Air Balloon #30 (relationship, winner format, 18 s), sent to Telegram (msg 138)
+- 2026-12-21 18:00: 121 Her Hand (relationship, format 2 one-sided love, she loves, 25 s), sent to Telegram (msg 139)
+- 2026-12-22 18:00: 122 Sky Proposal (relationship, viral remake 5.49M, 20 s), sent to Telegram (msg 140)
