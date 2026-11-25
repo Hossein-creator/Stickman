@@ -1,0 +1,246 @@
+        // ---------- "love is a hot air balloon. #30": winner split-screen format. Before dawn, a balloon on a field, both in the basket. BOTH DROP: each drops their sandbags, the burner roars, they rise above the clouds into the sunrise, hug, heart. ONE DROPS: he drops his bags; she hangs her shopping bags on and scrolls; the balloon won't lift; he climbs out so it can rise; it rises with her alone, she never looks down. FOLLOW: a banner "+ FOLLOW" unrolls under the basket, she pulls the burner chain → flame, "FOLLOWING ✓". ----------
+        E("svg").children[1].style.display = "none";
+        const SVG = E("svg");
+        const sm = (t, a, b) => { const p = clamp((t - a) / (b - a), 0, 1); return p * p * (3 - 2 * p); };
+        const frac = (v) => v - Math.floor(v);
+        const PW = 1233, PY0 = 98, PY1 = 815, PK = 535 / 717, PX = 81;
+        const G = 700, CX = 615, KS = 0.72;
+        const reachTo = (s, k, p, hand = "a") => { if (s[hand + "w"] < 1e-6) { s[hand + "tx"] = p[0]; s[hand + "ty"] = p[1]; s[hand + "w"] = k; return s; } s[hand + "w"] = Math.max(s[hand + "w"], k); s[hand + "tx"] = lerp(s[hand + "tx"], p[0], k); s[hand + "ty"] = lerp(s[hand + "ty"], p[1], k); return s; };
+        const hold = (s, a, b, r = 0.2) => win(s, a, a + r) * (1 - win(s, b - r, b));
+        const LEGH = Math.sqrt(LEG * LEG - 15 * 15);
+
+        // ---------- beats ----------
+        const T_D1 = 1.2, T_D2 = 1.7, T_D3 = 2.4, T_D4 = 2.9, T_FIRE = 3.3, T_RISE = 3.5, T_HIGH = 6.0, T_LEAN = 5.4, T_HEART = 6.8;
+        const T_B1 = 1.2, T_B2 = 2.2, T_SHOP = 3.0, T_TRY = 3.6, T_LOOK = 4.2, T_OUT = 4.8, T_DOWN = 5.8, T_BUP = 6.2, T_GONE = 9.4;
+        const T_H2 = 9.6, T_H3 = 11.0;
+        const T_CTA = 12.6, T_TAG = 13.1, T_TAP = 14.9;
+        const SHEX = 565, HEX = 668;
+
+        function makePanel(y0, id) {
+          const clip = svgEl("clipPath", { id: "clip" + id }, SVG.querySelector("defs"));
+          svgEl("rect", { x: 0, y: PY0, width: PW, height: PY1 - PY0 }, clip);
+          const g = svgEl("g", { transform: `translate(${PX} ${y0}) scale(${PK}) translate(0 ${-PY0})` }, SVG);
+          const inner = svgEl("g", { "clip-path": `url(#clip${id})` }, g);
+          svgEl("rect", { x: 0, y: PY0, width: PW, height: PY1 - PY0, fill: "url(#panelBg)" }, inner);
+          const dawn = svgEl("rect", { x: 0, y: PY0, width: PW, height: PY1 - PY0, fill: "url(#dawn)", opacity: 0 }, inner);
+          const sun = svgEl("circle", { cx: 980, r: 70, fill: "#ffd08a", stroke: "#000", "stroke-width": 4, opacity: 0 }, inner);
+          const stars = svgEl("g", {}, inner);
+          for (let i = 0; i < 26; i++) svgEl("circle", { cx: (i * 173) % PW, cy: PY0 + 20 + ((i * 97) % 360), r: 2 + (i % 3), fill: "#d8d4c8", opacity: 0.5 }, stars);
+          const beams = svgEl("g", {}, inner);
+          const sc = svgEl("g", { transform: `translate(${CX} ${G}) scale(${KS}) translate(${-CX} ${-G})` }, inner);
+          const world = svgEl("g", {}, sc);
+          for (let i = 0; i < 12; i++) svgEl("ellipse", { cx: -200 + i * 160, cy: G - 30, rx: 120, ry: 50 + ((i * 37) % 50), fill: "#12161c" }, world);
+          svgEl("rect", { x: -400, y: G, width: 2000, height: 400, fill: "#1a1e22" }, world);
+          svgEl("path", { d: `M-400 ${G} L1600 ${G}`, stroke: "#000", "stroke-width": 6 }, world);
+          for (let i = 0; i < 40; i++) { const x = -300 + i * 50 + ((i * 17) % 13); svgEl("path", { d: `M${x} ${G} l-4 -12 M${x + 4} ${G} l3 -14 M${x + 8} ${G} l6 -10`, stroke: "#2e3a2e", "stroke-width": 3 }, world); }
+          const clouds = svgEl("g", {}, sc);
+          const cl = Array.from({ length: 6 }, (_, i) => { const c = svgEl("g", {}, clouds); for (const [dx, dy, r] of [[-60, 0, 40], [0, -20, 55], [60, 0, 42], [0, 10, 40]]) svgEl("circle", { cx: dx, cy: dy, r, fill: "#3a3e4a", stroke: "#000", "stroke-width": 5 }, c); for (const [dx, dy, r] of [[-60, 0, 34], [0, -20, 49], [60, 0, 36], [0, 10, 34]]) svgEl("circle", { cx: dx, cy: dy, r, fill: "#4a4e5c" }, c); return c; });
+          const glow = svgEl("circle", { r: 300, fill: "url(#redGlow)", opacity: 0 }, sc);
+          const bal = svgEl("g", {}, sc);
+          const flame = svgEl("ellipse", { rx: 24, ry: 40, fill: "url(#flameG)", opacity: 0 }, bal);
+          const env = svgEl("path", { d: "", fill: id === "T" ? "url(#envT)" : "url(#envB)", stroke: "#000", "stroke-width": 7 }, bal);
+          const envLines = svgEl("path", { d: "", fill: "none", stroke: "#000", "stroke-width": 4, opacity: 0.5 }, bal);
+          const ropes = svgEl("path", { d: "", fill: "none", stroke: "#000", "stroke-width": 4 }, bal);
+          const burner = svgEl("rect", { x: -26, y: 0, width: 52, height: 22, rx: 4, fill: "#6a6e78", stroke: "#000", "stroke-width": 5 }, bal);
+          const bags = svgEl("g", {}, sc);
+          const figs = svgEl("g", {}, sc);
+          const basket = svgEl("g", {}, sc);
+          svgEl("path", { d: "M-112 -96 L112 -96 L100 0 L-100 0 Z", fill: id === "T" ? "#a8743a" : "#6a5a4a", stroke: "#000", "stroke-width": 7, "stroke-linejoin": "round" }, basket);
+          for (let k = -2; k <= 2; k++) svgEl("path", { d: `M${k * 40} -92 L${k * 37} -4`, stroke: "#000", "stroke-width": 3, opacity: 0.35 }, basket);
+          svgEl("path", { d: "M-108 -60 L108 -60 M-104 -30 L104 -30", stroke: "#000", "stroke-width": 3, opacity: 0.35 }, basket);
+          svgEl("rect", { x: -120, y: -104, width: 240, height: 16, rx: 6, fill: id === "T" ? "#7a5226" : "#4a3e34", stroke: "#000", "stroke-width": 6 }, basket);
+          const fx = svgEl("g", {}, sc);
+          const dark = svgEl("rect", { x: 0, y: PY0, width: PW, height: PY1 - PY0, fill: "#05070c", opacity: 0 }, inner);
+          svgEl("rect", { x: 0, y: PY0, width: PW, height: PY1 - PY0, fill: "none", stroke: "#2c2c30", "stroke-width": 5 }, g);
+          return { g, y0, dawn, sun, stars, beams, world, cl, glow, bal, flame, env, envLines, ropes, burner, bags, figs, basket, fx, dark };
+        }
+        const top = makePanel(412, "T");
+        const bot = makePanel(1010, "B");
+        const mkBag = (P2, col, txt) => { const g = svgEl("g", {}, P2.bags); svgEl("path", { d: "M0 -30 L0 -6", stroke: "#000", "stroke-width": 4 }, g); svgEl("path", { d: "M-20 -6 Q-26 30 0 34 Q26 30 20 -6 Z", fill: col, stroke: "#000", "stroke-width": 5 }, g); if (txt) svgEl("text", { x: 0, y: 20, "font-family": "HFMono, monospace", "font-weight": 700, "font-size": 14, fill: "#000", "text-anchor": "middle" }, g).textContent = txt; return g; };
+        const mkShop = (P2, col) => { const g = svgEl("g", { opacity: 0 }, P2.bags); svgEl("path", { d: "M-10 -10 Q-10 -26 0 -26 Q10 -26 10 -10", fill: "none", stroke: "#000", "stroke-width": 4 }, g); svgEl("rect", { x: -22, y: -10, width: 44, height: 50, rx: 3, fill: col, stroke: "#000", "stroke-width": 5 }, g); return g; };
+        const bagsT = [mkBag(top, "#c8b48a", "SAND"), mkBag(top, "#c8b48a", "SAND"), mkBag(top, "#c8b48a", "SAND"), mkBag(top, "#c8b48a", "SAND")];
+        const bagsB = [mkBag(bot, "#8a8070", "SAND"), mkBag(bot, "#8a8070", "SAND"), mkBag(bot, "#8a8070", "SAND"), mkBag(bot, "#8a8070", "SAND")];
+        const shops = [mkShop(bot, "#c86a8a"), mkShop(bot, "#7a8ac8"), mkShop(bot, "#c8a85a")];
+        // FOLLOW banner
+        const ban = svgEl("g", { opacity: 0 }, top.fx);
+        const banStr = svgEl("path", { d: "M-80 0 L-80 30 M80 0 L80 30", stroke: "#000", "stroke-width": 4 }, ban);
+        const banBody = svgEl("g", {}, ban);
+        const banR = svgEl("rect", { x: -150, y: 30, width: 300, height: 70, rx: 10, fill: "#ff3b30", stroke: "#000", "stroke-width": 6 }, banBody);
+        const banT = svgEl("text", { x: 0, y: 78, "font-family": "HFMono, monospace", "font-weight": 700, "font-size": 38, fill: "#fff", "text-anchor": "middle" }, banBody);
+        const sparks = Array.from({ length: 12 }, () => svgEl("path", { d: "M0 10 C-22 -3 -16 -22 0 -12 C16 -22 22 -3 0 10 Z", fill: "#ff3b30", stroke: "#000", "stroke-width": 3, opacity: 0 }, top.fx));
+        const chain = svgEl("path", { d: "", stroke: "#000", "stroke-width": 4, "stroke-dasharray": "6 4" }, top.fx);
+
+        // basket bottom y (scene units) over time
+        const lift = (t) => 14 * win(t, T_D1, T_D1 + 0.3) + 14 * win(t, T_D2, T_D2 + 0.3) + 14 * win(t, T_D3, T_D3 + 0.3) + 14 * win(t, T_D4, T_D4 + 0.3);
+        const bYT = (t) => G - 4 * Math.sin(t * 1.3) * sm(t, T_RISE, T_HIGH);
+        const worldT = (t) => lift(t) + 1400 * sm(t, T_RISE, T_HIGH + 1.5) + 40 * Math.max(0, t - T_HIGH - 1.5);
+        const blift = (t) => 14 * win(t, T_B1, T_B1 + 0.3) + 14 * win(t, T_B2, T_B2 + 0.3) - 28 * win(t, T_SHOP, T_SHOP + 0.6);
+        const bYB = (t) => G - Math.max(0, blift(t)) - 6 * Math.abs(Math.sin(t * 6)) * hold(t, T_TRY, T_LOOK, 0.2) - 30 * win(t, T_DOWN, T_DOWN + 0.4) - 1000 * Math.pow(sm(t, T_BUP, T_GONE), 1.6);
+
+        // ---------- poses (feet on the basket floor) ----------
+        const inB = (x, f, by) => base({ hx: x, hy: by - 12 - LEGH, ax: x + 15 * f, ay: by - 12, bx: x - 15 * f, by: by - 12 });
+        const dropAt = (st, t, a, x, y, hand = "a") => reachTo(st, hold(t, a - 0.45, a + 0.15, 0.25), [x, y], hand);
+        function topHer(t) {
+          const by = bYT(t), f = t < T_D3 + 0.3 ? -1 : 1;
+          const st = inB(SHEX, f, by);
+          dropAt(st, t, T_D1, 450, by - 70); dropAt(st, t, T_D3, 450, by - 70);
+          const ln = win(t, T_LEAN, T_LEAN + 0.6);
+          reachTo(st, ln, [HEX - 10, by - 270], "b"); st.torso = lerp(st.torso, 10, ln); st.head = lerp(st.head, 14, ln);
+          st.head += -16 * hold(t, T_FIRE, T_HIGH, 0.4);
+          const pull = hold(t, T_TAP - 0.6, T_TAP + 0.4, 0.3); reachTo(st, pull, [CX - 30, by - 345 + 30 * win(t, T_TAP - 0.12, T_TAP)]);
+          return st;
+        }
+        function topHim(t) {
+          const by = bYT(t), f = t < T_D4 + 0.3 ? 1 : -1;
+          const st = inB(HEX, f, by);
+          dropAt(st, t, T_D2, 780, by - 70); dropAt(st, t, T_D4, 780, by - 70);
+          reachTo(st, hold(t, T_FIRE - 0.3, T_FIRE + 0.5, 0.2), [CX + 20, by - 378]);
+          const ln = win(t, T_LEAN, T_LEAN + 0.6);
+          reachTo(st, ln, [SHEX + 20, by - 260], "b"); st.torso = lerp(st.torso, 6, ln);
+          st.head += -16 * hold(t, T_FIRE, T_HIGH, 0.4);
+          return st;
+        }
+        function botHim(t) {
+          const by = bYB(t), f = t < T_B2 + 0.3 ? 1 : t < T_LOOK + 0.6 ? -1 : 1;
+          let st = inB(HEX, f, by);
+          dropAt(st, t, T_B1, 780, by - 70); dropAt(st, t, T_B2, 780, by - 70);
+          reachTo(st, hold(t, T_TRY - 0.2, T_LOOK, 0.2), [CX + 20, by - 378]);
+          st.head = lerp(st.head, 8, hold(t, T_LOOK, T_OUT, 0.2));
+          // climb out over the right rim
+          const c1 = sm(t, T_OUT, T_OUT + 0.5), c2 = sm(t, T_OUT + 0.5, T_DOWN);
+          if (c1 > 0) {
+            const mid = base({ hx: 735, hy: G - 290, torso: 14, head: 10, ax: 712, ay: G - 106, bx: 790, by: G - 130 });
+            const out = standOn(850, -1, G);
+            st = mixPose(st, mid, c1); st = mixPose(st, out, c2);
+            reachTo(st, hold(t, T_OUT, T_DOWN, 0.2), [720, G - 108]);
+          }
+          if (t > T_DOWN) { st.head = lerp(-8, -30, sm(t, T_BUP, T_BUP + 1.2)); st.head = lerp(st.head, 24, sm(t, T_GONE - 0.6, T_GONE)); reachTo(st, hold(t, T_BUP + 0.4, T_GONE - 0.8, 0.4), [820, G - 420 + 20 * Math.sin(t * 6)], "b"); }
+          return st;
+        }
+        function botHer(t) {
+          const by = bYB(t);
+          const st = inB(SHEX, 1, by); st.head = 26; st.torso = 6;
+          reachTo(st, 1, [SHEX + 40, by - 12 - LEGH - 120], "b");
+          const hang = hold(t, T_SHOP - 0.6, T_SHOP + 0.2, 0.25);
+          reachTo(st, hang, [450, by - 80]);
+          reachTo(st, 1 - hang, [SHEX + 46, by - 12 - LEGH - 116]);
+          return st;
+        }
+        const mkFig = (P2, white, kind) => makeFig(P2.figs, white ? "#ffffff" : kind === "her" ? "#8e8e8e" : "#9a9a9a", white ? "#e0e0e0" : "#767676", white, kind + (white ? "T" : "B"));
+        const TF = { bun: svgEl("circle", { r: 15, fill: "#fff", stroke: "#000", "stroke-width": 6 }, top.figs), her: mkFig(top, true, "her"), him: mkFig(top, true, "him") };
+        const BF = { bun: svgEl("circle", { r: 15, fill: "#8e8e8e", stroke: "#000", "stroke-width": 6 }, bot.figs), her: mkFig(bot, false, "her") };
+        const himOutG = svgEl("g", {}, bot.fx);
+        BF.him = makeFig(himOutG, "#9a9a9a", "#767676", false, "himB");
+        const phone = svgEl("rect", { x: -10, y: -16, width: 20, height: 32, rx: 4, fill: "#bfe0ff", stroke: "#000", "stroke-width": 4 }, bot.fx);
+        const phoneGlow = svgEl("circle", { r: 70, fill: "url(#phoneGlow)", opacity: 0.8 }, bot.fx);
+        const bigHeart = svgEl("path", { d: "M0 12 C-26 -4 -19 -26 0 -14 C19 -26 26 -4 0 12 Z", fill: "#ff3b30", stroke: "#000", "stroke-width": 3, opacity: 0 }, top.fx);
+
+        // ---------- labels ----------
+        const label = (x, y, size, col) => { const d = document.createElement("div"); d.className = "mono"; d.style.cssText = `left:${x}px;top:${y}px;font-size:${size}px;letter-spacing:0.16em;color:${col}`; E("stage").appendChild(d); return d; };
+        const topT = label(PX + 44, 412 + 26, 30, "#ffffff"), topS = label(PX + 44, 412 + 66, 19, "#c8c8c8");
+        const botT = label(PX + 44, 1010 + 26, 30, "#a8a8a8"), botS = label(PX + 44, 1010 + 66, 19, "#a8a8a8");
+        topT.textContent = "BOTH DROP"; botT.textContent = "ONE DROPS";
+        topT.style.textShadow = "0 0 12px rgba(255,255,255,0.35)";
+        const typed = (seq, t, cps = 16) => { let cur = null; for (const s of seq) if (t >= s[0]) cur = s; if (!cur) return ["", null]; const n = Math.floor((t - cur[0]) * cps); return [cur[1].slice(0, n), cur[2] || null]; };
+        const TOPSEQ = [[0.05, "BOTH DROP THEIR WEIGHT"], [T_RISE, "THEY RISE TOGETHER"], [T_LEAN, "ABOVE THE CLOUDS", "#ff6a60"]];
+        const BOTSEQ = [[0.05, "HE DROPS HIS WEIGHT"], [T_SHOP - 0.3, "SHE ADDS HERS", "#ff3b30"], [T_OUT, "HE STEPS OUT", "#ff3b30"], [T_BUP + 0.4, "SHE NEVER LOOKS DOWN", "#ff3b30"]];
+        E("head").style.top = "236px";
+        E("head").style.fontSize = "30px";
+        E("head").style.letterSpacing = "0.16em";
+        E("head").style.lineHeight = "1.6";
+        const tom = label(0, 590, 26, "#ffcf7a"); tom.style.width = "1080px"; tom.style.textAlign = "center";
+        const fade = document.createElement("div");
+        fade.style.cssText = "position:absolute;inset:0;background:#000;opacity:0";
+        E("stage").appendChild(fade);
+
+        const toP = (x, y) => [CX + (x - CX) * KS, G + (y - G) * KS];
+        const CF0 = toP(CX, G - 120 - 260);
+        const CF = [CF0[0], CF0[1]], CS = [540, 1060], ZK = 1.3;
+        const zoomK = (t) => sm(t, T_CTA - 0.1, T_CTA + 1.0);
+        const cam = (t) => { const q = zoomK(t), z = lerp(PK, ZK, q), s0 = [PX + CF[0] * PK, top.y0 + (CF[1] - PY0) * PK]; return { z, ox: lerp(s0[0], CS[0], q) - CF[0] * z, oy: lerp(s0[1], CS[1], q) - (CF[1] - PY0) * z }; };
+
+        function drawBalloon(P2, by, fl, t, sway) {
+          P2.basket.setAttribute("transform", `translate(${r1(CX + sway)} ${r1(by)})`);
+          const ey = by - 640, ex = CX + sway * 1.4;
+          P2.env.setAttribute("d", `M${r1(ex - 70)} ${r1(ey + 230)} C${r1(ex - 250)} ${r1(ey + 60)} ${r1(ex - 230)} ${r1(ey - 190)} ${r1(ex)} ${r1(ey - 190)} C${r1(ex + 230)} ${r1(ey - 190)} ${r1(ex + 250)} ${r1(ey + 60)} ${r1(ex + 70)} ${r1(ey + 230)} Z`);
+          P2.envLines.setAttribute("d", `M${r1(ex)} ${r1(ey - 190)} C${r1(ex - 90)} ${r1(ey - 150)} ${r1(ex - 90)} ${r1(ey + 120)} ${r1(ex - 30)} ${r1(ey + 230)} M${r1(ex)} ${r1(ey - 190)} C${r1(ex + 90)} ${r1(ey - 150)} ${r1(ex + 90)} ${r1(ey + 120)} ${r1(ex + 30)} ${r1(ey + 230)} M${r1(ex - 190)} ${r1(ey)} Q${r1(ex)} ${r1(ey + 40)} ${r1(ex + 190)} ${r1(ey)}`);
+          P2.ropes.setAttribute("d", `M${r1(CX + sway - 112)} ${r1(by - 100)} L${r1(ex - 70)} ${r1(ey + 230)} M${r1(CX + sway + 112)} ${r1(by - 100)} L${r1(ex + 70)} ${r1(ey + 230)}`);
+          P2.burner.setAttribute("transform", `translate(${r1(CX + sway * 1.2)} ${r1(by - 395)})`);
+          P2.flame.setAttribute("cx", r1(CX + sway * 1.2)); P2.flame.setAttribute("cy", r1(by - 430 - 30 * fl));
+          P2.flame.setAttribute("rx", r1(18 + 22 * fl + 3 * Math.sin(t * 40))); P2.flame.setAttribute("ry", r1(30 + 60 * fl + 6 * Math.sin(t * 33)));
+          P2.flame.setAttribute("opacity", (fl > 0.02 ? 0.4 + 0.6 * fl : 0).toFixed(3));
+        }
+        const placeBag = (b, on, x, y, t0, t, gy) => { if (on) { b.setAttribute("transform", `translate(${r1(x)} ${r1(y)}) rotate(${r1(3 * Math.sin(t * 2 + x))})`); b.setAttribute("opacity", 1); return; } const q = clamp((t - t0) / 0.5, 0, 1); b.setAttribute("transform", `translate(${r1(x)} ${r1(lerp(y, gy, q * q))}) rotate(${r1(20 * q)})`); b.setAttribute("opacity", q < 1 ? 1 : gy > G - 20 ? 1 : 0); };
+
+        function render(t) {
+          // ---- top
+          const by = bYT(t), wy = worldT(t), sw = 3 * Math.sin(t * 1.1) * sm(t, T_RISE, T_HIGH);
+          top.world.setAttribute("transform", `translate(0 ${r1(wy)})`);
+          top.cl.forEach((c, i) => { const yy = -400 + i * 230 + wy * 0.9; const y2 = ((yy + 600) % 1400 + 1400) % 1400 - 600; c.setAttribute("transform", `translate(${(i * 397) % 1300 - 150} ${r1(y2)}) scale(${0.9 + (i % 3) * 0.25})`); c.setAttribute("opacity", sm(t, T_RISE, T_RISE + 0.8).toFixed(3)); });
+          bot.cl.forEach((c) => c.setAttribute("opacity", 0));
+          const dq = sm(t, T_RISE + 1.0, T_HIGH + 0.8);
+          top.dawn.setAttribute("opacity", (0.7 * dq).toFixed(3)); top.stars.setAttribute("opacity", (1 - dq).toFixed(3));
+          top.sun.setAttribute("cy", r1(lerp(PY1 + 80, 330, dq))); top.sun.setAttribute("opacity", dq.toFixed(3));
+          const fl = Math.max(hold(t, T_FIRE, T_RISE + 1.6, 0.15), 0.25 * sm(t, T_RISE, T_RISE + 0.3), hold(t, T_TAP, T_TAP + 1.2, 0.1) * 1.3);
+          drawBalloon(top, by, fl, t, sw);
+          const hp = drawFig(TF.her, livePose(topHer, t, 0.4), t < T_D3 + 0.3 ? -1 : 1);
+          const mp = drawFig(TF.him, livePose(topHim, t, 1.3), t < T_D4 + 0.3 ? 1 : -1);
+          const fb = t < T_D3 + 0.3 ? -1 : 1;
+          TF.bun.setAttribute("cx", r1(hp.head[0] - 25 * fb)); TF.bun.setAttribute("cy", r1(hp.head[1] - 16));
+          placeBag(bagsT[0], t < T_D1, 470, by - 40, T_D1, t, by + 700); placeBag(bagsT[1], t < T_D2, 760, by - 40, T_D2, t, by + 700);
+          placeBag(bagsT[2], t < T_D3, 440, by - 70, T_D3, t, by + 700); placeBag(bagsT[3], t < T_D4, 790, by - 70, T_D4, t, by + 700);
+          top.glow.setAttribute("cx", CX); top.glow.setAttribute("cy", by - 300); top.glow.setAttribute("opacity", (0.55 * win(t, T_LEAN, T_LEAN + 0.8)).toFixed(3));
+          const hq = sm(t, T_HEART, T_HEART + 0.6);
+          bigHeart.setAttribute("opacity", (hq * (1 - sm(t, T_CTA, T_CTA + 0.5))).toFixed(3));
+          bigHeart.setAttribute("transform", `translate(${CX + 290} ${r1(by - 430 - 10 * hq)}) scale(${(backOut(hq) * 2.6).toFixed(3)})`);
+          // FOLLOW banner under the basket
+          const ak = sm(t, T_TAG, T_TAG + 0.6), popped = t > T_TAP;
+          ban.setAttribute("opacity", Math.min(1, ak * 3).toFixed(3));
+          ban.setAttribute("transform", `translate(${r1(CX + sw)} ${r1(by + 4)}) rotate(${r1(2 * Math.sin(t * 1.7))})`);
+          banBody.setAttribute("transform", `translate(0 30) scale(1 ${(Math.max(0.02, backOut(ak)) * (popped ? 1 + 0.08 * Math.sin(Math.PI * clamp((t - T_TAP) / 0.25, 0, 1)) : 1)).toFixed(3)}) translate(0 -30)`);
+          banR.setAttribute("fill", popped ? "#ffffff" : "#ff3b30"); banT.setAttribute("fill", popped ? "#000" : "#fff");
+          banT.textContent = popped ? "FOLLOWING ✓" : "+ FOLLOW"; banT.setAttribute("font-size", popped ? 30 : 38);
+          sparks.forEach((h, i) => { const q = clamp((t - T_TAP) / 1.1, 0, 1), a = (i / 12) * Math.PI * 2; h.setAttribute("opacity", popped && q < 1 ? (1 - q).toFixed(3) : 0); h.setAttribute("transform", `translate(${r1(CX + Math.cos(a) * 260 * Math.sqrt(q))} ${r1(by + 70 + Math.sin(a) * 150 * Math.sqrt(q))}) scale(${(1.2 - 0.6 * q).toFixed(2)})`); });
+          chain.setAttribute("d", t > T_TAG ? `M${r1(CX - 20 + sw)} ${r1(by - 373)} L${r1(CX - 30 + sw)} ${r1(by - 345 + 30 * win(t, T_TAP - 0.12, T_TAP) * (1 - win(t, T_TAP + 0.3, T_TAP + 0.6)))}` : "");
+          const c = cam(t);
+          top.g.setAttribute("transform", `translate(${r1(c.ox)} ${r1(c.oy)}) scale(${c.z.toFixed(4)}) translate(0 ${-PY0})`);
+          const zq = zoomK(t);
+          bot.g.setAttribute("opacity", (1 - zq).toFixed(3));
+          [topT, topS, botT, botS].forEach((d) => (d.style.opacity = (1 - zq).toFixed(3)));
+
+          // ---- bottom
+          const bb = bYB(t), bsw = 4 * Math.sin(t * 1.2) * sm(t, T_BUP, T_BUP + 1);
+          const bfl = Math.max(hold(t, T_TRY, T_LOOK, 0.1), 0.8 * hold(t, T_BUP - 0.2, T_GONE, 0.3));
+          drawBalloon(bot, bb, bfl, t, bsw);
+          const sp = drawFig(BF.her, livePose(botHer, t, 0.9), 1);
+          BF.bun.setAttribute("cx", r1(sp.head[0] - 25)); BF.bun.setAttribute("cy", r1(sp.head[1] - 16));
+          const out = t > T_OUT + 0.35;
+          (out ? bot.fx : bot.figs).insertBefore(himOutG, (out ? bot.fx : bot.figs).firstChild);
+          drawFig(BF.him, livePose(botHim, t, 2.0), t < T_B2 + 0.3 ? 1 : t < T_LOOK + 0.6 ? -1 : 1);
+          placeBag(bagsB[0], t < T_B1, 760, bb - 40, T_B1, t, G - 34); placeBag(bagsB[1], t < T_B2, 790, bb - 70, T_B2, t, G - 34);
+          bagsB[2].setAttribute("opacity", 0); bagsB[3].setAttribute("opacity", 0);
+          shops.forEach((s, i) => { const on = t > T_SHOP + i * 0.15; s.setAttribute("opacity", on ? 1 : 0); s.setAttribute("transform", `translate(${r1(CX + bsw - 130 + i * 28)} ${r1(bb - 60 + i * 12)}) rotate(${r1(4 * Math.sin(t * 2 + i))})`); });
+          const ph = sp.hands[1];
+          phone.setAttribute("transform", `translate(${r1(ph[0])} ${r1(ph[1] - 6)})`);
+          phoneGlow.setAttribute("cx", r1(ph[0])); phoneGlow.setAttribute("cy", r1(ph[1])); phoneGlow.setAttribute("opacity", (0.75 + 0.15 * Math.sin(t * 5)).toFixed(3));
+          bot.dark.setAttribute("opacity", (0.3 * win(t, T_BUP + 1, T_GONE + 0.5)).toFixed(3));
+
+          const [ts, tc] = typed(TOPSEQ, t); topS.textContent = ts; topS.style.color = tc || "#c8c8c8";
+          const [bs, bc] = typed(BOTSEQ, t); botS.textContent = bs; botS.style.color = bc || "#a8a8a8";
+          const L2 = "HE STEPPED OUT SO SHE COULD RISE.", L3 = "SHE NEVER LOOKED DOWN.";
+          E("head").innerHTML = `<div>LOVE IS A HOT AIR BALLOON. #30</div><div>${L2.slice(0, Math.max(0, Math.floor((t - T_H2) * 30)))}&nbsp;</div><div style="color:#ff6a60">${L3.slice(0, Math.max(0, Math.floor((t - T_H3) * 30)))}&nbsp;</div>`;
+          const TT = "LOVE IS A ... #31 TOMORROW";
+          tom.textContent = TT.slice(0, Math.max(0, Math.floor((t - T_TAP - 0.5) * 28)));
+          fade.style.opacity = win(t, DUR - 0.35, DUR - 0.02).toFixed(3);
+        }
+        window.__timelines = window.__timelines || {};
+        const tl = gsap.timeline({ paused: true });
+        const clock = { t: 0 };
+        tl.to(clock, { t: DUR, duration: DUR, ease: "none", onUpdate: () => render(clock.t) }, 0);
+        window.__timelines["main"] = tl;
+        render(0);
+        tl.seek(0);
+      })();
+    </script>
+  </body>
+</html>
