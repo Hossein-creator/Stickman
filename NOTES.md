@@ -115,3 +115,10 @@ Claude's running notes. Newest on top. Everything Claude wants to remember goes 
 - Tall scenes (balloon): scaled group 0.72 in the panel; keep the basket fixed on screen and move the world down to show the rise.
 - Remake with several sets (sky / cockpit / field): one group per set, display toggled by scene(s), cut flashes between.
 - Next run: LOVE IS A #31 + #32, one-sided "he loves", a viral remake (backup: Seo Ellana boyfriend surprises girlfriend at school 1.35M). Next slots after Di 22.12 18:00.
+
+## 2026-11-27 run 21 ("generiere")
+- 123 Couch #31, 124 Savings Jar #32 (winner format), 125 The Door (one-sided, he loves), 126 School Gate (remake, Seo Ellana 1.35M). Slots 23.12-26.12.
+- Container was fresh: scratch tools rebuilt (rr.sh = copy to work dir + local gsap 3.14.2 + hyperframes 0.8.181 snapshot/render; err.cjs = playwright pageerror check). Render now ~40 s per reel.
+- yt-dlp search got 403 from YouTube this time, so the remake used the backup from the 11-25 check.
+- Telegram: no bot token in this container (no env TELEGRAM_BOT_TOKEN, no ~/.stickman/telegram.json), so 123-126 are in ready/ but not sent yet.
+- Next run: LOVE IS A #33 + #34, one-sided "she loves", a new viral remake (search again). Slots after Sa 26.12 18:00.
