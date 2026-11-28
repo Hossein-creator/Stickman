@@ -181,7 +181,7 @@ Lines up to 17 were scheduled in Metricool. 2026-10-25 ~10:42: all still-pending
 - 2026-12-20 16:00: 120 Love Is A Hot Air Balloon #30 (relationship, winner format, 18 s), sent to Telegram (msg 138)
 - 2026-12-21 18:00: 121 Her Hand (relationship, format 2 one-sided love, she loves, 25 s), sent to Telegram (msg 139)
 - 2026-12-22 18:00: 122 Sky Proposal (relationship, viral remake 5.49M, 20 s), sent to Telegram (msg 140)
-- 2026-12-23 16:00: 123 Love Is A Couch #31 (relationship, winner format, 18 s), Telegram pending
-- 2026-12-24 16:00: 124 Love Is A Savings Jar #32 (relationship, winner format, 18 s), Telegram pending
-- 2026-12-25 18:00: 125 The Door (relationship, format 2 one-sided love, he loves, 28 s), Telegram pending
-- 2026-12-26 18:00: 126 School Gate (relationship, viral remake 1.35M, 20 s), Telegram pending
+- 2026-12-23 16:00: 123 Love Is A Couch #31 (relationship, winner format, 18 s), sent in chat (user asked, Telegram token missing)
+- 2026-12-24 16:00: 124 Love Is A Savings Jar #32 (relationship, winner format, 18 s), sent in chat (user asked, Telegram token missing)
+- 2026-12-25 18:00: 125 The Door (relationship, format 2 one-sided love, he loves, 28 s), sent in chat (user asked, Telegram token missing)
+- 2026-12-26 18:00: 126 School Gate (relationship, viral remake 1.35M, 20 s), sent in chat (user asked, Telegram token missing)

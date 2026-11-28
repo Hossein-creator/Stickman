@@ -122,3 +122,4 @@ Claude's running notes. Newest on top. Everything Claude wants to remember goes 
 - yt-dlp search got 403 from YouTube this time, so the remake used the backup from the 11-25 check.
 - Telegram: no bot token in this container (no env TELEGRAM_BOT_TOKEN, no ~/.stickman/telegram.json), so 123-126 are in ready/ but not sent yet.
 - Next run: LOVE IS A #33 + #34, one-sided "she loves", a new viral remake (search again). Slots after Sa 26.12 18:00.
+- 2026-11-28: User: "Schick die Videos hier erst mal" → 123-126 + captions sent in the chat. Telegram still pending (no token).
